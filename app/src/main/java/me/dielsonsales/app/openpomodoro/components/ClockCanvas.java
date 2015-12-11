@@ -25,10 +25,14 @@ public class ClockCanvas extends View {
     static final double HOUR_LENGTH_MOD = 0.5; // hours pointer size
     static final int CURRENT_THICKNESS = 20; // current pomodoro mark thickness
     static final int BORDER_THICKNESS = 15;
+    static public int CLOCK_COLOR;
+    static public int POINTERS_COLOR;
+    static public int INTERVAL_COLOR;
+    static public int POMODORO_COLOR;
+    private static Paint mPaint;
     private int mViewWidth;
     private int mViewHeight;
     private int mClockRadius;
-    private Paint mPaint;
 
     // Elements of the clock
     private int mHours;
@@ -43,6 +47,10 @@ public class ClockCanvas extends View {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mIntervals =  new ArrayList<>();
+        CLOCK_COLOR = Color.RED;
+        POINTERS_COLOR = Color.WHITE;
+        INTERVAL_COLOR = Color.GRAY;
+        POINTERS_COLOR = Color.YELLOW;
     }
 
     // getters & setters ---------------------------------------------------------------------------
@@ -67,6 +75,10 @@ public class ClockCanvas extends View {
         return time;
     }
 
+    public void setClockColor() {
+
+    }
+
     // overriden methods ---------------------------------------------------------------------------
 
     @Override
@@ -78,7 +90,7 @@ public class ClockCanvas extends View {
         int smallerMetric = mViewWidth < mViewHeight ? mViewWidth : mViewHeight;
         mClockRadius = smallerMetric/2 - smallerMetric/2 * 20/100; // smallestMetric - 20%
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(Color.RED);
+        mPaint.setColor(CLOCK_COLOR);
         canvas.drawCircle(mViewWidth / 2, mViewHeight / 2, mClockRadius, mPaint);
 
         // Draws a time interval
@@ -133,7 +145,7 @@ public class ClockCanvas extends View {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(5 * getResources().getDisplayMetrics().density);
-        mPaint.setColor(Color.WHITE);
+        mPaint.setColor(POINTERS_COLOR);
         canvas.drawLine(mViewWidth / 2, mViewHeight / 2, x1, y1, mPaint);
     }
 
@@ -151,13 +163,13 @@ public class ClockCanvas extends View {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(5 * getResources().getDisplayMetrics().density);
-        mPaint.setColor(Color.WHITE);
+        mPaint.setColor(POINTERS_COLOR);
         canvas.drawLine(mViewWidth / 2, mViewHeight / 2, x1, y1, mPaint);
     }
 
     private void drawCentralCircle(Canvas canvas) {
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(Color.WHITE);
+        mPaint.setColor(POINTERS_COLOR);
         canvas.drawCircle(mViewWidth / 2, mViewHeight / 2, 5 * getResources().getDisplayMetrics().density, mPaint);
     }
 
@@ -175,7 +187,7 @@ public class ClockCanvas extends View {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeCap(Paint.Cap.BUTT);
         mPaint.setStrokeWidth(15 * getResources().getDisplayMetrics().density);
-        mPaint.setColor(Color.GRAY);
+        mPaint.setColor(INTERVAL_COLOR);
         int startAngle = (int) (calculateHourAngle(startTime.get(Calendar.HOUR), startTime.get(Calendar.MINUTE)));
         int endAngle = (int) (calculateHourAngle(endTime.get(Calendar.HOUR), endTime.get(Calendar.MINUTE)));
         canvas.drawArc(new RectF(x1, y1, x2, y2), startAngle - 90, endAngle - startAngle, false, mPaint);
@@ -202,7 +214,7 @@ public class ClockCanvas extends View {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeCap(Paint.Cap.BUTT);
         mPaint.setStrokeWidth(CURRENT_THICKNESS * getResources().getDisplayMetrics().density);
-        mPaint.setColor(Color.YELLOW);
+        mPaint.setColor(POMODORO_COLOR);
         canvas.drawArc(new RectF(x1, y1, x2, y2), startAngle - 90, endAngle - startAngle, false, mPaint);
     }
 

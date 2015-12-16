@@ -1,16 +1,12 @@
 package me.dielsonsales.app.openpomodoro.components;
 
 import android.graphics.Color;
-import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.app.AppCompatActivity;
 import android.test.ActivityInstrumentationTestCase2;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import android.test.suitebuilder.annotation.SmallTest;
 
 import me.dielsonsales.app.openpomodoro.MainActivity;
 
-@RunWith(AndroidJUnit4.class)
 public class ClockCanvasTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     AppCompatActivity mActivity;
@@ -34,7 +30,7 @@ public class ClockCanvasTest extends ActivityInstrumentationTestCase2<MainActivi
         assertNotNull("ClockCanvas is null", mClockCanvas);
     }
 
-    @Test
+    @SmallTest
     public void testColors() {
         assertEquals(mClockCanvas.POMODORO_COLOR, Color.YELLOW);
     }

@@ -13,6 +13,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import me.dielsonsales.app.openpomodoro.util.Duration;
+
 /**
  * This class is supposed to draw a clock circle
  * Created by dielson on 02/12/15.
@@ -37,8 +39,8 @@ public class ClockCanvas extends View {
     // Elements of the clock
     private int mHours;
     private int mMinutes;
-    private List<TimeInterval> mIntervals;
-    private TimeInterval mCurrentPomodoro;
+    private List<Duration> mIntervals;
+    private Duration mCurrentPomodoro;
 
     // constructor ---------------------------------------------------------------------------------
 
@@ -53,15 +55,15 @@ public class ClockCanvas extends View {
         POMODORO_COLOR = Color.YELLOW;
 
         // TODO: delete this later
-        List<TimeInterval> timeIntervals = new ArrayList<>();
+        List<Duration> durations = new ArrayList<>();
         Calendar startInterval = new GregorianCalendar();
         startInterval.set(Calendar.HOUR, 0);
         startInterval.set(Calendar.MINUTE, 0);
         Calendar endInterval = new GregorianCalendar();
         endInterval.set(Calendar.HOUR, 1);
         endInterval.set(Calendar.MINUTE, 0);
-        timeIntervals.add(new TimeInterval(startInterval, endInterval));
-        this.addIntervals(timeIntervals);
+        durations.add(new Duration(startInterval, endInterval));
+        this.addIntervals(durations);
     }
 
     // getters & setters ---------------------------------------------------------------------------
@@ -86,7 +88,7 @@ public class ClockCanvas extends View {
         return time;
     }
 
-    public void addIntervals(List<TimeInterval> intervals) {
+    public void addIntervals(List<Duration> intervals) {
         mIntervals.addAll(intervals);
     }
 
@@ -169,9 +171,9 @@ public class ClockCanvas extends View {
      * @param canvas the canvas where the interval will be drawn
      */
     private void drawInterval(Canvas canvas) {
-        for (TimeInterval timeInterval : mIntervals) {
-            Calendar startTime = timeInterval.getStartTime();
-            Calendar endTime = timeInterval.getEndTime();
+        for (Duration duration : mIntervals) {
+            Calendar startTime = duration.getStartTime();
+            Calendar endTime = duration.getEndTime();
 
             int x1 = mViewWidth /2 - mClockRadius /2;
             int y1 = mViewHeight /2 - mClockRadius /2;
@@ -256,24 +258,4 @@ public class ClockCanvas extends View {
      * @return the corresponding angle in radians
      */
     private double degreesToRadians(double degrees) { return (Math.PI/180) * degrees; }
-
-    // nested classes ------------------------------------------------------------------------------
-
-    /**
-     * Represents a time interval with a start and an end.
-     */
-    public class TimeInterval {
-        private Calendar mStartTime;
-        private Calendar mEndTime;
-        public TimeInterval(Calendar startTime, Calendar endTime) {
-            mStartTime = startTime;
-            mEndTime = endTime;
-        }
-        public Calendar getStartTime() {
-            return mStartTime;
-        }
-        public Calendar getEndTime() {
-            return mEndTime;
-        }
-    }
 }

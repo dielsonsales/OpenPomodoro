@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.components;
+package me.dielsonsales.app.openpomodoro.views;
 
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;

@@ -1,13 +1,21 @@
 package me.dielsonsales.app.openpomodoro;
 
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
+
+import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
+import me.dielsonsales.app.openpomodoro.controllers.PomodoroListener;
 
 public class MainActivity extends AppCompatActivity {
+
+    Button mPlayButton;
+    PomodoroController mPomodoroController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,14 +25,46 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle(getResources().getString(R.string.title_activity_main));
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+
+        mPomodoroController = new PomodoroController();
+
+        mPomodoroController.setPomodoroListener(new PomodoroListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onMinuteLeft() {
+
+            }
+
+            @Override
+            public void onTimeOver() {
+                playSound();
             }
         });
+
+        mPlayButton = (Button) findViewById(R.id.play_button);
+        mPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPomodoroController.start();
+            }
+        });
+    }
+
+    void playSound() {
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

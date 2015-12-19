@@ -12,9 +12,17 @@
     tools:context="me.dielsonsales.app.openpomodoro.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <me.dielsonsales.app.openpomodoro.components.ClockCanvas
+    <me.dielsonsales.app.openpomodoro.views.ClockCanvas
         android:id="@+id/clockCanvas"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/play_button"
+        android:text="Start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

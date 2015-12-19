@@ -30,7 +30,7 @@ public class PomodoroController extends TimerTask {
     // TimerTask methods -------------------------------------------------------
 
     /**
-     * Testing.
+     * Updates the pomodoro status
      */
     @Override
     public void run() {
@@ -79,5 +79,11 @@ public class PomodoroController extends TimerTask {
 
     public void stop() {
         throw new UnsupportedOperationException();
+    }
+
+    // Private methods ---------------------------------------------------------
+
+    private void scheduleNextTime() {
+        mTimer.schedule(this, (mPomodoroTime - 1) * 1000);
     }
 }

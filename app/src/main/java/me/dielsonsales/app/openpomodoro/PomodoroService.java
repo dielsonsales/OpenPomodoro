@@ -17,7 +17,9 @@ public class PomodoroService extends Service {
     private static final String TAG = "PomodoroService";
     private final IBinder mBinder = new LocalBinder();
     private PomodoroController mPomodoroController;
-    private int mStartId;
+    private UpdateListener mUpdateListener;
+
+    // Constructor -------------------------------------------------------------
 
     public PomodoroService() {
         mPomodoroController = new PomodoroController();
@@ -29,10 +31,23 @@ public class PomodoroService extends Service {
             }
 
             @Override
-            public void onTimeOver() {
-                Log.i(TAG, "onTimeOver!");
+            public void onTimeUpdated(long countdown) {
+                Log.i(TAG, "onTimeUpdated!");
+                mUpdateListener.onUpdate(countdown);
+            }
+
+            @Override
+            public void onTimeFinished() {
+                // TODO: wait for user to skip
+                mPomodoroController.skip();
             }
         });
+    }
+
+    // Getters & setters -------------------------------------------------------
+
+    public void setUpdateListener(UpdateListener listener) {
+        mUpdateListener = listener;
     }
 
     // Lifecycle methods -------------------------------------------------------
@@ -40,8 +55,6 @@ public class PomodoroService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "onStartCommand");
-        // TODO: something?
-        mStartId = startId;
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -78,5 +91,15 @@ public class PomodoroService extends Service {
         PomodoroService getService() {
             return PomodoroService.this;
         }
+    }
+
+    // Service listener --------------------------------------------------------
+
+    public interface UpdateListener {
+        /**
+         * Sends a signal to the UI every second to update the countdown.
+         * @param countDown the time left before the current period is over.
+         */
+        public void onUpdate(long countDown);
     }
 }

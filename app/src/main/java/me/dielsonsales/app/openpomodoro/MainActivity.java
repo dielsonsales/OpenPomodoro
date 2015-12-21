@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * The main activity containing the visual clock. This class is charged of
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
     private boolean mBound;
 
     // UI Components -----------------------------------------------------------
+    private TextView mCountdownText;
     private Button mPlayButton;
 
     @Override
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
         mBound = false;
 
         startPomodoroService();
+
+        mCountdownText = (TextView) findViewById(R.id.countdownText);
 
         mPlayButton = (Button) findViewById(R.id.play_button);
         mPlayButton.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +72,7 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
             unbindService(mConnection);
             mBound = false;
         }
-        Intent intent = new Intent(this, PomodoroService.class);
-        stopService(intent);
+        stopPomodoroService();
     }
 
     @Override
@@ -93,11 +96,29 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
     // Implemented classes -----------------------------------------------------
 
     private ServiceConnection mConnection = new ServiceConnection() {
+        /**
+         * Retrieves the service instance and start listening to updates.
+         * @param name
+         * @param service
+         */
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             PomodoroService.LocalBinder binder = (PomodoroService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
+
+            mService.setUpdateListener(new PomodoroService.UpdateListener() {
+                @Override
+                public void onUpdate(final long countDown) {
+                    mCountdownText.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCountdownText.setText(String.valueOf(countDown));
+                        }
+                    });
+//                    mCountdownText.setText(String.valueOf(countDown));
+                }
+            });
         }
 
         @Override

@@ -62,21 +62,23 @@ public class PomodoroControllerTest {
         mPomodoroController.start();
         assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
         assertEquals(mPomodoroController.getIsRunning(), true);
-        mPomodoroController.skip();
-        assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.REST);
-        mPomodoroController.skip();
-        assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
-        mPomodoroController.skip();
-        assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.REST);
-        mPomodoroController.skip();
-        assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
-        mPomodoroController.skip();
-        assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.REST);
-        mPomodoroController.skip();
-        assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
-        mPomodoroController.skip();
+        for (int i = 0; i < 3; i++) {
+            assertEquals(mPomodoroController.getPomodoroCount(), i + 1);
+            assertEquals(mPomodoroController.getIsRunning(), true);
+            mPomodoroController.skip();
+            assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.REST);
+            mPomodoroController.skip();
+            assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
+        }
+        mPomodoroController.skip(); // now it's the long rest
         assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.LONG_REST);
-        // reset
+        assertEquals(mPomodoroController.getPomodoroCount(), 0);
+
+        mPomodoroController.skip();
+        assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
+        assertEquals(mPomodoroController.getPomodoroCount(), 1);
+
+        // stop everything
         mPomodoroController.stop();
         assertEquals(mPomodoroController.getIsRunning(), false);
         assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);

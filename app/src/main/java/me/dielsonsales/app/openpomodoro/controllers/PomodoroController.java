@@ -33,7 +33,6 @@ public class PomodoroController {
         mLongRestTime = DEFAULT_LONG_REST_TIME;
         mExtendedTime = DEFAULT_EXTENDED_TIME;
         mLongRestFrequency = DEFAULT_LONG_REST_FREQUENCY;
-//        mTimer = new Timer();
         mCurrentIntervalType = IntervalType.POMODORO;
         mPomodoroCount = 0;
     }
@@ -120,18 +119,21 @@ public class PomodoroController {
     private void schedulePomodoro() {
         mTimer = new Timer();
         mCurrentIntervalType = IntervalType.POMODORO;
-        mTimer.schedule(new PomodoroTask(mListener), mPomodoroTime * 1000);
+        PomodoroTask pomodoroTask = new PomodoroTask(mListener, mPomodoroTime);
+        mTimer.schedule(pomodoroTask, 1000, 1000);
         mPomodoroCount += 1;
     }
 
     private void scheduleRest() {
         mTimer = new Timer();
         if (mPomodoroCount == mLongRestFrequency) {
-            mTimer.schedule(new PomodoroTask(mListener), mLongRestTime * 1000);
+            PomodoroTask longRestTask = new PomodoroTask(mListener, mLongRestTime);
+            mTimer.schedule(longRestTask, 1000, 1000);
             mCurrentIntervalType = IntervalType.LONG_REST;
             mPomodoroCount = 0; // start again
         } else {
-            mTimer.schedule(new PomodoroTask(mListener), mRestTime * 1000);
+            PomodoroTask restTask = new PomodoroTask(mListener, mRestTime);
+            mTimer.schedule(restTask, 1000, 1000);
             mCurrentIntervalType = IntervalType.REST;
         }
     }
@@ -146,12 +148,19 @@ public class PomodoroController {
 
     private class PomodoroTask extends TimerTask {
         private PomodoroListener mListener;
-        public PomodoroTask(PomodoroListener listener) {
+        private long mCountdown;
+        public PomodoroTask(PomodoroListener listener, long countdown) {
             mListener = listener;
+            mCountdown = countdown;
         }
         @Override
         public void run() {
-            mListener.onTimeOver();
+            if (mCountdown > 0) {
+                mCountdown = mCountdown - 1;
+                mListener.onTimeUpdated(mCountdown);
+            } else {
+                mListener.onTimeFinished();
+            }
         }
     }
 }

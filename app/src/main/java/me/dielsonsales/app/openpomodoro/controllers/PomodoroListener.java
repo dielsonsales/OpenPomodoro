@@ -6,5 +6,6 @@ package me.dielsonsales.app.openpomodoro.controllers;
  */
 public interface PomodoroListener {
     void onMinuteLeft();
-    void onTimeOver();
+    void onTimeUpdated(long countdown);
+    void onTimeFinished();
 }

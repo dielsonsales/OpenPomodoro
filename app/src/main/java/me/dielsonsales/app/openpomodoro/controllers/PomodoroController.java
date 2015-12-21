@@ -7,7 +7,7 @@ import java.util.TimerTask;
  * Controls the pomodoro clock
  * Created by dielson on 18/12/15.
  */
-public class PomodoroController extends TimerTask {
+public class PomodoroController {
     // Static default values ---------------------------------------------------
     private static final int DEFAULT_POMODORO_TIME = 25;
     private static final int DEFAULT_REST_TIME = 5;
@@ -24,6 +24,7 @@ public class PomodoroController extends TimerTask {
     private int mPomodoroCount;
 
     private Timer mTimer;
+    private boolean mIsRunning;
     private IntervalType mCurrentIntervalType;
 
     public PomodoroController() {
@@ -32,19 +33,9 @@ public class PomodoroController extends TimerTask {
         mLongRestTime = DEFAULT_LONG_REST_TIME;
         mExtendedTime = DEFAULT_EXTENDED_TIME;
         mLongRestFrequency = DEFAULT_LONG_REST_FREQUENCY;
-        mTimer = new Timer();
+//        mTimer = new Timer();
         mCurrentIntervalType = IntervalType.POMODORO;
         mPomodoroCount = 0;
-    }
-
-    // TimerTask methods -------------------------------------------------------
-
-    /**
-     * Updates the pomodoro status
-     */
-    @Override
-    public void run() {
-        mListener.onTimeOver();
     }
 
     // Getters & setters -------------------------------------------------------
@@ -58,6 +49,10 @@ public class PomodoroController extends TimerTask {
     public int getExtendedTime() { return mExtendedTime; }
 
     public int getPomodoroCount() { return mPomodoroCount; }
+
+    public IntervalType getCurrentIntervalType() { return mCurrentIntervalType; }
+
+    public boolean getIsRunning() { return mIsRunning; }
 
     public void setPomodoroTime(int pomodoroTime) {
         mPomodoroTime = pomodoroTime;
@@ -85,6 +80,7 @@ public class PomodoroController extends TimerTask {
      * Starts the pomodoro.
      */
     public void start() {
+        mIsRunning = true;
         schedulePomodoro();
     }
 
@@ -93,7 +89,12 @@ public class PomodoroController extends TimerTask {
      * it's a rest, to a pomodoro.
      */
     public void skip() {
+        if (!mIsRunning) {
+            return;
+        }
+        // skips to the next interval
         mTimer.cancel();
+        mTimer.purge();
         if (mCurrentIntervalType == IntervalType.POMODORO) {
             scheduleRest();
         } else {
@@ -105,28 +106,52 @@ public class PomodoroController extends TimerTask {
      * Stops any activity and cancels all operations.
      */
     public void stop() {
+        if (mIsRunning) {
+            mTimer.cancel();
+            mTimer.purge();
+        }
+        mCurrentIntervalType = IntervalType.POMODORO;
         mPomodoroCount = 0; // restart the count
-        mTimer.cancel();
+        mIsRunning = false;
     }
 
     // Private methods ---------------------------------------------------------
 
     private void schedulePomodoro() {
-        mTimer.schedule(this, mPomodoroTime * 1000);
+        mTimer = new Timer();
+        mCurrentIntervalType = IntervalType.POMODORO;
+        mTimer.schedule(new PomodoroTask(mListener), mPomodoroTime * 1000);
+        mPomodoroCount += 1;
     }
 
     private void scheduleRest() {
+        mTimer = new Timer();
         if (mPomodoroCount == mLongRestFrequency) {
-            // TODO schedule long pause
-            mPomodoroCount = 0;
+            mTimer.schedule(new PomodoroTask(mListener), mLongRestTime * 1000);
+            mCurrentIntervalType = IntervalType.LONG_REST;
+            mPomodoroCount = 0; // start again
+        } else {
+            mTimer.schedule(new PomodoroTask(mListener), mRestTime * 1000);
+            mCurrentIntervalType = IntervalType.REST;
         }
     }
 
     // Enums -------------------------------------------------------------------
 
-    private enum IntervalType {
+    public enum IntervalType {
         POMODORO,
         REST,
         LONG_REST
+    }
+
+    private class PomodoroTask extends TimerTask {
+        private PomodoroListener mListener;
+        public PomodoroTask(PomodoroListener listener) {
+            mListener = listener;
+        }
+        @Override
+        public void run() {
+            mListener.onTimeOver();
+        }
     }
 }

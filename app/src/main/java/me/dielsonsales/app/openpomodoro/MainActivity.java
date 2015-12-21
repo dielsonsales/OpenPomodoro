@@ -21,11 +21,12 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
 
     private static final String TAG = "MainActivity";
     private PomodoroService mService;
-    private boolean mBound;
+    private boolean mIsBound;
 
     // UI Components -----------------------------------------------------------
     private TextView mCountdownText;
     private Button mPlayButton;
+    private Button mStopButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,18 +36,30 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
         toolbar.setTitle(getResources().getString(R.string.title_activity_main));
         setSupportActionBar(toolbar);
 
-        mBound = false;
+        mIsBound = false;
 
         startPomodoroService();
 
         mCountdownText = (TextView) findViewById(R.id.countdownText);
 
+        // Play button
         mPlayButton = (Button) findViewById(R.id.play_button);
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mBound) {
+                if (mIsBound) {
                     mService.startPomodoro();
+                }
+            }
+        });
+
+        // Stop button
+        mStopButton = (Button) findViewById(R.id.stop_button);
+        mStopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mIsBound) {
+                    mService.stopPomodoro();
                 }
             }
         });
@@ -68,9 +81,9 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
     @Override
     protected void onStop() {
         super.onStop();
-        if (mBound) {
+        if (mIsBound) {
             unbindService(mConnection);
-            mBound = false;
+            mIsBound = false;
         }
         stopPomodoroService();
     }
@@ -105,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
         public void onServiceConnected(ComponentName name, IBinder service) {
             PomodoroService.LocalBinder binder = (PomodoroService.LocalBinder) service;
             mService = binder.getService();
-            mBound = true;
+            mIsBound = true;
 
             mService.setUpdateListener(new PomodoroService.UpdateListener() {
                 @Override
@@ -123,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            mBound = false;
+            mIsBound = false;
         }
     };
 }

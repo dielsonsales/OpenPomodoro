@@ -32,7 +32,7 @@ public class PomodoroService extends Service {
 
             @Override
             public void onTimeUpdated(long countdown) {
-                Log.i(TAG, "onTimeUpdated!");
+                Log.i(TAG, "onTimeUpdated: " + String.valueOf(countdown));
                 mUpdateListener.onUpdate(countdown);
             }
 
@@ -80,6 +80,10 @@ public class PomodoroService extends Service {
 
     public void startPomodoro() {
         mPomodoroController.start();
+    }
+
+    public void stopPomodoro() {
+        mPomodoroController.stop();
     }
 
     // Local binder ------------------------------------------------------------

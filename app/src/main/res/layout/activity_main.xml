@@ -38,12 +38,24 @@
         android:text="Teste"
         android:layout_gravity="center_horizontal"/>
 
-    <Button
-        android:id="@+id/play_button"
-        android:text="Start"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal"/>
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1">
+        <Button
+            android:id="@+id/play_button"
+            android:text="Start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/stop_button"
+            android:text="Stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
 
 </LinearLayout>

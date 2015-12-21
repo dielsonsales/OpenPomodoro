@@ -1,21 +1,29 @@
 package me.dielsonsales.app.openpomodoro;
 
-import android.media.Ringtone;
-import android.media.RingtoneManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
-import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
-import me.dielsonsales.app.openpomodoro.controllers.PomodoroListener;
-
+/**
+ * The main activity containing the visual clock. This class is charged of
+ * managing the view.
+ */
 public class MainActivity extends AppCompatActivity implements ClockFragment.OnFragmentInteractionListener {
 
-    Button mPlayButton;
-    PomodoroController mPomodoroController;
+    private static final String TAG = "MainActivity";
+    private PomodoroService mService;
+    private boolean mBound;
+
+    // UI Components -----------------------------------------------------------
+    private Button mPlayButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,41 +33,76 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
         toolbar.setTitle(getResources().getString(R.string.title_activity_main));
         setSupportActionBar(toolbar);
 
-        mPomodoroController = new PomodoroController();
+        mBound = false;
 
-        mPomodoroController.setPomodoroListener(new PomodoroListener() {
-            @Override
-            public void onMinuteLeft() {
-
-            }
-
-            @Override
-            public void onTimeOver() {
-                playSound();
-            }
-        });
+        startPomodoroService();
 
         mPlayButton = (Button) findViewById(R.id.play_button);
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPomodoroController.start();
+                if (mBound) {
+                    mService.startPomodoro();
+                }
             }
         });
     }
 
-    void playSound() {
-        try {
-            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-            r.play();
-        } catch (Exception e) {
-            e.printStackTrace();
+    /**
+     * Binds the class to the service.
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, PomodoroService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    /**
+     * Stops the activity and unbinds it from the @PomodoroService.
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
         }
+        Intent intent = new Intent(this, PomodoroService.class);
+        stopService(intent);
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        // does nothing yet
+        // TODO: implement this?
+        throw new UnsupportedOperationException("This was not supposed to be called yet");
     }
+
+    // Private methods ---------------------------------------------------------
+
+    private void startPomodoroService() {
+        Intent intent = new Intent(this, PomodoroService.class);
+        startService(intent);
+    }
+
+    private void stopPomodoroService() {
+        Intent intent = new Intent(this, PomodoroService.class);
+        stopService(intent);
+    }
+
+    // Implemented classes -----------------------------------------------------
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            PomodoroService.LocalBinder binder = (PomodoroService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound = false;
+        }
+    };
 }

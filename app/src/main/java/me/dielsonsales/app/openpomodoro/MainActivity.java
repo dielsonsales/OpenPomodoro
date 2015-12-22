@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
                         @Override
                         public void run() {
                             Log.i(TAG, "posting to mCountdownText");
-//                            mCountdownText.setText(String.valueOf(countDown));
                             mCountdownText.setText(FormattingUtils.getDisplayTime(countDown));
                         }
                     });

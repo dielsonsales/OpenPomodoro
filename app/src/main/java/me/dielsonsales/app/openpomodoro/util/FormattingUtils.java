@@ -14,7 +14,7 @@ public class FormattingUtils {
     public static String getDisplayTime(long seconds) {
         return String.format("%02d:%02d:%02d",
                 TimeUnit.SECONDS.toHours(seconds),
-                TimeUnit.SECONDS.toMinutes(seconds),
-                TimeUnit.SECONDS.toSeconds(seconds));
+                TimeUnit.SECONDS.toMinutes(seconds) - TimeUnit.SECONDS.toHours(seconds) * 60,
+                TimeUnit.SECONDS.toSeconds(seconds) % 60);
     }
 }

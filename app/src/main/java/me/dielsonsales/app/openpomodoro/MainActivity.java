@@ -63,7 +63,11 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
             @Override
             public void onClick(View v) {
                 if (mIsBound) {
-                    mService.stopPomodoro();
+                    if (mService.isRunning()) {
+                        mService.stopPomodoro();
+                    } else {
+                        Log.i(TAG, "The service is not running, duh!");
+                    }
                 }
             }
         });
@@ -101,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
             unbindService(mConnection);
             mIsBound = false;
         }
-//        finish();
     }
 
     @Override
@@ -138,14 +141,13 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
             mService.setUpdateListener(new PomodoroService.UpdateListener() {
                 @Override
                 public void onUpdate(final long countDown) {
-                    boolean postResult = mCountdownText.post(new Runnable() {
+                    mCountdownText.post(new Runnable() {
                         @Override
                         public void run() {
                             Log.i(TAG, "posting to mCountdownText");
                             mCountdownText.setText(String.valueOf(countDown));
                         }
                     });
-//                    Log.i(TAG, "onUpdate(): " + String.valueOf(postResult));
                 }
             });
         }

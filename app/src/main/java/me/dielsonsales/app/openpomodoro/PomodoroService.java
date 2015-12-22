@@ -8,6 +8,7 @@ import android.util.Log;
 
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroListener;
+import me.dielsonsales.app.openpomodoro.controllers.PomodoroNotificationManager;
 
 /**
  * The pomodoro service that contains the controller.
@@ -18,12 +19,12 @@ public class PomodoroService extends Service {
     private final IBinder mBinder = new LocalBinder();
     private PomodoroController mPomodoroController;
     private UpdateListener mUpdateListener;
+    private PomodoroNotificationManager mNotificationManager;
 
     // Constructor -------------------------------------------------------------
 
     public PomodoroService() {
         mPomodoroController = new PomodoroController();
-
         mPomodoroController.setPomodoroListener(new PomodoroListener() {
             @Override
             public void onMinuteLeft() {
@@ -55,6 +56,7 @@ public class PomodoroService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "onStartCommand");
+        mNotificationManager = new PomodoroNotificationManager(this);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -73,7 +75,7 @@ public class PomodoroService extends Service {
     @Override
     public boolean stopService(Intent name) {
         Log.i(TAG, "stoService");
-        mPomodoroController.stop();
+        stopPomodoro();
         return super.stopService(name);
     }
 
@@ -81,10 +83,12 @@ public class PomodoroService extends Service {
 
     public void startPomodoro() {
         mPomodoroController.start();
+        mNotificationManager.showNotification();
     }
 
     public void stopPomodoro() {
         mPomodoroController.stop();
+        mNotificationManager.hideNotification();
     }
 
     public boolean isRunning() {

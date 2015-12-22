@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
+
 /**
  * The main activity containing the visual clock. This class is charged of
  * managing the view.
@@ -145,7 +147,8 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
                         @Override
                         public void run() {
                             Log.i(TAG, "posting to mCountdownText");
-                            mCountdownText.setText(String.valueOf(countDown));
+//                            mCountdownText.setText(String.valueOf(countDown));
+                            mCountdownText.setText(FormattingUtils.getDisplayTime(countDown));
                         }
                     });
                 }

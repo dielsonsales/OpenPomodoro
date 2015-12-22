@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,8 +26,6 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
 
     // UI Components -----------------------------------------------------------
     private TextView mCountdownText;
-    private Button mPlayButton;
-    private Button mStopButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,19 +42,24 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
         mCountdownText = (TextView) findViewById(R.id.countdownText);
 
         // Play button
-        mPlayButton = (Button) findViewById(R.id.play_button);
-        mPlayButton.setOnClickListener(new View.OnClickListener() {
+        Button playButton = (Button) findViewById(R.id.play_button);
+        playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mIsBound) {
-                    mService.startPomodoro();
+                    if (!mService.isRunning()) {
+                        mService.startPomodoro();
+                    } else {
+                        Log.i(TAG, "Service is already running");
+                    }
+
                 }
             }
         });
 
         // Stop button
-        mStopButton = (Button) findViewById(R.id.stop_button);
-        mStopButton.setOnClickListener(new View.OnClickListener() {
+        Button stopButton = (Button) findViewById(R.id.stop_button);
+        stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mIsBound) {
@@ -72,7 +76,13 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
     protected void onStart() {
         super.onStart();
         Intent intent = new Intent(this, PomodoroService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        bindService(intent, mConnection, Context.BIND_IMPORTANT);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "Pausing activity");
     }
 
     /**
@@ -81,11 +91,17 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
     @Override
     protected void onStop() {
         super.onStop();
+        Log.i(TAG, "Stopping activity");
+        if (mService != null) {
+            if (!mService.isRunning()) {
+                stopPomodoroService();
+            }
+        }
         if (mIsBound) {
             unbindService(mConnection);
             mIsBound = false;
         }
-        stopPomodoroService();
+//        finish();
     }
 
     @Override
@@ -111,11 +127,10 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
     private ServiceConnection mConnection = new ServiceConnection() {
         /**
          * Retrieves the service instance and start listening to updates.
-         * @param name
-         * @param service
          */
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.i(TAG, "onServiceConnected");
             PomodoroService.LocalBinder binder = (PomodoroService.LocalBinder) service;
             mService = binder.getService();
             mIsBound = true;
@@ -123,13 +138,14 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
             mService.setUpdateListener(new PomodoroService.UpdateListener() {
                 @Override
                 public void onUpdate(final long countDown) {
-                    mCountdownText.post(new Runnable() {
+                    boolean postResult = mCountdownText.post(new Runnable() {
                         @Override
                         public void run() {
+                            Log.i(TAG, "posting to mCountdownText");
                             mCountdownText.setText(String.valueOf(countDown));
                         }
                     });
-//                    mCountdownText.setText(String.valueOf(countDown));
+//                    Log.i(TAG, "onUpdate(): " + String.valueOf(postResult));
                 }
             });
         }

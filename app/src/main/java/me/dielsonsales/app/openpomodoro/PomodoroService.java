@@ -73,6 +73,7 @@ public class PomodoroService extends Service {
     @Override
     public boolean stopService(Intent name) {
         Log.i(TAG, "stoService");
+        mPomodoroController.stop();
         return super.stopService(name);
     }
 
@@ -86,15 +87,17 @@ public class PomodoroService extends Service {
         mPomodoroController.stop();
     }
 
+    public boolean isRunning() {
+        return mPomodoroController.isRunning();
+    }
+
     // Local binder ------------------------------------------------------------
 
     /**
      * Class used for the client binder.
      */
     public class LocalBinder extends Binder {
-        PomodoroService getService() {
-            return PomodoroService.this;
-        }
+        PomodoroService getService() { return PomodoroService.this; }
     }
 
     // Service listener --------------------------------------------------------
@@ -104,6 +107,6 @@ public class PomodoroService extends Service {
          * Sends a signal to the UI every second to update the countdown.
          * @param countDown the time left before the current period is over.
          */
-        public void onUpdate(long countDown);
+        void onUpdate(long countDown);
     }
 }

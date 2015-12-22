@@ -23,7 +23,7 @@ public class PomodoroControllerTest {
     @Test
     public void testPomodoroDefaults() {
         assertEquals(mPomodoroController.getPomodoroCount(), 0);
-        assertEquals(mPomodoroController.getIsRunning(), false);
+        assertEquals(mPomodoroController.isRunning(), false);
         assertEquals(mPomodoroController.getPomodoroTime(), 25);
         assertEquals(mPomodoroController.getRestTime(), 5);
         assertEquals(mPomodoroController.getExtendedTime(), 3);
@@ -57,14 +57,14 @@ public class PomodoroControllerTest {
     @Test
     public void testRunning() {
         assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
-        assertEquals(mPomodoroController.getIsRunning(), false);
+        assertEquals(mPomodoroController.isRunning(), false);
         // start counting
         mPomodoroController.start();
         assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
-        assertEquals(mPomodoroController.getIsRunning(), true);
+        assertEquals(mPomodoroController.isRunning(), true);
         for (int i = 0; i < 3; i++) {
             assertEquals(mPomodoroController.getPomodoroCount(), i + 1);
-            assertEquals(mPomodoroController.getIsRunning(), true);
+            assertEquals(mPomodoroController.isRunning(), true);
             mPomodoroController.skip();
             assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.REST);
             mPomodoroController.skip();
@@ -80,7 +80,7 @@ public class PomodoroControllerTest {
 
         // stop everything
         mPomodoroController.stop();
-        assertEquals(mPomodoroController.getIsRunning(), false);
+        assertEquals(mPomodoroController.isRunning(), false);
         assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
     }
 }

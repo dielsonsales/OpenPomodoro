@@ -51,7 +51,7 @@ public class PomodoroController {
 
     public IntervalType getCurrentIntervalType() { return mCurrentIntervalType; }
 
-    public boolean getIsRunning() { return mIsRunning; }
+    public boolean isRunning() { return mIsRunning; }
 
     public void setPomodoroTime(int pomodoroTime) {
         mPomodoroTime = pomodoroTime;

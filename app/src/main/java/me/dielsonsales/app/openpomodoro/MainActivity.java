@@ -6,17 +6,13 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.lang.ref.WeakReference;
 
 import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
 
@@ -28,7 +24,6 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
 
     private static final String TAG = "MainActivity";
     private PomodoroService mService;
-    private static Handler mHandler;
     private boolean mIsBound;
 
     // UI Components -----------------------------------------------------------
@@ -41,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.title_activity_main));
         setSupportActionBar(toolbar);
-
-        mHandler = new ActivityHandler(this);
 
         mIsBound = false;
 
@@ -134,27 +127,15 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
         stopService(intent);
     }
 
-    public void updateUI(Message msg) {
-        mCountdownText.setText(FormattingUtils.getDisplayTime(msg.getData().getLong("countdown")));
+    /**
+     * Updates the whole UI with the news parameters
+     * @param bundle the updated data to display
+     */
+    public void updateUI(Bundle bundle) {
+        mCountdownText.setText(FormattingUtils.getDisplayTime(bundle.getLong("countdown")));
     }
 
-    // Implemented classes -----------------------------------------------------
-
-    static class ActivityHandler extends Handler {
-        private WeakReference<MainActivity> mMainActivity;
-        public ActivityHandler(MainActivity activity) {
-            mMainActivity = new WeakReference<>(activity);
-        }
-        @Override
-        public void handleMessage(Message msg) {
-            if (mMainActivity != null) {
-                MainActivity reference = mMainActivity.get();
-                if (reference != null) {
-                    reference.updateUI(msg);
-                }
-            }
-        }
-    }
+    // Service connection ------------------------------------------------------
 
     private ServiceConnection mConnection = new ServiceConnection() {
         /**
@@ -169,9 +150,7 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
             mService.setUpdateListener(new PomodoroService.UpdateListener() {
                 @Override
                 public void onUpdate(Bundle bundle) {
-                    Message msg = new Message();
-                    msg.setData(bundle);
-                    mHandler.sendMessage(msg);
+                    updateUI(bundle);
                 }
             });
         }

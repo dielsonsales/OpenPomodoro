@@ -22,8 +22,13 @@ public class PomodoroSoundManager {
     }
 
     public void playAlarm() {
-        mPlayer = MediaPlayer.create(mContext, R.raw.alarm);
-        mPlayer.start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mPlayer = MediaPlayer.create(mContext, R.raw.alarm);
+                mPlayer.start();
+            }
+        }).start();
     }
 
     public static PomodoroSoundManager getInstance(Context context) {

@@ -43,18 +43,20 @@ public class PomodoroService extends Service {
             }
 
             @Override
-            public void onTimeUpdated(long countdown) {
+            public void onTimeUpdated(Bundle bundle) {
+                long countdown = bundle.getLong("countdown");
                 Log.i(TAG, "onTimeUpdated: " + String.valueOf(countdown));
-                Bundle bundle = new Bundle();
-                bundle.putLong("countdown", countdown);
                 mUpdateListener.onUpdate(bundle);
+                if (countdown == 0) {
+                    mPomodoroController.skip();
+                }
             }
 
-            @Override
-            public void onTimeFinished() {
-                // TODO: wait for user to skip
-                mPomodoroController.skip();
-            }
+//            @Override
+//            public void onTimeFinished() {
+//                // TODO: wait for user to skip
+//                mPomodoroController.skip();
+//            }
         });
 
         return super.onStartCommand(intent, flags, startId);

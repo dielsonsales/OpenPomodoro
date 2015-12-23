@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
 
     // Implemented classes -----------------------------------------------------
 
-    private class ActivityHandler extends Handler {
+    static class ActivityHandler extends Handler {
         private WeakReference<MainActivity> mMainActivity;
         public ActivityHandler(MainActivity activity) {
             mMainActivity = new WeakReference<>(activity);

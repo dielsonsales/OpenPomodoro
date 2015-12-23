@@ -1,5 +1,7 @@
 package me.dielsonsales.app.openpomodoro.controllers;
 
+import android.content.Context;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,11 +25,13 @@ public class PomodoroController {
     private int mLongRestFrequency;
     private int mPomodoroCount;
 
+    private Context mContext;
     private Timer mTimer;
     private boolean mIsRunning;
     private IntervalType mCurrentIntervalType;
 
-    public PomodoroController() {
+    public PomodoroController(Context context) {
+        mContext = context;
         mPomodoroTime = DEFAULT_POMODORO_TIME;
         mRestTime = DEFAULT_REST_TIME;
         mLongRestTime = DEFAULT_LONG_REST_TIME;
@@ -91,7 +95,6 @@ public class PomodoroController {
         if (!mIsRunning) {
             return;
         }
-        // skips to the next interval
         mTimer.cancel();
         mTimer.purge();
         if (mCurrentIntervalType == IntervalType.POMODORO) {
@@ -149,9 +152,13 @@ public class PomodoroController {
     private class PomodoroTask extends TimerTask {
         private PomodoroListener mListener;
         private long mCountdown;
+        private PomodoroSoundManager mSoundManager;
+        private int mSecondsCounter; // counts to know when a minute is completed
         public PomodoroTask(PomodoroListener listener, long countdown) {
             mListener = listener;
             mCountdown = countdown;
+            mSecondsCounter = 0;
+            mSoundManager = new PomodoroSoundManager(mContext);
         }
         @Override
         public void run() {
@@ -159,8 +166,10 @@ public class PomodoroController {
                 mCountdown = mCountdown - 1;
                 mListener.onTimeUpdated(mCountdown);
             } else {
-                mListener.onTimeFinished();
+                mSoundManager.playAlarm();
+                mListener.onTimeFinished(); // emits the signal
             }
         }
+
     }
 }

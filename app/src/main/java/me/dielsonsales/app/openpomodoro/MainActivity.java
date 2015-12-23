@@ -18,7 +18,7 @@ import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
 
 /**
  * The main activity containing the visual clock. This class is charged of
- * managing the view.
+ * displaying and updating the view according to the data in the Service.
  */
 public class MainActivity extends AppCompatActivity implements ClockFragment.OnFragmentInteractionListener {
 
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
     }
 
     /**
-     * Stops the activity and unbinds it from the @PomodoroService.
+     * Stops the activity and unbinds it from the PomodoroService.
      */
     @Override
     protected void onStop() {

@@ -96,6 +96,10 @@ public class ClockCanvas extends View {
         mIntervals.clear();
     }
 
+    public void addCurrentInterval(Duration pomodoroDuration) {
+
+    }
+
     // overriden methods ---------------------------------------------------------------------------
 
     @Override

@@ -21,10 +21,20 @@ public class PomodoroService extends Service {
     private UpdateListener mUpdateListener;
     private PomodoroNotificationManager mNotificationManager;
 
-    // Constructor -------------------------------------------------------------
+    // Getters & setters -------------------------------------------------------
 
-    public PomodoroService() {
-        mPomodoroController = new PomodoroController();
+    public void setUpdateListener(UpdateListener listener) {
+        mUpdateListener = listener;
+    }
+
+    // Lifecycle methods -------------------------------------------------------
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i(TAG, "onStartCommand");
+        mNotificationManager = new PomodoroNotificationManager(this);
+
+        mPomodoroController = new PomodoroController(this);
         mPomodoroController.setPomodoroListener(new PomodoroListener() {
             @Override
             public void onMinuteLeft() {
@@ -43,20 +53,7 @@ public class PomodoroService extends Service {
                 mPomodoroController.skip();
             }
         });
-    }
 
-    // Getters & setters -------------------------------------------------------
-
-    public void setUpdateListener(UpdateListener listener) {
-        mUpdateListener = listener;
-    }
-
-    // Lifecycle methods -------------------------------------------------------
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(TAG, "onStartCommand");
-        mNotificationManager = new PomodoroNotificationManager(this);
         return super.onStartCommand(intent, flags, startId);
     }
 

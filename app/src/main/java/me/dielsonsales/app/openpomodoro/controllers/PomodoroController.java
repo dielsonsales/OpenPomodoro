@@ -153,11 +153,9 @@ public class PomodoroController {
         private PomodoroListener mListener;
         private long mCountdown;
         private PomodoroSoundManager mSoundManager;
-        private int mSecondsCounter; // counts to know when a minute is completed
         public PomodoroTask(PomodoroListener listener, long countdown) {
             mListener = listener;
             mCountdown = countdown;
-            mSecondsCounter = 0;
             mSoundManager = PomodoroSoundManager.getInstance(mContext);
         }
         @Override
@@ -166,7 +164,13 @@ public class PomodoroController {
                 mCountdown = mCountdown - 1;
                 mListener.onTimeUpdated(mCountdown);
             } else {
-                mSoundManager.playAlarm();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSoundManager.playAlarm();
+                    }
+                }).start();
+//                mSoundManager.playAlarm();
                 mListener.onTimeFinished(); // emits the signal
             }
         }

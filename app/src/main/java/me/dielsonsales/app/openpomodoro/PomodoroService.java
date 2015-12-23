@@ -3,6 +3,7 @@ package me.dielsonsales.app.openpomodoro;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -44,7 +45,9 @@ public class PomodoroService extends Service {
             @Override
             public void onTimeUpdated(long countdown) {
                 Log.i(TAG, "onTimeUpdated: " + String.valueOf(countdown));
-                mUpdateListener.onUpdate(countdown);
+                Bundle bundle = new Bundle();
+                bundle.putLong("countdown", countdown);
+                mUpdateListener.onUpdate(bundle);
             }
 
             @Override
@@ -106,8 +109,8 @@ public class PomodoroService extends Service {
     public interface UpdateListener {
         /**
          * Sends a signal to the UI every second to update the countdown.
-         * @param countDown the time left before the current period is over.
+         * @param bundle the data to be updated
          */
-        void onUpdate(long countDown);
+        void onUpdate(Bundle bundle);
     }
 }

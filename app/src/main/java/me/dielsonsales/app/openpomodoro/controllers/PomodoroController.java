@@ -158,7 +158,7 @@ public class PomodoroController {
             mListener = listener;
             mCountdown = countdown;
             mSecondsCounter = 0;
-            mSoundManager = new PomodoroSoundManager(mContext);
+            mSoundManager = PomodoroSoundManager.getInstance(mContext);
         }
         @Override
         public void run() {

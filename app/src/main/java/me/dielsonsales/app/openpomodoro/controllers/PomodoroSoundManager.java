@@ -2,6 +2,7 @@ package me.dielsonsales.app.openpomodoro.controllers;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.util.Log;
 
 import me.dielsonsales.app.openpomodoro.R;
 
@@ -9,7 +10,6 @@ public class PomodoroSoundManager {
     private static final String TAG = "PomodoroSoundManager";
 
     private MediaPlayer mPlayer;
-    private Context mContext;
     private static PomodoroSoundManager mInstance;
 
     public static PomodoroSoundManager getInstance(Context context) {
@@ -22,8 +22,7 @@ public class PomodoroSoundManager {
     private PomodoroSoundManager() {}
 
     private PomodoroSoundManager(Context context) {
-        mContext = context;
-        mPlayer = MediaPlayer.create(mContext, R.raw.alarm);
+        mPlayer = MediaPlayer.create(context, R.raw.alarm);
     }
 
     public void playAlarm() {
@@ -31,6 +30,7 @@ public class PomodoroSoundManager {
             mPlayer.pause();
             mPlayer.seekTo(0);
         }
+        Log.i("SoundManager", "Playing sound");
         mPlayer.start();
     }
 }

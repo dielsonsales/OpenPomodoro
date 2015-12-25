@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.Timer;
@@ -156,7 +155,6 @@ public class PomodoroController {
         if (mCounter > 0) {
             mCounter = mCounter - 1;
         }
-        Log.i(TAG, "handleMessage()");
         Bundle bundle = new Bundle();
         bundle.putLong("countdown", mCounter);
         mListener.onTimeUpdated(bundle);
@@ -205,7 +203,6 @@ public class PomodoroController {
     private class PomodoroTask extends TimerTask {
         @Override
         public void run() {
-            Log.d(TAG, "sendingEmptyMessage");
             mHandler.sendEmptyMessage(0);
         }
     }

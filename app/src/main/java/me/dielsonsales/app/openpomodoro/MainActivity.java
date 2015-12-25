@@ -38,9 +38,6 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
         setSupportActionBar(toolbar);
 
         mIsBound = false;
-
-        startPomodoroService();
-
         mCountdownText = (TextView) findViewById(R.id.countdownText);
 
         // Play button
@@ -49,12 +46,7 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
             @Override
             public void onClick(View v) {
                 if (mIsBound) {
-                    if (!mService.isRunning()) {
-                        mService.startPomodoro();
-                    } else {
-                        Log.i(TAG, "Service is already running");
-                    }
-
+                    startPomodoro();
                 }
             }
         });
@@ -65,11 +57,7 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
             @Override
             public void onClick(View v) {
                 if (mIsBound) {
-                    if (mService.isRunning()) {
-                        mService.stopPomodoro();
-                    } else {
-                        Log.i(TAG, "The service is not running, duh!");
-                    }
+                    stopPomodoro();
                 }
             }
         });
@@ -82,13 +70,7 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
     protected void onStart() {
         super.onStart();
         Intent intent = new Intent(this, PomodoroService.class);
-        bindService(intent, mConnection, Context.BIND_IMPORTANT);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.i(TAG, "Pausing activity");
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     /**
@@ -97,15 +79,9 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
     @Override
     protected void onStop() {
         super.onStop();
-        Log.i(TAG, "Stopping activity");
-        if (mService != null) {
-            if (!mService.isRunning()) {
-                stopPomodoroService();
-            }
-        }
         if (mIsBound) {
+            Log.i(TAG, "Unbinding service");
             unbindService(mConnection);
-            mIsBound = false;
         }
     }
 
@@ -117,14 +93,17 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
 
     // Private methods ---------------------------------------------------------
 
-    private void startPomodoroService() {
-        Intent intent = new Intent(this, PomodoroService.class);
-        startService(intent);
+    private void startPomodoro() {
+        if (!mService.isRunning()) {
+            Intent intent = new Intent(this, PomodoroService.class);
+            startService(intent);
+        }
     }
 
-    private void stopPomodoroService() {
-        Intent intent = new Intent(this, PomodoroService.class);
-        stopService(intent);
+    private void stopPomodoro() {
+        if (mService.isRunning()) {
+            mService.stopPomodoro();
+        }
     }
 
     /**
@@ -143,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
          */
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.i(TAG, "onServiceConnected");
             PomodoroService.LocalBinder binder = (PomodoroService.LocalBinder) service;
             mService = binder.getService();
             mIsBound = true;

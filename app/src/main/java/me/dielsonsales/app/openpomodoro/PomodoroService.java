@@ -21,6 +21,7 @@ public class PomodoroService extends Service {
     private PomodoroController mPomodoroController;
     private UpdateListener mUpdateListener;
     private PomodoroNotificationManager mNotificationManager;
+    private int mStartId;
 
     // Getters & setters -------------------------------------------------------
 
@@ -30,19 +31,29 @@ public class PomodoroService extends Service {
 
     // Lifecycle methods -------------------------------------------------------
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(TAG, "onStartCommand");
-        mNotificationManager = new PomodoroNotificationManager(this);
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.i(TAG, "creating service");
+        mNotificationManager = new PomodoroNotificationManager(this);
         mPomodoroController = new PomodoroController(this);
         mPomodoroController.setPomodoroListener(new PomodoroListener() {
             @Override
             public void onTimeUpdated(Bundle bundle) {
-                mUpdateListener.onUpdate(bundle);
+                if (mUpdateListener != null) {
+                    mUpdateListener.onUpdate(bundle);
+                }
             }
         });
-        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        mStartId = startId;
+        startPomodoro();
+        return START_STICKY;
+//        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -57,16 +68,13 @@ public class PomodoroService extends Service {
         return super.onUnbind(intent);
     }
 
-    @Override
-    public boolean stopService(Intent name) {
-        Log.i(TAG, "stoService");
-        stopPomodoro();
-        return super.stopService(name);
-    }
-
     // Public methods ----------------------------------------------------------
 
-    public void startPomodoro() {
+    /**
+     * This method is not supposed to get called from a bound activity. Instead,
+     * it is called when onStartCommand is called.
+     */
+    private void startPomodoro() {
         mPomodoroController.start();
         mNotificationManager.showNotification();
     }
@@ -74,6 +82,7 @@ public class PomodoroService extends Service {
     public void stopPomodoro() {
         mPomodoroController.stop();
         mNotificationManager.hideNotification();
+        stopSelf(mStartId);
     }
 
     public boolean isRunning() {

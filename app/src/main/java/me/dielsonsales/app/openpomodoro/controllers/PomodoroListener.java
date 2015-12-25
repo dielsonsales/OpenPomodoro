@@ -7,7 +7,5 @@ import android.os.Bundle;
  * Created by dielson on 19/12/15.
  */
 public interface PomodoroListener {
-    void onMinuteLeft();
     void onTimeUpdated(Bundle bundle);
-//    void onTimeFinished();
 }

@@ -204,18 +204,14 @@ public class PomodoroController {
      */
     private class PomodoroTask extends TimerTask {
         private long mCountdown;
-        private PomodoroSoundManager mSoundManager;
         // time values
         public PomodoroTask(long countdown) {
             mCountdown = countdown;
-            mSoundManager = PomodoroSoundManager.getInstance(mContext);
         }
         @Override
         public void run() {
             if (mCountdown > 0) {
                 mCountdown = mCountdown - 1;
-            } else {
-                mSoundManager.playAlarm();
             }
             sendMessage();
         }

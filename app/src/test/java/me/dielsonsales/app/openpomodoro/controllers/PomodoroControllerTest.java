@@ -14,7 +14,7 @@ public class PomodoroControllerTest {
 
     @Before
     public void setUp() {
-        mPomodoroController = new PomodoroController();
+//        mPomodoroController = new PomodoroController();
     }
 
     /**

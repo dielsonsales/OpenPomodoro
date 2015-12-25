@@ -5,36 +5,32 @@ import android.media.MediaPlayer;
 
 import me.dielsonsales.app.openpomodoro.R;
 
-/**
- * Created by dielson on 22/12/15.
- */
 public class PomodoroSoundManager {
+    private static final String TAG = "PomodoroSoundManager";
 
     private MediaPlayer mPlayer;
     private Context mContext;
     private static PomodoroSoundManager mInstance;
-
-    private PomodoroSoundManager() {}
-
-    private PomodoroSoundManager(Context context) {
-        mPlayer = new MediaPlayer();
-        mContext = context;
-    }
-
-    public void playAlarm() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mPlayer = MediaPlayer.create(mContext, R.raw.alarm);
-                mPlayer.start();
-            }
-        }).start();
-    }
 
     public static PomodoroSoundManager getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new PomodoroSoundManager(context);
         }
         return mInstance;
+    }
+
+    private PomodoroSoundManager() {}
+
+    private PomodoroSoundManager(Context context) {
+        mContext = context;
+        mPlayer = MediaPlayer.create(mContext, R.raw.alarm);
+    }
+
+    public void playAlarm() {
+        if (mPlayer.isPlaying()) {
+            mPlayer.pause();
+            mPlayer.seekTo(0);
+        }
+        mPlayer.start();
     }
 }

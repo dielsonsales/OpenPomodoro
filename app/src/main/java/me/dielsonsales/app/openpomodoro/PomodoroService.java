@@ -39,14 +39,9 @@ public class PomodoroService extends Service {
         mPomodoroController.setPomodoroListener(new PomodoroListener() {
             @Override
             public void onTimeUpdated(Bundle bundle) {
-                long countdown = bundle.getLong("countdown");
                 mUpdateListener.onUpdate(bundle);
-                if (countdown == 0) {
-                    mPomodoroController.skip();
-                }
             }
         });
-
         return super.onStartCommand(intent, flags, startId);
     }
 

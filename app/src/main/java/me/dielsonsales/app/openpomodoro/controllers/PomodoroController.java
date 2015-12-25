@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.Timer;
@@ -14,6 +15,7 @@ import java.util.TimerTask;
  * Created by dielson on 18/12/15.
  */
 public class PomodoroController {
+    private static final String TAG = "PomodoroController";
     // Enums -------------------------------------------------------------------
     public enum IntervalType {
         POMODORO,
@@ -39,6 +41,7 @@ public class PomodoroController {
     private Context mContext;
     private Timer mTimer;
     private boolean mIsRunning;
+    private long mCounter;
     private IntervalType mCurrentIntervalType;
     private PomodoroListener mListener;
     private static ControllerHandler mHandler;
@@ -103,8 +106,9 @@ public class PomodoroController {
      * Starts the pomodoro.
      */
     public void start() {
+        mCounter = mPomodoroTime;
         mIsRunning = true;
-        schedulePomodoro();
+        startPomodoroTask();
     }
 
     /**
@@ -115,12 +119,19 @@ public class PomodoroController {
         if (!mIsRunning) {
             return;
         }
-        mTimer.cancel();
-        mTimer.purge();
         if (mCurrentIntervalType == IntervalType.POMODORO) {
-            scheduleRest();
+            if (mPomodoroCount == mLongRestFrequency) {
+                mCurrentIntervalType = IntervalType.LONG_REST;
+                mPomodoroCount = 0;
+                mCounter = mLongRestTime;
+            } else {
+                mCurrentIntervalType = IntervalType.REST;
+                mCounter = mRestTime;
+            }
         } else {
-            schedulePomodoro();
+            mCurrentIntervalType = IntervalType.POMODORO;
+            mCounter = mPomodoroTime;
+            mPomodoroCount += 1;
         }
     }
 
@@ -141,38 +152,27 @@ public class PomodoroController {
         mSoundManager.playAlarm();
     }
 
-    public void handleMessage(Message msg) {
-        if (msg.getData().getLong("countdown") == 0) {
-            playAlarm();
+    public void handleMessage() {
+        if (mCounter > 0) {
+            mCounter = mCounter - 1;
         }
-        mListener.onTimeUpdated(msg.getData());
+        Log.i(TAG, "handleMessage()");
+        Bundle bundle = new Bundle();
+        bundle.putLong("countdown", mCounter);
+        mListener.onTimeUpdated(bundle);
+        if (mCounter == 0) {
+            playAlarm();
+            skip();
+        }
     }
 
     // Private methods ---------------------------------------------------------
 
-    private void schedulePomodoro() {
+    private void startPomodoroTask() {
         mTimer = new Timer();
-        mCurrentIntervalType = IntervalType.POMODORO;
-        PomodoroTask pomodoroTask = new PomodoroTask(mPomodoroTime);
-        mTimer.schedule(pomodoroTask, 1000, 1000);
-        mPomodoroCount += 1;
+        PomodoroTask pomodoroTask = new PomodoroTask();
+        mTimer.schedule(pomodoroTask, 0, 1000);
     }
-
-    private void scheduleRest() {
-        mTimer = new Timer();
-        if (mPomodoroCount == mLongRestFrequency) {
-            PomodoroTask longRestTask = new PomodoroTask(mLongRestTime);
-            mTimer.schedule(longRestTask, 1000, 1000);
-            mCurrentIntervalType = IntervalType.LONG_REST;
-            mPomodoroCount = 0; // start again
-        } else {
-            PomodoroTask restTask = new PomodoroTask(mRestTime);
-            mTimer.schedule(restTask, 1000, 1000);
-            mCurrentIntervalType = IntervalType.REST;
-        }
-    }
-
-
 
     // Handler -----------------------------------------------------------------
 
@@ -191,7 +191,7 @@ public class PomodoroController {
             if (mController != null) {
                 PomodoroController pomodoroController = mController.get();
                 if (pomodoroController != null) {
-                    pomodoroController.handleMessage(msg);
+                    pomodoroController.handleMessage();
                 }
             }
         }
@@ -203,25 +203,10 @@ public class PomodoroController {
      * Executes in a
      */
     private class PomodoroTask extends TimerTask {
-        private long mCountdown;
-        // time values
-        public PomodoroTask(long countdown) {
-            mCountdown = countdown;
-        }
         @Override
         public void run() {
-            if (mCountdown > 0) {
-                mCountdown = mCountdown - 1;
-            }
-            sendMessage();
+            Log.d(TAG, "sendingEmptyMessage");
+            mHandler.sendEmptyMessage(0);
         }
-        private void sendMessage() {
-            Bundle bundle = new Bundle();
-            bundle.putLong("countdown", mCountdown);
-            Message msg = new Message();
-            msg.setData(bundle);
-            mHandler.sendMessage(msg);
-        }
-
     }
 }

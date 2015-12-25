@@ -31,11 +31,14 @@ public class PomodoroService extends Service {
 
     // Lifecycle methods -------------------------------------------------------
 
-
+    /**
+     * Creates the service. This is supposed to be called always by calling the
+     * onBind method.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "creating service");
+        Log.i(TAG, "Creating service");
         mNotificationManager = new PomodoroNotificationManager(this);
         mPomodoroController = new PomodoroController(this);
         mPomodoroController.setPomodoroListener(new PomodoroListener() {
@@ -48,12 +51,15 @@ public class PomodoroService extends Service {
         });
     }
 
+    /**
+     * Start counting the pomodoro cycle. This class starts the foreground
+     * service and allows it to run when the activity unbinds it.
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mStartId = startId;
         startPomodoro();
         return START_STICKY;
-//        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -71,20 +77,28 @@ public class PomodoroService extends Service {
     // Public methods ----------------------------------------------------------
 
     /**
-     * This method is not supposed to get called from a bound activity. Instead,
-     * it is called when onStartCommand is called.
+     * This method is NOT supposed to be called from an activity. Instead, it
+     * is automatically called in the onStartCommand method.
      */
     private void startPomodoro() {
         mPomodoroController.start();
         mNotificationManager.showNotification();
     }
 
+    /**
+     * Stops the pomodoro and the foreground service. After calling this method,
+     * the service will be destroyed after it is unbound.
+     */
     public void stopPomodoro() {
         mPomodoroController.stop();
         mNotificationManager.hideNotification();
         stopSelf(mStartId);
     }
 
+    /**
+     * Returns whether the pomodoro is running or not.
+     * @return true if the pomodoro is running
+     */
     public boolean isRunning() {
         return mPomodoroController.isRunning();
     }
@@ -92,7 +106,8 @@ public class PomodoroService extends Service {
     // Local binder ------------------------------------------------------------
 
     /**
-     * Class used for the client binder.
+     * Class used for the client binder. This class returns an instance of this
+     * service for the bound activity.
      */
     public class LocalBinder extends Binder {
         PomodoroService getService() { return PomodoroService.this; }
@@ -100,6 +115,10 @@ public class PomodoroService extends Service {
 
     // Service listener --------------------------------------------------------
 
+    /**
+     * Interface used to send signals to its bound activity. It allows the
+     * MainActivity to register as a listener to this service.
+     */
     public interface UpdateListener {
         /**
          * Sends a signal to the UI every second to update the countdown.

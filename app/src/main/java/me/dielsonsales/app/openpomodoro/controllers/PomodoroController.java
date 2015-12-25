@@ -37,7 +37,7 @@ public class PomodoroController {
     private int mLongRestFrequency;
     private int mPomodoroCount;
 
-    private Context mContext;
+    // Member variables --------------------------------------------------------
     private Timer mTimer;
     private boolean mIsRunning;
     private long mCounter;
@@ -51,7 +51,6 @@ public class PomodoroController {
      * @param context the service context
      */
     public PomodoroController(Context context) {
-        mContext = context;
         mHandler = new ControllerHandler(this);
         mPomodoroTime = DEFAULT_POMODORO_TIME;
         mRestTime = DEFAULT_REST_TIME;
@@ -60,7 +59,7 @@ public class PomodoroController {
         mLongRestFrequency = DEFAULT_LONG_REST_FREQUENCY;
         mCurrentIntervalType = IntervalType.POMODORO;
         mPomodoroCount = 0;
-        mSoundManager = PomodoroSoundManager.getInstance(mContext);
+        mSoundManager = PomodoroSoundManager.getInstance(context);
     }
 
     // Getters & setters -------------------------------------------------------
@@ -147,9 +146,7 @@ public class PomodoroController {
         mIsRunning = false;
     }
 
-    public void playAlarm() {
-        mSoundManager.playAlarm();
-    }
+    public void playAlarm() { mSoundManager.playAlarm(); }
 
     public void handleMessage() {
         if (mCounter > 0) {

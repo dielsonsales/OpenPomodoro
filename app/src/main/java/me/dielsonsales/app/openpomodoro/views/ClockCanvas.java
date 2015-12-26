@@ -23,14 +23,14 @@ public class ClockCanvas extends View {
 
     // Abstract members
     static final private String TAG = "ClockCanvas";
-    static final private double MINUTE_LENGTH_MOD = 0.8; // minutes pointer size
-    static final private double HOUR_LENGTH_MOD = 0.5; // hours pointer size
-    static final private int CURRENT_THICKNESS = 20; // current pomodoro mark thickness
-    static final private int BORDER_THICKNESS = 15;
-    static public int CLOCK_COLOR;
-    static public int POINTERS_COLOR;
-    static public int INTERVAL_COLOR;
-    static public int POMODORO_COLOR;
+    static final private double MINUTE_POINTER_MODIFIER = 0.8;
+    static final private double HOUR_POINTER_MODIFIER = 0.5;
+    static final private int POMODORO_THICKNESS = 20;
+    static final private int CLOCK_BORDER_THICKNESS = 15;
+    static public int CLOCK_COLOR = Color.RED;
+    static public int POINTERS_COLOR = Color.WHITE;
+    static public int INTERVAL_COLOR = Color.GRAY;
+    static public int POMODORO_COLOR = Color.YELLOW;
     private static Paint mPaint;
     private int mViewWidth;
     private int mViewHeight;
@@ -42,31 +42,27 @@ public class ClockCanvas extends View {
     private List<Duration> mIntervals;
     private Duration mCurrentPomodoro;
 
-    // constructor ---------------------------------------------------------------------------------
+    // constructor -------------------------------------------------------------
 
     public ClockCanvas(Context context, AttributeSet attrs) {
         super(context, attrs);
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mIntervals =  new ArrayList<>();
-        CLOCK_COLOR = Color.RED;
-        POINTERS_COLOR = Color.WHITE;
-        INTERVAL_COLOR = Color.GRAY;
-        POMODORO_COLOR = Color.YELLOW;
 
         // TODO: delete this later
         List<Duration> durations = new ArrayList<>();
         Calendar startInterval = new GregorianCalendar();
-        startInterval.set(Calendar.HOUR, 0);
-        startInterval.set(Calendar.MINUTE, 0);
+        startInterval.set(Calendar.HOUR, 11);
+        startInterval.set(Calendar.MINUTE, 58);
         Calendar endInterval = new GregorianCalendar();
-        endInterval.set(Calendar.HOUR, 1);
-        endInterval.set(Calendar.MINUTE, 0);
+        endInterval.set(Calendar.HOUR, 0);
+        endInterval.set(Calendar.MINUTE, 22);
         durations.add(new Duration(startInterval, endInterval));
         this.addIntervals(durations);
     }
 
-    // getters & setters ---------------------------------------------------------------------------
+    // getters & setters -------------------------------------------------------
 
     /**
      * Sets the clock time.
@@ -96,11 +92,11 @@ public class ClockCanvas extends View {
         mIntervals.clear();
     }
 
-    public void addCurrentInterval(Duration pomodoroDuration) {
-
+    public void addCurrentPomodoro(Calendar startTime, Calendar endTime) {
+        mCurrentPomodoro = new Duration(startTime, endTime);
     }
 
-    // overriden methods ---------------------------------------------------------------------------
+    // overriden methods -------------------------------------------------------
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -118,10 +114,13 @@ public class ClockCanvas extends View {
         drawInterval(canvas);
 
         // Draws current pomodoro
-        Calendar startTime = new GregorianCalendar();
-        startTime.set(Calendar.MINUTE, 30);
-        int pomodoroTime = 25;
-        drawCurrentPomodoro(startTime, pomodoroTime, canvas);
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR, 20);
+        startTime.set(Calendar.MINUTE, 50);
+        Calendar endTime = (Calendar) startTime.clone();
+        endTime.add(Calendar.MINUTE, 25);
+        addCurrentPomodoro(startTime, endTime);
+        drawCurrentPomodoro(canvas);
 
         // Draws the pointers in the current time
         Calendar currentTime = Calendar.getInstance();
@@ -143,7 +142,7 @@ public class ClockCanvas extends View {
         // Draw hour
         double degreesAngle = calculateHourAngle(hours, minutes);
         double radiansAngle = degreesToRadians(degreesAngle);
-        double hourBraceLength = mClockRadius * HOUR_LENGTH_MOD;
+        double hourBraceLength = mClockRadius * HOUR_POINTER_MODIFIER;
         int x1 = (int) (mViewWidth /2 + hourBraceLength * Math.sin(radiansAngle));
         int y1 = (int) (mViewHeight /2 - hourBraceLength * Math.cos(radiansAngle));
         mPaint.setStyle(Paint.Style.STROKE);
@@ -155,7 +154,7 @@ public class ClockCanvas extends View {
         // Draw minutes
         degreesAngle = calculateMinutesAngle(minutes);
         radiansAngle = degreesToRadians(degreesAngle);
-        double minutesBraceLength = mClockRadius * MINUTE_LENGTH_MOD;
+        double minutesBraceLength = mClockRadius * MINUTE_POINTER_MODIFIER;
         x1 = (int) (mViewWidth /2 + minutesBraceLength * Math.sin(radiansAngle));
         y1 = (int) (mViewHeight /2 - minutesBraceLength * Math.cos(radiansAngle));
         mPaint.setStyle(Paint.Style.STROKE);
@@ -189,31 +188,34 @@ public class ClockCanvas extends View {
             mPaint.setColor(INTERVAL_COLOR);
             int startAngle = (int) (calculateHourAngle(startTime.get(Calendar.HOUR), startTime.get(Calendar.MINUTE)));
             int endAngle = (int) (calculateHourAngle(endTime.get(Calendar.HOUR), endTime.get(Calendar.MINUTE)));
+            if (endAngle < startAngle) {
+                endAngle += startAngle; 
+            }
             canvas.drawArc(new RectF(x1, y1, x2, y2), startAngle - 90, endAngle - startAngle, false, mPaint);
         }
     }
 
     /**
      * Draws the current pomodoro's time
-     * @param startTime
-     * @param pomodoroTime the time of the pomodoro (usually 25 min.)
-     * @param canvas
      */
-    private void drawCurrentPomodoro(Calendar startTime, int pomodoroTime, Canvas canvas) {
-        int rectSize = mClockRadius - CURRENT_THICKNESS;
+    private void drawCurrentPomodoro(Canvas canvas) {
+        int rectSize = mClockRadius - POMODORO_THICKNESS;
         int x1 = mViewWidth /2 - rectSize;
         int y1 = mViewHeight /2 - rectSize;
         int x2 = mViewWidth /2 + rectSize;
         int y2 = mViewHeight /2 + rectSize;
-        int startMinutes = startTime.get(Calendar.MINUTE);
-        int endMinutes = startMinutes + pomodoroTime;
+        int startMinutes = mCurrentPomodoro.getStartTime().get(Calendar.MINUTE);
+        int endMinutes = mCurrentPomodoro.getEndTime().get(Calendar.MINUTE);
+        if (endMinutes < startMinutes) {
+            endMinutes += startMinutes;
+        }
 
         int startAngle = (int) calculateMinutesAngle(startMinutes);
         int endAngle = (int) calculateMinutesAngle(endMinutes);
 
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeCap(Paint.Cap.BUTT);
-        mPaint.setStrokeWidth(CURRENT_THICKNESS * getResources().getDisplayMetrics().density);
+        mPaint.setStrokeWidth(POMODORO_THICKNESS * getResources().getDisplayMetrics().density);
         mPaint.setColor(POMODORO_COLOR);
         canvas.drawArc(new RectF(x1, y1, x2, y2), startAngle - 90, endAngle - startAngle, false, mPaint);
     }
@@ -223,14 +225,14 @@ public class ClockCanvas extends View {
      * @param canvas the canvas where the border will be drawn
      */
     private void drawClockBorder(Canvas canvas) {
-        int rectSize = mClockRadius + BORDER_THICKNESS/2;
+        int rectSize = mClockRadius + CLOCK_BORDER_THICKNESS /2;
         int x1 = mViewWidth /2 - rectSize;
         int y1 = mViewHeight /2 - rectSize;
         int x2 = mViewWidth /2 + rectSize;
         int y2 = mViewHeight /2 + rectSize;
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeCap(Paint.Cap.BUTT);
-        mPaint.setStrokeWidth(BORDER_THICKNESS * getResources().getDisplayMetrics().density);
+        mPaint.setStrokeWidth(CLOCK_BORDER_THICKNESS * getResources().getDisplayMetrics().density);
         mPaint.setColor(Color.WHITE);
         canvas.drawArc(new RectF(x1, y1, x2, y2), 0, 360, false, mPaint);
     }

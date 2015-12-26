@@ -23,6 +23,7 @@ import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
 public class MainActivity extends AppCompatActivity implements ClockFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "MainActivity";
+    private ClockFragment mClockFragment;
     private PomodoroService mService;
     private boolean mIsBound;
 
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.title_activity_main));
         setSupportActionBar(toolbar);
+
+        mClockFragment = (ClockFragment) getSupportFragmentManager().findFragmentById(R.id.clock_fragment);
 
         mIsBound = false;
         mCountdownText = (TextView) findViewById(R.id.countdownText);
@@ -112,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
      */
     public void updateUI(Bundle bundle) {
         mCountdownText.setText(FormattingUtils.getDisplayTime(bundle.getLong("countdown")));
+        mClockFragment.updateClock();
     }
 
     // Service connection ------------------------------------------------------

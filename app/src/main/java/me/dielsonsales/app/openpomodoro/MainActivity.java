@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
 
 /**
@@ -114,7 +117,17 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
      * @param bundle the updated data to display
      */
     public void updateUI(Bundle bundle) {
-        mCountdownText.setText(FormattingUtils.getDisplayTime(bundle.getLong("countdown")));
+        long countdown = bundle.getLong("countdown");
+        boolean isStarting = bundle.getBoolean("isStarting");
+        mCountdownText.setText(FormattingUtils.getDisplayTime(countdown));
+        if (isStarting) {
+            Calendar startTime = Calendar.getInstance();
+            Calendar endTime = (Calendar) startTime.clone();
+            endTime.add(Calendar.SECOND, (int) countdown);
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            Log.i(TAG, "From " + formatter.format(startTime.getTime()) + " to " + formatter.format(endTime.getTime()));
+            mClockFragment.setCurrentPomodoro(startTime, endTime);
+        }
         mClockFragment.updateClock();
     }
 

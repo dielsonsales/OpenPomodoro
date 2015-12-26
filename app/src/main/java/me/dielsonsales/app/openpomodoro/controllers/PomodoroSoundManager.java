@@ -2,7 +2,6 @@ package me.dielsonsales.app.openpomodoro.controllers;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.util.Log;
 
 import me.dielsonsales.app.openpomodoro.R;
 
@@ -30,7 +29,6 @@ public class PomodoroSoundManager {
             mPlayer.pause();
             mPlayer.seekTo(0);
         }
-        Log.i("SoundManager", "Playing sound");
         mPlayer.start();
     }
 }

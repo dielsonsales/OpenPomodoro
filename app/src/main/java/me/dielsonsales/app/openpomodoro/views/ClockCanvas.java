@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -96,11 +97,14 @@ public class ClockCanvas extends View {
         mCurrentPomodoro = new Duration(startTime, endTime);
     }
 
+    public void clearCurrentPomodoro() { mCurrentPomodoro = null; }
+
     // overriden methods -------------------------------------------------------
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Log.d(TAG, "Drawing clock again");
 
         mViewWidth = getWidth();
         mViewHeight = getHeight();
@@ -114,13 +118,15 @@ public class ClockCanvas extends View {
         drawInterval(canvas);
 
         // Draws current pomodoro
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR, 20);
-        startTime.set(Calendar.MINUTE, 50);
-        Calendar endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.MINUTE, 25);
-        addCurrentPomodoro(startTime, endTime);
-        drawCurrentPomodoro(canvas);
+//        Calendar startTime = Calendar.getInstance();
+//        startTime.set(Calendar.HOUR, 20);
+//        startTime.set(Calendar.MINUTE, 50);
+//        Calendar endTime = (Calendar) startTime.clone();
+//        endTime.add(Calendar.MINUTE, 25);
+//        addCurrentPomodoro(startTime, endTime);
+        if (mCurrentPomodoro != null) {
+            drawCurrentPomodoro(canvas);
+        }
 
         // Draws the pointers in the current time
         Calendar currentTime = Calendar.getInstance();
@@ -189,7 +195,7 @@ public class ClockCanvas extends View {
             int startAngle = (int) (calculateHourAngle(startTime.get(Calendar.HOUR), startTime.get(Calendar.MINUTE)));
             int endAngle = (int) (calculateHourAngle(endTime.get(Calendar.HOUR), endTime.get(Calendar.MINUTE)));
             if (endAngle < startAngle) {
-                endAngle += startAngle; 
+                endAngle += startAngle;
             }
             canvas.drawArc(new RectF(x1, y1, x2, y2), startAngle - 90, endAngle - startAngle, false, mPaint);
         }

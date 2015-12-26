@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Calendar;
+
 import me.dielsonsales.app.openpomodoro.views.ClockCanvas;
 
 public class ClockFragment extends Fragment {
@@ -56,6 +58,10 @@ public class ClockFragment extends Fragment {
     }
 
     // ClockFragment methods ---------------------------------------------------
+
+    public void setCurrentPomodoro(Calendar startTime, Calendar endTime) {
+        mClockCanvas.addCurrentPomodoro(startTime, endTime);
+    }
 
     /**
      * Forces the clock to be drawn again.

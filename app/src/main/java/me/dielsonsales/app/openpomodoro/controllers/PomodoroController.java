@@ -9,6 +9,8 @@ import java.lang.ref.WeakReference;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import me.dielsonsales.app.openpomodoro.util.Duration;
+
 /**
  * Controls the pomodoro clock
  * Created by dielson on 18/12/15.
@@ -19,14 +21,15 @@ public class PomodoroController {
     public enum IntervalType {
         POMODORO,
         REST,
-        LONG_REST
+        LONG_REST,
+        EXTENDED
     }
 
     // Static default values ---------------------------------------------------
-    private static final int DEFAULT_POMODORO_TIME = 25;
-    private static final int DEFAULT_REST_TIME = 5;
-    private static final int DEFAULT_LONG_REST_TIME = 20;
-    private static final int DEFAULT_EXTENDED_TIME = 3;
+    private static final int DEFAULT_POMODORO_TIME = 60;
+    private static final int DEFAULT_REST_TIME = 20;
+    private static final int DEFAULT_LONG_REST_TIME = 40;
+    private static final int DEFAULT_EXTENDED_TIME = 30;
     private static final int DEFAULT_LONG_REST_FREQUENCY = 4;
 
     // Configurable time values ------------------------------------------------
@@ -42,6 +45,7 @@ public class PomodoroController {
     private boolean mIsRunning;
     private long mCounter;
     private IntervalType mCurrentIntervalType;
+    private Duration mCurrentIntervalDuration;
     private PomodoroListener mListener;
     private static ControllerHandler mHandler;
     private PomodoroSoundManager mSoundManager;
@@ -149,11 +153,16 @@ public class PomodoroController {
     public void playAlarm() { mSoundManager.playAlarm(); }
 
     public void handleMessage() {
+        boolean isStarting = false;
+        if (mCounter == getCurrentStartingCount()) {
+            isStarting = true;
+        }
         if (mCounter > 0) {
             mCounter = mCounter - 1;
         }
         Bundle bundle = new Bundle();
         bundle.putLong("countdown", mCounter);
+        bundle.putBoolean("isStarting", isStarting);
         mListener.onTimeUpdated(bundle);
         if (mCounter == 0) {
             playAlarm();
@@ -167,6 +176,18 @@ public class PomodoroController {
         mTimer = new Timer();
         PomodoroTask pomodoroTask = new PomodoroTask();
         mTimer.schedule(pomodoroTask, 0, 1000);
+    }
+
+    private long getCurrentStartingCount() {
+        if (mCurrentIntervalType == IntervalType.POMODORO) {
+            return mPomodoroTime;
+        } else if (mCurrentIntervalType == IntervalType.REST ) {
+            return mRestTime;
+        } else if (mCurrentIntervalType == IntervalType.LONG_REST) {
+            return mLongRestTime;
+        } else {
+            return mExtendedTime;
+        }
     }
 
     // Handler -----------------------------------------------------------------

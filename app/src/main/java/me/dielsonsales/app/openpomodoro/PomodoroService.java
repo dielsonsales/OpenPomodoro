@@ -49,14 +49,6 @@ public class PomodoroService extends Service {
                 }
             }
         });
-//        mPomodoroController.setPomodoroListener(new PomodoroListener() {
-//            @Override
-//            public void onTimeUpdated(Bundle bundle) {
-//                if (mUpdateListener != null) {
-//                    mUpdateListener.onUpdate(bundle);
-//                }
-//            }
-//        });
     }
 
     /**
@@ -91,6 +83,10 @@ public class PomodoroService extends Service {
     private void startPomodoro() {
         mPomodoroController.start();
         mNotificationManager.showNotification();
+    }
+
+    public void skipPomodoro() {
+        mPomodoroController.skip();
     }
 
     /**

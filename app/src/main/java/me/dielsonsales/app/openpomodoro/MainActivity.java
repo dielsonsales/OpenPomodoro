@@ -57,6 +57,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Skup button
+        Button skipButton = (Button) findViewById(R.id.skip_button);
+        skipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mIsBound) {
+                    skipPomodoro();
+                }
+            }
+        });
+
         // Stop button
         Button stopButton = (Button) findViewById(R.id.stop_button);
         stopButton.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +111,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void skipPomodoro() {
+        if (mService.isRunning()) {
+            mService.skipPomodoro();
+        }
+    }
+
     private void stopPomodoro() {
         if (mService.isRunning()) {
             mService.stopPomodoro();
@@ -133,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetClock() {
         mClockFragment.setDuration(null);
+        mCountdownText.setText("00:00:00");
         mClockFragment.updateClock();
     }
 

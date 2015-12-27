@@ -10,6 +10,7 @@ import android.util.Log;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroListener;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroNotificationManager;
+import me.dielsonsales.app.openpomodoro.controllers.PomodoroSoundManager;
 
 /**
  * The pomodoro service that contains the controller.
@@ -40,8 +41,7 @@ public class PomodoroService extends Service {
         super.onCreate();
         Log.i(TAG, "Creating service");
         mNotificationManager = new PomodoroNotificationManager(this);
-        mPomodoroController = new PomodoroController(this);
-        mPomodoroController.setPomodoroListener(new PomodoroListener() {
+        mPomodoroController = new PomodoroController(PomodoroSoundManager.getInstance(this), new PomodoroListener() {
             @Override
             public void onTimeUpdated(Bundle bundle) {
                 if (mUpdateListener != null) {
@@ -49,6 +49,14 @@ public class PomodoroService extends Service {
                 }
             }
         });
+//        mPomodoroController.setPomodoroListener(new PomodoroListener() {
+//            @Override
+//            public void onTimeUpdated(Bundle bundle) {
+//                if (mUpdateListener != null) {
+//                    mUpdateListener.onUpdate(bundle);
+//                }
+//            }
+//        });
     }
 
     /**

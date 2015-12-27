@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -17,13 +16,14 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import me.dielsonsales.app.openpomodoro.util.Duration;
 import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
 
 /**
  * The main activity containing the visual clock. This class is charged of
  * displaying and updating the view according to the data in the Service.
  */
-public class MainActivity extends AppCompatActivity implements ClockFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private ClockFragment mClockFragment;
@@ -91,12 +91,6 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
         }
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        // TODO: implement this?
-        throw new UnsupportedOperationException("This was not supposed to be called yet");
-    }
-
     // Private methods ---------------------------------------------------------
 
     private void startPomodoro() {
@@ -109,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
     private void stopPomodoro() {
         if (mService.isRunning()) {
             mService.stopPomodoro();
+            resetClock();
         }
     }
 
@@ -118,16 +113,26 @@ public class MainActivity extends AppCompatActivity implements ClockFragment.OnF
      */
     public void updateUI(Bundle bundle) {
         long countdown = bundle.getLong("countdown");
-        boolean isStarting = bundle.getBoolean("isStarting");
+        Calendar startTime = Calendar.getInstance();
+        startTime.setTimeInMillis(bundle.getLong("startTime"));
+        Calendar endTime = Calendar.getInstance();
+        endTime.setTimeInMillis(bundle.getLong("endTime"));
+        Duration duration = new Duration(startTime, endTime);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+        Log.i(TAG, "From " + formatter.format(startTime.getTime()) + " to " + formatter.format(endTime.getTime()));
+
         mCountdownText.setText(FormattingUtils.getDisplayTime(countdown));
-        if (isStarting) {
-            Calendar startTime = Calendar.getInstance();
-            Calendar endTime = (Calendar) startTime.clone();
-            endTime.add(Calendar.SECOND, (int) countdown);
-            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-            Log.i(TAG, "From " + formatter.format(startTime.getTime()) + " to " + formatter.format(endTime.getTime()));
-            mClockFragment.setCurrentPomodoro(startTime, endTime);
+        if (mClockFragment.getDuration() == null) {
+            mClockFragment.setDuration(duration);
+        } else if (!mClockFragment.getDuration().equals(duration)) {
+            mClockFragment.setDuration(duration);
         }
+        mClockFragment.updateClock();
+    }
+
+    private void resetClock() {
+        mClockFragment.setDuration(null);
         mClockFragment.updateClock();
     }
 

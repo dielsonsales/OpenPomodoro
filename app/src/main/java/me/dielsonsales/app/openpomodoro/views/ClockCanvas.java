@@ -41,7 +41,7 @@ public class ClockCanvas extends View {
     private int mHours;
     private int mMinutes;
     private List<Duration> mIntervals;
-    private Duration mCurrentPomodoro;
+    private Duration mDuration;
 
     // constructor -------------------------------------------------------------
 
@@ -93,11 +93,22 @@ public class ClockCanvas extends View {
         mIntervals.clear();
     }
 
-    public void addCurrentPomodoro(Calendar startTime, Calendar endTime) {
-        mCurrentPomodoro = new Duration(startTime, endTime);
+    /**
+     * Sets the current duration arc to be shown in the clock.
+     * @param duration
+     */
+    public void addDuration(Duration duration) {
+        mDuration = duration;
     }
 
-    public void clearCurrentPomodoro() { mCurrentPomodoro = null; }
+    public Duration getDuration() {
+        return mDuration;
+    }
+
+    /**
+     * Removes the current duration arc shwon in the clock.
+     */
+    public void clearDuration() { mDuration = null; }
 
     // overriden methods -------------------------------------------------------
 
@@ -123,8 +134,8 @@ public class ClockCanvas extends View {
 //        startTime.set(Calendar.MINUTE, 50);
 //        Calendar endTime = (Calendar) startTime.clone();
 //        endTime.add(Calendar.MINUTE, 25);
-//        addCurrentPomodoro(startTime, endTime);
-        if (mCurrentPomodoro != null) {
+//        addDuration(startTime, endTime);
+        if (mDuration != null) {
             drawCurrentPomodoro(canvas);
         }
 
@@ -210,8 +221,8 @@ public class ClockCanvas extends View {
         int y1 = mViewHeight /2 - rectSize;
         int x2 = mViewWidth /2 + rectSize;
         int y2 = mViewHeight /2 + rectSize;
-        int startMinutes = mCurrentPomodoro.getStartTime().get(Calendar.MINUTE);
-        int endMinutes = mCurrentPomodoro.getEndTime().get(Calendar.MINUTE);
+        int startMinutes = mDuration.getStartTime().get(Calendar.MINUTE);
+        int endMinutes = mDuration.getEndTime().get(Calendar.MINUTE);
         if (endMinutes < startMinutes) {
             endMinutes += startMinutes;
         }

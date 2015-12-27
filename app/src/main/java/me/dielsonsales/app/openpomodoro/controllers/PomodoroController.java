@@ -1,11 +1,11 @@
 package me.dielsonsales.app.openpomodoro.controllers;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,16 +45,17 @@ public class PomodoroController {
     private boolean mIsRunning;
     private long mCounter;
     private IntervalType mCurrentIntervalType;
-    private Duration mCurrentIntervalDuration;
+    private Duration mDuration;
     private PomodoroListener mListener;
     private static ControllerHandler mHandler;
     private PomodoroSoundManager mSoundManager;
 
+    // Constructors ------------------------------------------------------------
     /**
      * Creates a new PomodoroController instance.
-     * @param context the service context
+     * @param soundManager a sound manager instance to play the sounds
      */
-    public PomodoroController(Context context) {
+    public PomodoroController(PomodoroSoundManager soundManager) {
         mHandler = new ControllerHandler(this);
         mPomodoroTime = DEFAULT_POMODORO_TIME;
         mRestTime = DEFAULT_REST_TIME;
@@ -63,7 +64,12 @@ public class PomodoroController {
         mLongRestFrequency = DEFAULT_LONG_REST_FREQUENCY;
         mCurrentIntervalType = IntervalType.POMODORO;
         mPomodoroCount = 0;
-        mSoundManager = PomodoroSoundManager.getInstance(context);
+        mSoundManager = soundManager;
+    }
+
+    public PomodoroController(PomodoroSoundManager soundManager, PomodoroListener listener) {
+        this(soundManager);
+        setPomodoroListener(listener);
     }
 
     // Getters & setters -------------------------------------------------------
@@ -111,6 +117,7 @@ public class PomodoroController {
         mCounter = mPomodoroTime;
         mIsRunning = true;
         startPomodoroTask();
+        mDuration = createNewDuration(getCurrentPomodoroTime());
     }
 
     /**
@@ -135,6 +142,7 @@ public class PomodoroController {
             mCounter = mPomodoroTime;
             mPomodoroCount += 1;
         }
+        mDuration = createNewDuration(getCurrentPomodoroTime());
     }
 
     /**
@@ -148,21 +156,19 @@ public class PomodoroController {
         mCurrentIntervalType = IntervalType.POMODORO;
         mPomodoroCount = 0; // restart the count
         mIsRunning = false;
+        mDuration = null; // not necessary anymore
     }
 
     public void playAlarm() { mSoundManager.playAlarm(); }
 
     public void handleMessage() {
-        boolean isStarting = false;
-        if (mCounter == getCurrentStartingCount()) {
-            isStarting = true;
-        }
         if (mCounter > 0) {
             mCounter = mCounter - 1;
         }
         Bundle bundle = new Bundle();
         bundle.putLong("countdown", mCounter);
-        bundle.putBoolean("isStarting", isStarting);
+        bundle.putLong("startTime", mDuration.getStartTime().getTime().getTime());
+        bundle.putLong("endTime", mDuration.getEndTime().getTime().getTime());
         mListener.onTimeUpdated(bundle);
         if (mCounter == 0) {
             playAlarm();
@@ -178,7 +184,7 @@ public class PomodoroController {
         mTimer.schedule(pomodoroTask, 0, 1000);
     }
 
-    private long getCurrentStartingCount() {
+    private int getCurrentPomodoroTime() {
         if (mCurrentIntervalType == IntervalType.POMODORO) {
             return mPomodoroTime;
         } else if (mCurrentIntervalType == IntervalType.REST ) {
@@ -188,6 +194,13 @@ public class PomodoroController {
         } else {
             return mExtendedTime;
         }
+    }
+
+    private static Duration createNewDuration(int currentCountdown) {
+        Calendar startTime = Calendar.getInstance();
+        Calendar endTime = (Calendar) startTime.clone();
+        endTime.add(Calendar.SECOND, currentCountdown);
+        return new Duration(startTime, endTime);
     }
 
     // Handler -----------------------------------------------------------------
@@ -215,13 +228,8 @@ public class PomodoroController {
 
     // Pomodoro task -----------------------------------------------------------
 
-    /**
-     * Executes in a
-     */
     private class PomodoroTask extends TimerTask {
         @Override
-        public void run() {
-            mHandler.sendEmptyMessage(0);
-        }
+        public void run() { mHandler.sendEmptyMessage(0); }
     }
 }

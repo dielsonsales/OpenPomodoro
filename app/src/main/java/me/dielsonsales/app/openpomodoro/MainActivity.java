@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         mCountdownText = (TextView) findViewById(R.id.countdownText);
 
         // Play button
-        Button playButton = (Button) findViewById(R.id.play_button);
+        ImageView playButton = (ImageView) findViewById(R.id.play_button);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Skup button
-        Button skipButton = (Button) findViewById(R.id.skip_button);
+        // Skip button
+        ImageView skipButton = (ImageView) findViewById(R.id.skip_button);
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Stop button
-        Button stopButton = (Button) findViewById(R.id.stop_button);
+        ImageView stopButton = (ImageView) findViewById(R.id.stop_button);
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

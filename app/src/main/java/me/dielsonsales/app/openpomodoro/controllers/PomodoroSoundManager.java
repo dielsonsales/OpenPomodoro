@@ -20,24 +20,12 @@ public class PomodoroSoundManager {
         return mInstance;
     }
 
-    public static PomodoroSoundManager getInstance(MediaPlayer mediaPlayer) {
-        if (mInstance == null) {
-            mInstance = new PomodoroSoundManager(mediaPlayer);
-        }
-        return mInstance;
-    }
-
     // Constructors ------------------------------------------------------------
 
     private PomodoroSoundManager() {}
 
     private PomodoroSoundManager(Context context) {
         mPlayer = MediaPlayer.create(context, R.raw.alarm);
-    }
-
-    // Used mainly for mocking the media player
-    private PomodoroSoundManager(MediaPlayer mediaPlayer) {
-        mPlayer = mediaPlayer;
     }
 
     // Public methods ----------------------------------------------------------

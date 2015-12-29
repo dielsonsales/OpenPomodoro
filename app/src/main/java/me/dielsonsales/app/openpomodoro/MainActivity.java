@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
     // UI Components -----------------------------------------------------------
     private TextView mCountdownText;
+    ImageView mPlayButton;
+    ImageView mSkipButton;
+    ImageView mStopButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         mCountdownText = (TextView) findViewById(R.id.countdownText);
 
         // Play button
-        ImageView playButton = (ImageView) findViewById(R.id.play_button);
-        playButton.setOnClickListener(new View.OnClickListener() {
+        mPlayButton = (ImageView) findViewById(R.id.play_button);
+        mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mIsBound) {
@@ -58,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Skip button
-        ImageView skipButton = (ImageView) findViewById(R.id.skip_button);
-        skipButton.setOnClickListener(new View.OnClickListener() {
+        mSkipButton = (ImageView) findViewById(R.id.skip_button);
+        mSkipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mIsBound) {
@@ -69,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Stop button
-        ImageView stopButton = (ImageView) findViewById(R.id.stop_button);
-        stopButton.setOnClickListener(new View.OnClickListener() {
+        mStopButton = (ImageView) findViewById(R.id.stop_button);
+        mStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mIsBound) {
@@ -108,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         if (!mService.isRunning()) {
             Intent intent = new Intent(this, PomodoroService.class);
             startService(intent);
+            enableRunningButtons();
         }
     }
 
@@ -121,7 +125,26 @@ public class MainActivity extends AppCompatActivity {
         if (mService.isRunning()) {
             mService.stopPomodoro();
             resetClock();
+            disableRunningButtons();
         }
+    }
+
+    private void resetClock() {
+        mClockFragment.setDuration(null);
+        mCountdownText.setText("00:00:00");
+        mClockFragment.updateClock();
+    }
+
+    private void enableRunningButtons() {
+        mPlayButton.setVisibility(View.GONE);
+        mSkipButton.setVisibility(View.VISIBLE);
+        mStopButton.setVisibility(View.VISIBLE);
+    }
+
+    private void disableRunningButtons() {
+        mPlayButton.setVisibility(View.VISIBLE);
+        mSkipButton.setVisibility(View.GONE);
+        mStopButton.setVisibility(View.GONE);
     }
 
     /**
@@ -148,12 +171,6 @@ public class MainActivity extends AppCompatActivity {
         mClockFragment.updateClock();
     }
 
-    private void resetClock() {
-        mClockFragment.setDuration(null);
-        mCountdownText.setText("00:00:00");
-        mClockFragment.updateClock();
-    }
-
     // Service connection ------------------------------------------------------
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -171,6 +188,9 @@ public class MainActivity extends AppCompatActivity {
                     updateUI(bundle);
                 }
             });
+            if (mService.isRunning()) {
+                enableRunningButtons();
+            }
         }
 
         @Override

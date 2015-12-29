@@ -46,15 +46,10 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="4">
         <ImageView
-            android:id="@+id/play_button"
-            android:src="@drawable/button_play"
-            android:clickable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"/>
-        <ImageView
             android:id="@+id/skip_button"
+            android:visibility="gone"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:src="@drawable/button_skip"
             android:clickable="true"
             android:layout_width="wrap_content"
@@ -62,7 +57,21 @@
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"/>
         <ImageView
+            android:id="@+id/play_button"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@drawable/button_play"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"/>
+
+        <ImageView
             android:id="@+id/stop_button"
+            android:visibility="gone"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:src="@drawable/button_stop"
             android:clickable="true"
             android:layout_width="wrap_content"

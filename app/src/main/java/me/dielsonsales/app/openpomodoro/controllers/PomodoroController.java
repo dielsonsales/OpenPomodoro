@@ -118,6 +118,7 @@ public class PomodoroController {
         mIsRunning = true;
         startPomodoroTask();
         mDuration = createNewDuration(getCurrentPomodoroTime());
+        mPomodoroCount += 1;
     }
 
     /**
@@ -212,9 +213,15 @@ public class PomodoroController {
     static class ControllerHandler extends Handler {
         private WeakReference<PomodoroController> mController;
         public ControllerHandler(PomodoroController controller) {
+            setController(controller);
+        }
+        public ControllerHandler() {
+            // does nothing
+        }
+        void setController(PomodoroController controller) {
             mController = new WeakReference<>(controller);
         }
-
+        // Overridden methods --------------------------------------------------
         @Override
         public void handleMessage(Message msg) {
             if (mController != null) {

@@ -2,19 +2,21 @@ package me.dielsonsales.app.openpomodoro.controllers;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by dielson on 21/12/15.
- */
+@RunWith(RobolectricTestRunner.class)
 public class PomodoroControllerTest {
 
+    private static final String TAG = "PomodoroControllerTest";
     private PomodoroController mPomodoroController;
 
     @Before
     public void setUp() {
-//        mPomodoroController = new PomodoroController();
+        mPomodoroController = new PomodoroController(PomodoroSoundManager.getInstance(RuntimeEnvironment.application));
     }
 
     /**
@@ -24,10 +26,10 @@ public class PomodoroControllerTest {
     public void testPomodoroDefaults() {
         assertEquals(mPomodoroController.getPomodoroCount(), 0);
         assertEquals(mPomodoroController.isRunning(), false);
-        assertEquals(mPomodoroController.getPomodoroTime(), 25);
-        assertEquals(mPomodoroController.getRestTime(), 5);
-        assertEquals(mPomodoroController.getExtendedTime(), 3);
-        assertEquals(mPomodoroController.getLongRestTime(), 20);
+        assertEquals(mPomodoroController.getPomodoroTime(), 60);
+        assertEquals(mPomodoroController.getRestTime(), 20);
+        assertEquals(mPomodoroController.getExtendedTime(), 30);
+        assertEquals(mPomodoroController.getLongRestTime(), 40);
     }
 
     /**

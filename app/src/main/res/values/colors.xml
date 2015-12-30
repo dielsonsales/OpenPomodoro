@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Generated with http://www.materialpalette.com -->
     <color name="colorPrimary">#F44336</color>
     <color name="colorPrimaryDark">#D32F2F</color>
-    <color name="colorAccent">#00C853</color>
+    <color name="colorPrimaryLight">#FFCDD2</color>
+    <color name="colorAccent">#607D8B</color>
+    <color name="textPrimary">#212121</color>
+    <color name="textSecondary">#727272</color>
+    <color name="colorDivider">#B6B6B6</color>
 </resources>

@@ -16,9 +16,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.not;
 
-/**
- * Created by dielson on 30/12/15.
- */
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
     private MainActivity mActivity;
     public MainActivityTest() {
@@ -31,10 +28,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mActivity = getActivity();
     }
 
-    /**
-     * Checks whether the buttons start is visible from the start and disappear
-     * after clicking it.
-     */
+
     @Test
     public void testButtonsState() {
         // Checks whether the play button starts visible alone
@@ -45,20 +39,24 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         // Clicks the play button
         onView(withId(R.id.play_button)).perform(ViewActions.click());
 
-        // Checks whether the play button's become invisible and the skip and
-        // stop buttons are now visible.
+        // Checks if the play button's become invisible and the skip and stop
+        // buttons are now visible.
         onView(withId(R.id.play_button)).check(ViewAssertions.matches(not(isDisplayed())));
         onView(withId(R.id.skip_button)).check(ViewAssertions.matches(isDisplayed()));
         onView(withId(R.id.stop_button)).check(ViewAssertions.matches(isDisplayed()));
 
-        // Clicks the skip button, everything should remain the same
+        // Clicks the skip button
         onView(withId(R.id.skip_button)).perform(ViewActions.click());
+
+        // Checks if everything remains the same
         onView(withId(R.id.play_button)).check(ViewAssertions.matches(not(isDisplayed())));
         onView(withId(R.id.skip_button)).check(ViewAssertions.matches(isDisplayed()));
         onView(withId(R.id.stop_button)).check(ViewAssertions.matches(isDisplayed()));
 
-        // Clicks the stop button and checks if everything is back to initial state
+        // Clicks the stop button
         onView(withId(R.id.stop_button)).perform(ViewActions.click());
+
+        // Checks if everything is back to the initial state
         onView(withId(R.id.play_button)).check(ViewAssertions.matches(isDisplayed()));
         onView(withId(R.id.skip_button)).check(ViewAssertions.matches(not(isDisplayed())));
         onView(withId(R.id.stop_button)).check(ViewAssertions.matches(not(isDisplayed())));

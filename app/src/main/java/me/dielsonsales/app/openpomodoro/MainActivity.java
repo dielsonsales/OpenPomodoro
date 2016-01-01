@@ -9,6 +9,9 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +21,7 @@ import java.util.Calendar;
 
 import me.dielsonsales.app.openpomodoro.util.Duration;
 import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
+import me.dielsonsales.app.openpomodoro.views.SettingsActivity;
 
 /**
  * The main activity containing the visual clock. This class is charged of
@@ -103,6 +107,26 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "Unbinding service");
             unbindService(mConnection);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     // Private methods ---------------------------------------------------------

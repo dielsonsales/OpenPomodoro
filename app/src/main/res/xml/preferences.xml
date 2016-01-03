@@ -1,8 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:key="pref_sound"
-        android:title="Sound active?"
-        android:summary="Whether the sound is active or not"
-        android:defaultValue="true" />
+    <PreferenceCategory
+        android:title="Time preferences">
+        <EditTextPreference
+            android:title="Pomodoro time"
+            android:summary="Default is 00:25:00"
+            android:key="pref_pomodoro_time_settings"
+            android:defaultValue="00:25:00"/>
+        <EditTextPreference
+            android:title="Rest time"
+            android:summary="Default is 00:05:00"
+            android:key="pref_rest_time_settings"
+            android:defaultValue="00:05:00"/>
+        <EditTextPreference
+            android:title="Long rest time"
+            android:summary="Default is 00:20:00"
+            android:key="pref_long_rest_time_settings"
+            android:defaultValue="00:20:00"/>
+        <EditTextPreference
+            android:title="Extended time"
+            android:summary="Default is 00:03:00"
+            android:key="pref_extended_time_settings"
+            android:defaultValue="00:20:00"/>
+        <CheckBoxPreference
+            android:title="Skip time automatically"
+            android:summary="Enables the extended time"
+            android:key="pref_play_autoskip_settings"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Alert preferences">
+        <CheckBoxPreference
+            android:title="Play sound"
+            android:key="pref_play_sound_settings"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:title="Vibrate"
+            android:key="pref_vibration_settings"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
+
 </PreferenceScreen>

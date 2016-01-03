@@ -5,8 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import me.dielsonsales.app.openpomodoro.R;
 import me.dielsonsales.app.openpomodoro.util.Duration;
 
 /**
@@ -28,10 +29,10 @@ public class ClockCanvas extends View {
     static final private double HOUR_POINTER_MODIFIER = 0.5;
     static final private int POMODORO_THICKNESS = 20;
     static final private int CLOCK_BORDER_THICKNESS = 15;
-    static public int CLOCK_COLOR = Color.RED;
-    static public int POINTERS_COLOR = Color.WHITE;
-    static public int INTERVAL_COLOR = Color.GRAY;
-    static public int POMODORO_COLOR = Color.YELLOW;
+    static public int CLOCK_COLOR;
+    static public int POINTERS_COLOR;
+    static public int INTERVALS_COLOR;
+    static public int POMODORO_COLOR;
     private static Paint mPaint;
     private int mViewWidth;
     private int mViewHeight;
@@ -50,6 +51,11 @@ public class ClockCanvas extends View {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mIntervals =  new ArrayList<>();
+
+        CLOCK_COLOR = ContextCompat.getColor(context, R.color.colorKoi);
+        POINTERS_COLOR = ContextCompat.getColor(context, R.color.colorFabulan);
+        INTERVALS_COLOR = ContextCompat.getColor(context, R.color.colorAquent);
+        POMODORO_COLOR = ContextCompat.getColor(context, R.color.colorCopper);
 
         // TODO: delete this later
         List<Duration> durations = new ArrayList<>();
@@ -115,7 +121,6 @@ public class ClockCanvas extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.d(TAG, "Drawing clock again");
 
         mViewWidth = getWidth();
         mViewHeight = getHeight();
@@ -128,13 +133,7 @@ public class ClockCanvas extends View {
         // Draws the timeIntervals
         drawInterval(canvas);
 
-        // Draws current pomodoro
-//        Calendar startTime = Calendar.getInstance();
-//        startTime.set(Calendar.HOUR, 20);
-//        startTime.set(Calendar.MINUTE, 50);
-//        Calendar endTime = (Calendar) startTime.clone();
-//        endTime.add(Calendar.MINUTE, 25);
-//        addDuration(startTime, endTime);
+        // Draws the current pomodoro
         if (mDuration != null) {
             drawCurrentPomodoro(canvas);
         }
@@ -202,7 +201,7 @@ public class ClockCanvas extends View {
             mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setStrokeCap(Paint.Cap.BUTT);
             mPaint.setStrokeWidth(15 * getResources().getDisplayMetrics().density);
-            mPaint.setColor(INTERVAL_COLOR);
+            mPaint.setColor(INTERVALS_COLOR);
             int startAngle = (int) (calculateHourAngle(startTime.get(Calendar.HOUR), startTime.get(Calendar.MINUTE)));
             int endAngle = (int) (calculateHourAngle(endTime.get(Calendar.HOUR), endTime.get(Calendar.MINUTE)));
             if (endAngle < startAngle) {

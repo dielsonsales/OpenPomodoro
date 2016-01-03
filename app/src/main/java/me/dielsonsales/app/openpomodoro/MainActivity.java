@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import me.dielsonsales.app.openpomodoro.util.Duration;
@@ -104,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         if (mIsBound) {
-            Log.i(TAG, "Unbinding service");
             unbindService(mConnection);
         }
     }
@@ -182,9 +179,6 @@ public class MainActivity extends AppCompatActivity {
         Calendar endTime = Calendar.getInstance();
         endTime.setTimeInMillis(bundle.getLong("endTime"));
         Duration duration = new Duration(startTime, endTime);
-
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-        Log.i(TAG, "From " + formatter.format(startTime.getTime()) + " to " + formatter.format(endTime.getTime()));
 
         mCountdownText.setText(FormattingUtils.getDisplayTime(countdown));
         if (mClockFragment.getDuration() == null) {

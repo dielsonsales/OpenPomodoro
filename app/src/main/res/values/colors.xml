@@ -8,4 +8,10 @@
     <color name="textPrimary">#212121</color>
     <color name="textSecondary">#727272</color>
     <color name="colorDivider">#B6B6B6</color>
+
+    <!-- Clock default colors -->
+    <color name="colorKoi">#DC3F1C</color>
+    <color name="colorCopper">#D8A027</color>
+    <color name="colorAquent">#448D7A</color>
+    <color name="colorFabulan">#F3F4E4</color>
 </resources>

@@ -19,7 +19,6 @@ import java.util.Calendar;
 
 import me.dielsonsales.app.openpomodoro.util.Duration;
 import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
-import me.dielsonsales.app.openpomodoro.views.SettingsActivity;
 
 /**
  * The main activity containing the visual clock. This class is charged of

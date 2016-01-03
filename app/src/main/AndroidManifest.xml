@@ -24,7 +24,7 @@
             android:exported="true"/>
 
         <activity
-            android:name=".views.SettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MainActivity">
             <meta-data

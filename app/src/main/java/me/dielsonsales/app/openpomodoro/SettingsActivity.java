@@ -1,12 +1,10 @@
-package me.dielsonsales.app.openpomodoro.views;
+package me.dielsonsales.app.openpomodoro;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
-import me.dielsonsales.app.openpomodoro.R;
 
 public class SettingsActivity extends AppCompatActivity {
 

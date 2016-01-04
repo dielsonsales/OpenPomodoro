@@ -51,6 +51,7 @@ public class TimePreference extends DialogPreference {
             persistString(defaultValue.toString());
             mCurrentTime = defaultValue.toString();
         }
+        setSummary(mCurrentTime);
     }
 
     @Override
@@ -90,6 +91,7 @@ public class TimePreference extends DialogPreference {
             String stringValue = generatePrefString(hours, minutes, seconds);
             mCurrentTime = stringValue;
             persistString(stringValue);
+            setSummary(stringValue);
         }
     }
 

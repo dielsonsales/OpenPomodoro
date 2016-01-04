@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Layout of time picker-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_gravity="center_horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layoutDirection="ltr">
+
+        <!-- hour -->
+        <NumberPicker
+            android:id="@+id/hour"
+            android:layout_width="70dip"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
+
+        <!-- minute -->
+        <NumberPicker
+            android:id="@+id/minute"
+            android:layout_width="70dip"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dip"
+            android:layout_marginLeft="5dip"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            />
+        
+        <!-- seconds -->
+        <NumberPicker
+            android:id="@+id/seconds"
+            android:layout_width="70dip"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dip"
+            android:layout_marginLeft="5dip"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -2,26 +2,26 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="Time preferences">
-        <me.dielsonsales.app.openpomodoro.views.TimePreference
+        <me.dielsonsales.app.openpomodoro.preferences.TimePreference
             android:title="Pomodoro time"
             android:summary="Default is 00:25:00"
             android:key="pref_time_settings"
             android:defaultValue="00:25:00"/>
-        <!--<me.dielsonsales.app.openpomodoro.views.TimePreference-->
-            <!--android:title="Rest time"-->
-            <!--android:summary="Default is 00:05:00"-->
-            <!--android:key="pref_rest_time_settings"-->
-            <!--android:defaultValue="00:05:00"/>-->
-        <!--<me.dielsonsales.app.openpomodoro.views.TimePreference-->
-            <!--android:title="Long rest time"-->
-            <!--android:summary="Default is 00:20:00"-->
-            <!--android:key="pref_long_rest_time_settings"-->
-            <!--android:defaultValue="00:20:00"/>-->
-        <!--<me.dielsonsales.app.openpomodoro.views.TimePreference-->
-            <!--android:title="Extended time"-->
-            <!--android:summary="Default is 00:03:00"-->
-            <!--android:key="pref_extended_time_settings"-->
-            <!--android:defaultValue="00:03:00"/>-->
+        <me.dielsonsales.app.openpomodoro.preferences.TimePreference
+            android:title="Rest time"
+            android:summary="Default is 00:05:00"
+            android:key="pref_rest_time_settings"
+            android:defaultValue="00:05:00"/>
+        <me.dielsonsales.app.openpomodoro.preferences.TimePreference
+            android:title="Long rest time"
+            android:summary="Default is 00:20:00"
+            android:key="pref_long_rest_time_settings"
+            android:defaultValue="00:20:00"/>
+        <me.dielsonsales.app.openpomodoro.preferences.TimePreference
+            android:title="Extended time"
+            android:summary="Default is 00:03:00"
+            android:key="pref_extended_time_settings"
+            android:defaultValue="00:03:00"/>
         <CheckBoxPreference
             android:title="Skip time automatically"
             android:summary="Enables the extended time"

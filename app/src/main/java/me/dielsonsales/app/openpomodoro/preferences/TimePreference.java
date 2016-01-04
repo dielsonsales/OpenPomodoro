@@ -1,10 +1,9 @@
-package me.dielsonsales.app.openpomodoro.views;
+package me.dielsonsales.app.openpomodoro.preferences;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.NumberPicker;
 
@@ -60,9 +59,6 @@ public class TimePreference extends DialogPreference {
         int hours = Integer.valueOf(values[0]);
         int minutes = Integer.valueOf(values[1]);
         int seconds = Integer.valueOf(values[2]);
-        Log.d(TAG, "hours = " + String.valueOf(hours));
-        Log.d(TAG, "minutes = " + String.valueOf(minutes));
-        Log.d(TAG, "seconds = " + String.valueOf(seconds));
 
         mHourPicker = (NumberPicker) view.findViewById(R.id.hour);
         mHourPicker.setMinValue(0);
@@ -101,7 +97,6 @@ public class TimePreference extends DialogPreference {
 
     private String generatePrefString(int hours, int minutes, int seconds) {
         String formattedString = String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        Log.d(TAG, "formattedString = " + formattedString);
         return formattedString;
     }
 }

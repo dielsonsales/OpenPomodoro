@@ -16,4 +16,6 @@
     <!--Extended time preferences-->
     <string name="pref_extended_time_key">pref_extended_time</string>
     <string name="extended_time_default">00:03:00</string>
+    <!--Sound preferences-->
+    <string name="pref_play_sound_key">pref_play_sound</string>
 </resources>

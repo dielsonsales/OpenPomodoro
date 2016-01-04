@@ -23,6 +23,7 @@ public class PomodoroService extends Service {
     private static final String TAG = "PomodoroService";
     private final IBinder mBinder = new LocalBinder();
     private PomodoroController mPomodoroController;
+    private PomodoroSoundManager mSoundmanager;
     private UpdateListener mUpdateListener;
     private PomodoroNotificationManager mNotificationManager;
     private int mStartId;
@@ -44,7 +45,8 @@ public class PomodoroService extends Service {
         super.onCreate();
         Log.i(TAG, "Creating service");
         mNotificationManager = new PomodoroNotificationManager(this);
-        mPomodoroController = new PomodoroController(PomodoroSoundManager.getInstance(this), new PomodoroListener() {
+        mSoundmanager = PomodoroSoundManager.getInstance(this);
+        mPomodoroController = new PomodoroController(mSoundmanager, new PomodoroListener() {
             @Override
             public void onTimeUpdated(Bundle bundle) {
                 if (mUpdateListener != null) {
@@ -143,6 +145,9 @@ public class PomodoroService extends Service {
                 getResources().getString(R.string.extended_time_default)
         );
         mPomodoroController.setExtendedTime(FormattingUtils.timeToSeconds(extendedTimeString));
+
+        boolean soundAllowed = preferences.getBoolean(getResources().getString(R.string.pref_play_sound_key), true);
+        mSoundmanager.setSoundAllowed(soundAllowed);
     }
 
     // Local binder ------------------------------------------------------------

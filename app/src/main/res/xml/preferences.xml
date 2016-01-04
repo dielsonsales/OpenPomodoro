@@ -28,7 +28,7 @@
         android:title="Alert preferences">
         <CheckBoxPreference
             android:title="Play sound"
-            android:key="pref_play_sound_settings"
+            android:key="@string/pref_play_sound_key"
             android:defaultValue="true" />
         <CheckBoxPreference
             android:title="Vibrate"

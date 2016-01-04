@@ -61,7 +61,12 @@ public class PomodoroService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mStartId = startId;
-        startPomodoro();
+        try {
+            startPomodoro();
+        } catch (Exception e) {
+            e.printStackTrace();
+            stopPomodoro();
+        }
         return START_STICKY;
     }
 
@@ -83,13 +88,13 @@ public class PomodoroService extends Service {
      * This method is NOT supposed to be called from an activity. Instead, it
      * is automatically called in the onStartCommand method.
      */
-    private void startPomodoro() {
+    private void startPomodoro() throws Exception {
         updateControllerSettings();
         mPomodoroController.start();
         mNotificationManager.showNotification();
     }
 
-    public void skipPomodoro() { mPomodoroController.skip(); }
+    public void skipPomodoro() { mPomodoroController.skip(true); }
 
     /**
      * Stops the pomodoro and the foreground service. After calling this method,

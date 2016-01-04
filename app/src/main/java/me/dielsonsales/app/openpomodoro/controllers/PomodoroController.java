@@ -26,10 +26,6 @@ public class PomodoroController {
     }
 
     // Static default values ---------------------------------------------------
-    private static final int DEFAULT_POMODORO_TIME = 60;
-    private static final int DEFAULT_REST_TIME = 20;
-    private static final int DEFAULT_LONG_REST_TIME = 40;
-    private static final int DEFAULT_EXTENDED_TIME = 30;
     private static final int DEFAULT_LONG_REST_FREQUENCY = 4;
 
     // Configurable time values ------------------------------------------------
@@ -57,10 +53,6 @@ public class PomodoroController {
      */
     public PomodoroController(PomodoroSoundManager soundManager) {
         mHandler = new ControllerHandler(this);
-        mPomodoroTime = DEFAULT_POMODORO_TIME;
-        mRestTime = DEFAULT_REST_TIME;
-        mLongRestTime = DEFAULT_LONG_REST_TIME;
-        mExtendedTime = DEFAULT_EXTENDED_TIME;
         mLongRestFrequency = DEFAULT_LONG_REST_FREQUENCY;
         mCurrentIntervalType = IntervalType.POMODORO;
         mPomodoroCount = 0; // counts the pomodoros until the long rest
@@ -115,21 +107,28 @@ public class PomodoroController {
     /**
      * Starts the pomodoro.
      */
-    public void start() {
+    public void start() throws Exception {
+        if (mPomodoroTime < 5 || mRestTime < 5 || mLongRestTime < 5 || mExtendedTime < 5) {
+            throw new Exception("Pomodoro values were not set");
+        }
         mCounter = mPomodoroTime;
         mIsRunning = true;
         startPomodoroTask();
         mDuration = createNewDuration(getCurrentPomodoroTime());
         mPomodoroCount += 1;
+        mSoundManager.playTicTacSound();
     }
 
     /**
      * Advances the clock to the next type: if it's a pomodoro, to a rest and if
      * it's a rest, to a pomodoro.
      */
-    public void skip() {
+    public void skip(boolean userInduced) {
         if (!mIsRunning) {
             return;
+        }
+        if (userInduced) {
+            mSoundManager.playTicTacSound();
         }
         if (mCurrentIntervalType == IntervalType.POMODORO) {
             if (mPomodoroCount == mLongRestFrequency) {
@@ -175,7 +174,7 @@ public class PomodoroController {
         mListener.onTimeUpdated(bundle);
         if (mCounter == 0) {
             playAlarm();
-            skip();
+            skip(false);
         }
     }
 

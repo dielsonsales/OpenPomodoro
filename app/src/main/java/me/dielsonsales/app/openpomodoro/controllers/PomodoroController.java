@@ -63,7 +63,7 @@ public class PomodoroController {
         mExtendedTime = DEFAULT_EXTENDED_TIME;
         mLongRestFrequency = DEFAULT_LONG_REST_FREQUENCY;
         mCurrentIntervalType = IntervalType.POMODORO;
-        mPomodoroCount = 0;
+        mPomodoroCount = 0; // counts the pomodoros until the long rest
         mSoundManager = soundManager;
     }
 
@@ -89,24 +89,26 @@ public class PomodoroController {
     public boolean isRunning() { return mIsRunning; }
 
     public void setPomodoroTime(int pomodoroTime) {
+        checkParameterTime(pomodoroTime);
         mPomodoroTime = pomodoroTime;
     }
 
     public void setRestTime(int restTime) {
+        checkParameterTime(restTime);
         mRestTime = restTime;
     }
 
     public void setLongRestTime(int longRestTime) {
+        checkParameterTime(longRestTime);
         mLongRestTime = longRestTime;
     }
 
     public void setExtendedTime(int extendedTime) {
+        checkParameterTime(extendedTime);
         mExtendedTime = extendedTime;
     }
 
-    public void setPomodoroListener(PomodoroListener listener) {
-        mListener = listener;
-    }
+    public void setPomodoroListener(PomodoroListener listener) { mListener = listener; }
 
     // Behavior methods --------------------------------------------------------
 
@@ -202,6 +204,12 @@ public class PomodoroController {
         Calendar endTime = (Calendar) startTime.clone();
         endTime.add(Calendar.SECOND, currentCountdown);
         return new Duration(startTime, endTime);
+    }
+
+    private static void checkParameterTime(int seconds) {
+        if (seconds < 5) {
+            throw new IllegalArgumentException("Time should not be less than 5 seconds");
+        }
     }
 
     // Handler -----------------------------------------------------------------

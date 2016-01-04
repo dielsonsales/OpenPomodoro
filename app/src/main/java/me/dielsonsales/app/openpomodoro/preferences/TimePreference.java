@@ -9,7 +9,7 @@ import android.widget.NumberPicker;
 
 import me.dielsonsales.app.openpomodoro.R;
 
-public class TimePreference extends DialogPreference {
+public class TimePreference extends DialogPreference implements NumberPicker.OnValueChangeListener {
     private static final String TAG = "TimePreference";
     private static final String DEFAULT_VALUE = "00:00:00";
 
@@ -66,18 +66,21 @@ public class TimePreference extends DialogPreference {
         mHourPicker.setMaxValue(10);
         mHourPicker.setFormatter(TWO_DIGITS_FORMATTER);
         mHourPicker.setValue(hours);
+        mHourPicker.setOnValueChangedListener(this); // min time is 5s
 
         mMinutePicker = (NumberPicker) view.findViewById(R.id.minute);
         mMinutePicker.setMinValue(0);
         mMinutePicker.setMaxValue(59);
         mMinutePicker.setFormatter(TWO_DIGITS_FORMATTER);
         mMinutePicker.setValue(minutes);
+        mMinutePicker.setOnValueChangedListener(this); // min time is 5s
 
         mSecondPicker = (NumberPicker) view.findViewById(R.id.seconds);
-        mSecondPicker.setMinValue(0);
+        mSecondPicker.setMinValue(0); // see onValueChange method
         mSecondPicker.setMaxValue(59);
         mSecondPicker.setFormatter(TWO_DIGITS_FORMATTER);
         mSecondPicker.setValue(seconds);
+        mSecondPicker.setOnValueChangedListener(this); // min time is 5s
 
         super.onBindDialogView(view);
     }
@@ -92,6 +95,18 @@ public class TimePreference extends DialogPreference {
             mCurrentTime = stringValue;
             persistString(stringValue);
             setSummary(stringValue);
+        }
+    }
+
+    /**
+     * Sets the second minValue to 5 if all the other NumberPickers are 0.
+     */
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        if (mMinutePicker.getValue() == 0 && mHourPicker.getValue() == 0) {
+            mSecondPicker.setMinValue(5);
+        } else {
+            mSecondPicker.setMinValue(0);
         }
     }
 

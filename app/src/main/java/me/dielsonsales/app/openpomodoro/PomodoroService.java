@@ -2,15 +2,18 @@ package me.dielsonsales.app.openpomodoro;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroListener;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroNotificationManager;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroSoundManager;
+import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
 
 /**
  * The pomodoro service that contains the controller.
@@ -81,13 +84,12 @@ public class PomodoroService extends Service {
      * is automatically called in the onStartCommand method.
      */
     private void startPomodoro() {
+        updateControllerSettings();
         mPomodoroController.start();
         mNotificationManager.showNotification();
     }
 
-    public void skipPomodoro() {
-        mPomodoroController.skip();
-    }
+    public void skipPomodoro() { mPomodoroController.skip(); }
 
     /**
      * Stops the pomodoro and the foreground service. After calling this method,
@@ -103,8 +105,39 @@ public class PomodoroService extends Service {
      * Returns whether the pomodoro is running or not.
      * @return true if the pomodoro is running
      */
-    public boolean isRunning() {
-        return mPomodoroController.isRunning();
+    public boolean isRunning() { return mPomodoroController.isRunning(); }
+
+    // Private methods ---------------------------------------------------------
+
+    private void updateControllerSettings() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Set pomodoro time
+        String pomodoroTimeString = preferences.getString(
+                getResources().getString(R.string.pref_pomodoro_time_key),
+                getResources().getString(R.string.pomodoro_time_default));
+        mPomodoroController.setPomodoroTime(FormattingUtils.timeToSeconds(pomodoroTimeString));
+
+        // Set rest time
+        String restTimeString = preferences.getString(
+                getResources().getString(R.string.pref_rest_time_key),
+                getResources().getString(R.string.rest_time_default)
+        );
+        mPomodoroController.setRestTime(FormattingUtils.timeToSeconds(restTimeString));
+
+        // Set long rest time
+        String longRestTimeString = preferences.getString(
+                getResources().getString(R.string.pref_long_rest_time_key),
+                getResources().getString(R.string.long_rest_time_default)
+        );
+        mPomodoroController.setLongRestTime(FormattingUtils.timeToSeconds(longRestTimeString));
+
+        // Set extended time
+        String extendedTimeString = preferences.getString(
+                getResources().getString(R.string.pref_extended_time_key),
+                getResources().getString(R.string.extended_time_default)
+        );
+        mPomodoroController.setExtendedTime(FormattingUtils.timeToSeconds(extendedTimeString));
     }
 
     // Local binder ------------------------------------------------------------

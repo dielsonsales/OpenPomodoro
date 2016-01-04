@@ -4,20 +4,20 @@
         android:title="Time preferences">
         <me.dielsonsales.app.openpomodoro.preferences.TimePreference
             android:title="Pomodoro time"
-            android:key="pref_time_settings"
-            android:defaultValue="00:25:00"/>
+            android:key="@string/pref_pomodoro_time_key"
+            android:defaultValue="@string/pomodoro_time_default"/>
         <me.dielsonsales.app.openpomodoro.preferences.TimePreference
             android:title="Rest time"
-            android:key="pref_rest_time_settings"
-            android:defaultValue="00:05:00"/>
+            android:key="@string/pref_rest_time_key"
+            android:defaultValue="@string/rest_time_default"/>
         <me.dielsonsales.app.openpomodoro.preferences.TimePreference
             android:title="Long rest time"
-            android:key="pref_long_rest_time_settings"
-            android:defaultValue="00:20:00"/>
+            android:key="@string/pref_long_rest_time_key"
+            android:defaultValue="@string/long_rest_time_default"/>
         <me.dielsonsales.app.openpomodoro.preferences.TimePreference
             android:title="Extended time"
-            android:key="pref_extended_time_settings"
-            android:defaultValue="00:03:00"/>
+            android:key="@string/pref_extended_time_key"
+            android:defaultValue="@string/extended_time_default"/>
         <CheckBoxPreference
             android:title="Skip time automatically"
             android:summary="Enables the extended time"

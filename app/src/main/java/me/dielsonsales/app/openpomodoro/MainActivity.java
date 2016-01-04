@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
      * @param bundle the updated data to display
      */
     public void updateUI(Bundle bundle) {
-        long countdown = bundle.getLong("countdown");
+        int countdown = (int) bundle.getLong("countdown");
         Calendar startTime = Calendar.getInstance();
         startTime.setTimeInMillis(bundle.getLong("startTime"));
         Calendar endTime = Calendar.getInstance();

@@ -2,7 +2,18 @@
     <string name="app_name">OpenPomodoro</string>
     <string name="title_activity_main">OpenPomodoro</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!--Pomodoro preferences-->
+    <string name="pref_pomodoro_time_key">pref_pomodoro_time</string>
+    <string name="pomodoro_time_default">00:25:00</string>
+    <!--Rest preferences-->
+    <string name="pref_rest_time_key">pref_rest_time</string>
+    <string name="rest_time_default">00:05:00</string>
+    <!--Long rest preferences-->
+    <string name="pref_long_rest_time_key">pref_long_rest_time</string>
+    <string name="long_rest_time_default">00:20:00</string>
+    <!--Extended time preferences-->
+    <string name="pref_extended_time_key">pref_extended_time</string>
+    <string name="extended_time_default">00:03:00</string>
 </resources>

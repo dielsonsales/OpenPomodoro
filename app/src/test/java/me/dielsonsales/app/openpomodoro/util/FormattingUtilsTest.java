@@ -35,4 +35,20 @@ public class FormattingUtilsTest {
         result = FormattingUtils.getDisplayTime(7 * 60);
         assertEquals(expected, result);
     }
+
+
+    @Test
+    public void testTimeToSeconds() {
+        int expected = 0;
+        int result = FormattingUtils.timeToSeconds("00:00:00");
+        assertEquals(expected, result);
+
+        expected = 20 * 60 + 12;
+        result = FormattingUtils.timeToSeconds("00:20:12");
+        assertEquals(expected, result);
+
+        expected = 3600 + 30 * 60;
+        result = FormattingUtils.timeToSeconds("01:30:00");
+        assertEquals(expected, result);
+    }
 }

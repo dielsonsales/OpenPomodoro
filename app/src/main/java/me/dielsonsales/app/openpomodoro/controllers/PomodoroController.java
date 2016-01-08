@@ -178,8 +178,6 @@ public class PomodoroController {
         mDuration = null; // not necessary anymore
     }
 
-    public void playAlarm() { mSoundManager.playAlarm(); }
-
     public void handleMessage() {
         if (mCounter > 0) {
             mCounter = mCounter - 1;
@@ -189,8 +187,10 @@ public class PomodoroController {
         bundle.putLong("startTime", mDuration.getStartTime().getTime().getTime());
         bundle.putLong("endTime", mDuration.getEndTime().getTime().getTime());
         mListener.onTimeUpdated(bundle);
-        if (mCounter == 0) {
-            playAlarm();
+        if (mCounter == 60) {
+            mSoundManager.playBell();
+        } else if (mCounter == 0) {
+            mSoundManager.playAlarm();
             skip(false);
         }
     }

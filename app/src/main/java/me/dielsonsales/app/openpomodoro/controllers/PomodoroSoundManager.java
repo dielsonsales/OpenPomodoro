@@ -10,22 +10,12 @@ public class PomodoroSoundManager {
     private Context mContext;
     private boolean mSoundAllowed;
     private MediaPlayer mPlayer;
-    private static PomodoroSoundManager mInstance;
-
-    // Static methods ----------------------------------------------------------
-
-    public static PomodoroSoundManager getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new PomodoroSoundManager(context);
-        }
-        return mInstance;
-    }
 
     // Constructors ------------------------------------------------------------
 
-    protected PomodoroSoundManager() {}
+    public PomodoroSoundManager() {}
 
-    protected PomodoroSoundManager(Context context) {
+    public PomodoroSoundManager(Context context) {
         mContext = context;
         mSoundAllowed = true;
     }
@@ -58,7 +48,15 @@ public class PomodoroSoundManager {
         }
     }
 
-    private void resetPlayer() {
+    public void playBell() {
+        resetPlayer();
+        if (mSoundAllowed) {
+            mPlayer = MediaPlayer.create(mContext, R.raw.bell);
+            mPlayer.start();
+        }
+    }
+
+    public void resetPlayer() {
         if (mPlayer != null) {
             if (mPlayer.isPlaying()) {
                 mPlayer.stop();

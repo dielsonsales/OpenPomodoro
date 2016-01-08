@@ -45,7 +45,7 @@ public class PomodoroService extends Service {
         super.onCreate();
         Log.i(TAG, "Creating service");
         mNotificationManager = new PomodoroNotificationManager(this);
-        mSoundmanager = PomodoroSoundManager.getInstance(this);
+        mSoundmanager = new PomodoroSoundManager(this);
         mPomodoroController = new PomodoroController(mSoundmanager, new PomodoroListener() {
             @Override
             public void onTimeUpdated(Bundle bundle) {

@@ -1,5 +1,7 @@
 package me.dielsonsales.app.openpomodoro.controllers;
 
+import android.content.Context;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,20 +18,7 @@ public class PomodoroControllerTest {
 
     @Before
     public void setUp() {
-        mPomodoroController = new PomodoroController(PomodoroSoundManager.getInstance(RuntimeEnvironment.application));
-    }
-
-    /**
-     * Tests if the default values are set correctly in the constructor.
-     */
-    @Test
-    public void testPomodoroDefaults() {
-        assertEquals(mPomodoroController.getPomodoroCount(), 0);
-        assertEquals(mPomodoroController.isRunning(), false);
-        assertEquals(mPomodoroController.getPomodoroTime(), 60);
-        assertEquals(mPomodoroController.getRestTime(), 20);
-        assertEquals(mPomodoroController.getExtendedTime(), 30);
-        assertEquals(mPomodoroController.getLongRestTime(), 40);
+        mPomodoroController = new PomodoroController(new MockSoundManager(RuntimeEnvironment.application));
     }
 
     /**
@@ -37,10 +26,10 @@ public class PomodoroControllerTest {
      */
     @Test
     public void testSettingValues() {
-        int POMODORO_TIME = 15;
-        int REST_TIME = 7;
-        int EXTENDED_TIME = 2;
-        int LONG_REST_TIME = 23;
+        int POMODORO_TIME = 15 * 60;
+        int REST_TIME = 7 * 60;
+        int EXTENDED_TIME = 5 * 60;
+        int LONG_REST_TIME = 23 * 60;
         // sets new values
         mPomodoroController.setPomodoroTime(POMODORO_TIME);
         mPomodoroController.setRestTime(REST_TIME);
@@ -54,29 +43,43 @@ public class PomodoroControllerTest {
     }
 
     /**
-     * Tests the start, skip and stop functions.
+     * Tests the start, skip (user) and stop functions.
      */
     @Test
-    public void testRunning() {
+    public void testRunningUserSkipping() {
+        setPomodoroValues();
         assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
         assertEquals(mPomodoroController.isRunning(), false);
         // start counting
-        mPomodoroController.start();
+        try {
+            mPomodoroController.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
         assertEquals(mPomodoroController.isRunning(), true);
+
+        // automatic skip, should keep the interval time the same
+        for (int i = 0; i < 3; i++) {
+            mPomodoroController.skip(false);
+            assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
+        }
+
+        // user skip
         for (int i = 0; i < 3; i++) {
             assertEquals(mPomodoroController.getPomodoroCount(), i + 1);
             assertEquals(mPomodoroController.isRunning(), true);
-            mPomodoroController.skip();
+            mPomodoroController.skip(true);
             assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.REST);
-            mPomodoroController.skip();
+            mPomodoroController.skip(true);
             assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
         }
-        mPomodoroController.skip(); // now it's the long rest
+        mPomodoroController.skip(true); // now it's the long rest
         assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.LONG_REST);
         assertEquals(mPomodoroController.getPomodoroCount(), 0);
 
-        mPomodoroController.skip();
+        mPomodoroController.skip(true);
         assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
         assertEquals(mPomodoroController.getPomodoroCount(), 1);
 
@@ -84,5 +87,25 @@ public class PomodoroControllerTest {
         mPomodoroController.stop();
         assertEquals(mPomodoroController.isRunning(), false);
         assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
+    }
+
+     private void setPomodoroValues() {
+         mPomodoroController.setPomodoroTime(25 * 60);
+         mPomodoroController.setRestTime(5 * 60);
+         mPomodoroController.setLongRestTime(20 * 60);
+         mPomodoroController.setExtendedTime(20 * 60);
+     }
+
+    // Private classes ---------------------------------------------------------
+
+    public class MockSoundManager extends PomodoroSoundManager {
+        public MockSoundManager(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void playTicTacSound() {
+            // do nothing
+        }
     }
 }

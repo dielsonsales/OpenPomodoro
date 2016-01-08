@@ -23,9 +23,9 @@ public class PomodoroSoundManager {
 
     // Constructors ------------------------------------------------------------
 
-    private PomodoroSoundManager() {}
+    protected PomodoroSoundManager() {}
 
-    private PomodoroSoundManager(Context context) {
+    protected PomodoroSoundManager(Context context) {
         mContext = context;
         mSoundAllowed = true;
     }

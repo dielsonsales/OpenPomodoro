@@ -37,6 +37,7 @@ public class PomodoroController {
     private int mPomodoroCount;
 
     // Member variables --------------------------------------------------------
+    private boolean mAllowExtended;
     private Timer mTimer;
     private boolean mIsRunning;
     private long mCounter;
@@ -57,6 +58,7 @@ public class PomodoroController {
         mCurrentIntervalType = IntervalType.POMODORO;
         mPomodoroCount = 0; // counts the pomodoros until the long rest
         mSoundManager = soundManager;
+        mAllowExtended = true;
     }
 
     public PomodoroController(PomodoroSoundManager soundManager, PomodoroListener listener) {
@@ -80,6 +82,8 @@ public class PomodoroController {
 
     public boolean isRunning() { return mIsRunning; }
 
+    public boolean isExtendedAllowed() { return mAllowExtended; }
+
     public void setPomodoroTime(int pomodoroTime) {
         checkParameterTime(pomodoroTime);
         mPomodoroTime = pomodoroTime;
@@ -98,6 +102,13 @@ public class PomodoroController {
     public void setExtendedTime(int extendedTime) {
         checkParameterTime(extendedTime);
         mExtendedTime = extendedTime;
+    }
+
+    /**
+     * Sets if the clock is allowed to go to extended time.
+     */
+    public void setExtendedAllowed(boolean allowExtended) {
+        mAllowExtended = allowExtended;
     }
 
     public void setPomodoroListener(PomodoroListener listener) { mListener = listener; }
@@ -120,31 +131,37 @@ public class PomodoroController {
     }
 
     /**
-     * Advances the clock to the next type: if it's a pomodoro, to a rest and if
-     * it's a rest, to a pomodoro.
+     * Advances the clock to the next duration if the user skipped it or to the
+     * extended time if it was automatically skipped.
+     *
+     * @param userInduced If the function was explicitly called by the user
      */
     public void skip(boolean userInduced) {
         if (!mIsRunning) {
             return;
         }
-        if (userInduced) {
-            mSoundManager.playTicTacSound();
-        }
-        if (mCurrentIntervalType == IntervalType.POMODORO) {
-            if (mPomodoroCount == mLongRestFrequency) {
-                mCurrentIntervalType = IntervalType.LONG_REST;
-                mPomodoroCount = 0;
-                mCounter = mLongRestTime;
-            } else {
-                mCurrentIntervalType = IntervalType.REST;
-                mCounter = mRestTime;
-            }
+        if (!userInduced && mAllowExtended) {
+            mDuration = createNewDuration(mExtendedTime);
+            mCounter = mExtendedTime;
         } else {
-            mCurrentIntervalType = IntervalType.POMODORO;
-            mCounter = mPomodoroTime;
-            mPomodoroCount += 1;
+            mSoundManager.playTicTacSound();
+
+            if (mCurrentIntervalType == IntervalType.POMODORO) {
+                if (mPomodoroCount == mLongRestFrequency) {
+                    mCurrentIntervalType = IntervalType.LONG_REST;
+                    mPomodoroCount = 0;
+                    mCounter = mLongRestTime;
+                } else {
+                    mCurrentIntervalType = IntervalType.REST;
+                    mCounter = mRestTime;
+                }
+            } else {
+                mCurrentIntervalType = IntervalType.POMODORO;
+                mCounter = mPomodoroTime;
+                mPomodoroCount += 1;
+            }
+            mDuration = createNewDuration(getCurrentPomodoroTime());
         }
-        mDuration = createNewDuration(getCurrentPomodoroTime());
     }
 
     /**
@@ -198,10 +215,10 @@ public class PomodoroController {
         }
     }
 
-    private static Duration createNewDuration(int currentCountdown) {
+    private static Duration createNewDuration(int currentDurationSeconds) {
         Calendar startTime = Calendar.getInstance();
         Calendar endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.SECOND, currentCountdown);
+        endTime.add(Calendar.SECOND, currentDurationSeconds);
         return new Duration(startTime, endTime);
     }
 

@@ -148,6 +148,9 @@ public class PomodoroService extends Service {
 
         boolean soundAllowed = preferences.getBoolean(getResources().getString(R.string.pref_play_sound_key), true);
         mSoundmanager.setSoundAllowed(soundAllowed);
+
+        boolean extendedTimeAllowed = preferences.getBoolean(getResources().getString(R.string.pref_auto_skip_key), true);
+        mPomodoroController.setExtendedAllowed(extendedTimeAllowed);
     }
 
     // Local binder ------------------------------------------------------------

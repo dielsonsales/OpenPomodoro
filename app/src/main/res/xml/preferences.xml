@@ -21,7 +21,7 @@
         <CheckBoxPreference
             android:title="Skip time automatically"
             android:summary="Enables the extended time"
-            android:key="pref_play_autoskip_settings"
+            android:key="@string/pref_auto_skip_key"
             android:defaultValue="true" />
     </PreferenceCategory>
     <PreferenceCategory

@@ -4,6 +4,10 @@
 
     <string name="title_activity_settings">Settings</string>
 
+    <!--Notification messages-->
+    <string name="notification_work_message">Time to work</string>
+    <string name="notification_rest_message">Time to rest</string>
+
     <!--Pomodoro preferences-->
     <string name="pref_pomodoro_time_key">pref_pomodoro_time</string>
     <string name="pomodoro_time_default">00:25:00</string>

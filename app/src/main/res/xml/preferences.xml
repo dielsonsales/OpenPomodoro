@@ -19,10 +19,10 @@
             android:key="@string/pref_extended_time_key"
             android:defaultValue="@string/extended_time_default"/>
         <CheckBoxPreference
-            android:title="Skip time automatically"
+            android:title="Enable extended time"
             android:summary="Enables the extended time"
             android:key="@string/pref_auto_skip_key"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Alert preferences">

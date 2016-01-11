@@ -21,8 +21,7 @@ public class PomodoroController {
     public enum IntervalType {
         POMODORO,
         REST,
-        LONG_REST,
-        EXTENDED
+        LONG_REST
     }
 
     // Static default values ---------------------------------------------------
@@ -46,23 +45,25 @@ public class PomodoroController {
     private PomodoroListener mListener;
     private static ControllerHandler mHandler;
     private PomodoroSoundManager mSoundManager;
+    private PomodoroNotificationManager mNotificationManager;
 
     // Constructors ------------------------------------------------------------
     /**
      * Creates a new PomodoroController instance.
      * @param soundManager a sound manager instance to play the sounds
      */
-    public PomodoroController(PomodoroSoundManager soundManager) {
+    public PomodoroController(PomodoroSoundManager soundManager, PomodoroNotificationManager notificationManager) {
         mHandler = new ControllerHandler(this);
         mLongRestFrequency = DEFAULT_LONG_REST_FREQUENCY;
         mCurrentIntervalType = IntervalType.POMODORO;
         mPomodoroCount = 0; // counts the pomodoros until the long rest
         mSoundManager = soundManager;
+        mNotificationManager = notificationManager;
         mAllowExtended = true;
     }
 
-    public PomodoroController(PomodoroSoundManager soundManager, PomodoroListener listener) {
-        this(soundManager);
+    public PomodoroController(PomodoroSoundManager soundManager, PomodoroNotificationManager notificationManager, PomodoroListener listener) {
+        this(soundManager, notificationManager);
         setPomodoroListener(listener);
     }
 
@@ -128,6 +129,7 @@ public class PomodoroController {
         mDuration = createNewDuration(getCurrentPomodoroTime());
         mPomodoroCount += 1;
         mSoundManager.playTicTacSound();
+        mNotificationManager.showNotification(PomodoroNotificationManager.NotificationType.WORK_NOTIFICATION);
     }
 
     /**
@@ -155,10 +157,12 @@ public class PomodoroController {
                     mCurrentIntervalType = IntervalType.REST;
                     mCounter = mRestTime;
                 }
+                mNotificationManager.showNotification(PomodoroNotificationManager.NotificationType.REST_NOTIFICATION);
             } else {
                 mCurrentIntervalType = IntervalType.POMODORO;
                 mCounter = mPomodoroTime;
                 mPomodoroCount += 1;
+                mNotificationManager.showNotification(PomodoroNotificationManager.NotificationType.WORK_NOTIFICATION);
             }
             mDuration = createNewDuration(getCurrentPomodoroTime());
         }
@@ -176,6 +180,7 @@ public class PomodoroController {
         mPomodoroCount = 0; // restart the count
         mIsRunning = false;
         mDuration = null; // not necessary anymore
+        mNotificationManager.hideNotification();
     }
 
     public void handleMessage() {

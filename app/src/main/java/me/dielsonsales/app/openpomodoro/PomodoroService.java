@@ -46,7 +46,7 @@ public class PomodoroService extends Service {
         Log.i(TAG, "Creating service");
         mNotificationManager = new PomodoroNotificationManager(this);
         mSoundmanager = new PomodoroSoundManager(this);
-        mPomodoroController = new PomodoroController(mSoundmanager, new PomodoroListener() {
+        mPomodoroController = new PomodoroController(mSoundmanager, mNotificationManager, new PomodoroListener() {
             @Override
             public void onTimeUpdated(Bundle bundle) {
                 if (mUpdateListener != null) {
@@ -93,7 +93,6 @@ public class PomodoroService extends Service {
     private void startPomodoro() throws Exception {
         updateControllerSettings();
         mPomodoroController.start();
-        mNotificationManager.showNotification();
     }
 
     public void skipPomodoro() { mPomodoroController.skip(true); }
@@ -104,7 +103,6 @@ public class PomodoroService extends Service {
      */
     public void stopPomodoro() {
         mPomodoroController.stop();
-        mNotificationManager.hideNotification();
         stopSelf(mStartId);
     }
 
@@ -149,8 +147,8 @@ public class PomodoroService extends Service {
         boolean soundAllowed = preferences.getBoolean(getResources().getString(R.string.pref_play_sound_key), true);
         mSoundmanager.setSoundAllowed(soundAllowed);
 
-        boolean extendedTimeAllowed = preferences.getBoolean(getResources().getString(R.string.pref_auto_skip_key), true);
-        mPomodoroController.setExtendedAllowed(extendedTimeAllowed);
+        boolean extendedAllowed = preferences.getBoolean(getResources().getString(R.string.pref_auto_skip_key), false);
+        mPomodoroController.setExtendedAllowed(extendedAllowed);
     }
 
     // Local binder ------------------------------------------------------------

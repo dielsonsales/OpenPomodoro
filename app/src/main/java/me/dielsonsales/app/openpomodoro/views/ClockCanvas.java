@@ -11,7 +11,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import me.dielsonsales.app.openpomodoro.R;
@@ -57,16 +56,15 @@ public class ClockCanvas extends View {
         INTERVALS_COLOR = ContextCompat.getColor(context, R.color.colorAquent);
         POMODORO_COLOR = ContextCompat.getColor(context, R.color.colorCopper);
 
-        // TODO: delete this later
-        List<Duration> durations = new ArrayList<>();
-        Calendar startInterval = new GregorianCalendar();
-        startInterval.set(Calendar.HOUR, 11);
-        startInterval.set(Calendar.MINUTE, 58);
-        Calendar endInterval = new GregorianCalendar();
-        endInterval.set(Calendar.HOUR, 0);
-        endInterval.set(Calendar.MINUTE, 22);
-        durations.add(new Duration(startInterval, endInterval));
-        this.addIntervals(durations);
+//        List<Duration> durations = new ArrayList<>();
+//        Calendar startInterval = new GregorianCalendar();
+//        startInterval.set(Calendar.HOUR, 11);
+//        startInterval.set(Calendar.MINUTE, 58);
+//        Calendar endInterval = new GregorianCalendar();
+//        endInterval.set(Calendar.HOUR, 0);
+//        endInterval.set(Calendar.MINUTE, 22);
+//        durations.add(new Duration(startInterval, endInterval));
+//        this.addIntervals(durations);
     }
 
     // getters & setters -------------------------------------------------------

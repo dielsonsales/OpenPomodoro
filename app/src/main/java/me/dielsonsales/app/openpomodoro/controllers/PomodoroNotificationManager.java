@@ -33,7 +33,7 @@ public class PomodoroNotificationManager {
     public void showNotification(NotificationType notificationType) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mService);
         builder.setCategory(Notification.CATEGORY_SERVICE);
-        builder.setContentTitle("OpenPomodoro");
+        builder.setContentTitle(mService.getResources().getString(R.string.app_name));
         builder.setContentText(mService.getResources().getString(R.string.notification_rest_message));
         if (notificationType == NotificationType.WORK_NOTIFICATION) {
             builder.setContentText(mService.getResources().getString(R.string.notification_work_message));

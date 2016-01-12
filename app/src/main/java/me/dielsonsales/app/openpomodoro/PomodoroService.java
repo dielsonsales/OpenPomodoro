@@ -7,7 +7,6 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroListener;
@@ -23,9 +22,8 @@ public class PomodoroService extends Service {
     private static final String TAG = "PomodoroService";
     private final IBinder mBinder = new LocalBinder();
     private PomodoroController mPomodoroController;
-    private PomodoroSoundManager mSoundmanager;
+    private PomodoroSoundManager mSoundManager;
     private UpdateListener mUpdateListener;
-    private PomodoroNotificationManager mNotificationManager;
     private int mStartId;
 
     // Getters & setters -------------------------------------------------------
@@ -43,10 +41,9 @@ public class PomodoroService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "Creating service");
-        mNotificationManager = new PomodoroNotificationManager(this);
-        mSoundmanager = new PomodoroSoundManager(this);
-        mPomodoroController = new PomodoroController(mSoundmanager, mNotificationManager, new PomodoroListener() {
+        mSoundManager = new PomodoroSoundManager(this);
+        mPomodoroController = new PomodoroController(mSoundManager,
+                new PomodoroNotificationManager(this), new PomodoroListener() {
             @Override
             public void onTimeUpdated(Bundle bundle) {
                 if (mUpdateListener != null) {
@@ -74,15 +71,13 @@ public class PomodoroService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.i(TAG, "onBind");
         return mBinder;
     }
 
-    @Override
-    public boolean onUnbind(Intent intent) {
-        Log.i(TAG, "onUnbind");
-        return super.onUnbind(intent);
-    }
+//    @Override
+//    public boolean onUnbind(Intent intent) {
+//        return super.onUnbind(intent);
+//    }
 
     // Public methods ----------------------------------------------------------
 
@@ -145,7 +140,7 @@ public class PomodoroService extends Service {
         mPomodoroController.setExtendedTime(FormattingUtils.timeToSeconds(extendedTimeString));
 
         boolean soundAllowed = preferences.getBoolean(getResources().getString(R.string.pref_play_sound_key), true);
-        mSoundmanager.setSoundAllowed(soundAllowed);
+        mSoundManager.setSoundAllowed(soundAllowed);
 
         boolean extendedAllowed = preferences.getBoolean(getResources().getString(R.string.pref_auto_skip_key), false);
         mPomodoroController.setExtendedAllowed(extendedAllowed);

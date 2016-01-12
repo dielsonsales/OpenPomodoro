@@ -31,15 +31,17 @@ public class ClockFragment extends Fragment {
         mClockCanvas = (ClockCanvas) getView().findViewById(R.id.clockCanvas);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateClock();
+    }
+
     // ClockFragment methods ---------------------------------------------------
 
-    public Duration getDuration() {
-        return mClockCanvas.getDuration();
-    }
+    public Duration getDuration() { return mClockCanvas.getDuration(); }
 
-    public void setDuration(Duration duration) {
-        mClockCanvas.addDuration(duration);
-    }
+    public void setDuration(Duration duration) { mClockCanvas.addDuration(duration); }
 
     /**
      * Forces the clock to be drawn again.

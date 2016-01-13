@@ -36,5 +36,17 @@
             android:defaultValue="false" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="Others">
+        <Preference
+            android:title="About">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="me.dielsonsales.app.openpomodoro"
+                android:targetClass="me.dielsonsales.app.openpomodoro.AboutActivity"/>
+        </Preference>
+    </PreferenceCategory>
+
+
 
 </PreferenceScreen>

@@ -1,10 +1,17 @@
 <resources>
     <string name="app_name">OpenPomodoro</string>
+    <string name="app_version">0.1.0</string>
+
+    <!-- MainActivity -->
     <string name="title_activity_main">OpenPomodoro</string>
 
+    <!-- SettingsActivity -->
     <string name="title_activity_settings">Settings</string>
 
-    <!--Notification messages-->
+    <!--AboutActivity-->
+    <string name="about_developer">Developer:</string>
+
+    <!-- PomodoroNotificationManager -->
     <string name="notification_work_message">Time to work</string>
     <string name="notification_rest_message">Time to rest</string>
 
@@ -24,4 +31,6 @@
     <string name="pref_play_sound_key">pref_play_sound</string>
     <!--Auto skip preference-->
     <string name="pref_auto_skip_key">pref_auto_skip</string>
+    <string name="title_activity_about">About</string>
+    <string name="action_settings">Settings</string>
 </resources>

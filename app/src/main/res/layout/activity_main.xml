@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
     tools:context="me.dielsonsales.app.openpomodoro.MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -26,9 +26,10 @@
     <fragment
         android:id="@+id/clock_fragment"
         class="me.dielsonsales.app.openpomodoro.ClockFragment"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="20"
+        android:layout_height="match_parent"
         tools:layout="@layout/fragment_clock"/>
 
     <TextView
@@ -37,14 +38,16 @@
         android:layout_height="wrap_content"
         android:textSize="40sp"
         android:text="00:00:00"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_above="@+id/buttons"
+        android:layout_centerHorizontal="true"/>
 
     <LinearLayout
+        android:id="@id/buttons"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="4">
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true">
         <ImageView
             android:id="@+id/skip_button"
             android:visibility="gone"
@@ -52,8 +55,8 @@
             android:paddingRight="20dp"
             android:src="@drawable/button_skip"
             android:clickable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"/>
         <ImageView
@@ -62,8 +65,8 @@
             android:paddingRight="20dp"
             android:src="@drawable/button_play"
             android:clickable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"/>
 
@@ -74,12 +77,12 @@
             android:paddingRight="20dp"
             android:src="@drawable/button_stop"
             android:clickable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"/>
     </LinearLayout>
 
 
 
-</LinearLayout>
+</RelativeLayout>

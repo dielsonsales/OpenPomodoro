@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -33,14 +32,13 @@ public class TextCounter extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.i("TextCounter", "Drawing text");
         super.onDraw(canvas);
         float screenDensity = getResources().getDisplayMetrics().density;
         Paint strokePaint = new Paint();
         strokePaint.setAntiAlias(true);
         strokePaint.setColor(Color.BLACK);
         strokePaint.setTextAlign(Paint.Align.CENTER);
-        strokePaint.setTextSize(40 * screenDensity);
+        strokePaint.setTextSize(30 * screenDensity);
         strokePaint.setStyle(Paint.Style.STROKE);
         strokePaint.setStrokeWidth(3 * screenDensity);
 
@@ -48,7 +46,7 @@ public class TextCounter extends View {
         textPaint.setAntiAlias(true);
         textPaint.setColor(Color.WHITE);
         textPaint.setTextAlign(Paint.Align.CENTER);
-        textPaint.setTextSize(40 * screenDensity);
+        textPaint.setTextSize(30 * screenDensity);
 
         canvas.drawText(mText, getWidth()/2, getHeight() - 10 * screenDensity, strokePaint);
         canvas.drawText(mText, getWidth()/2, getHeight() - 10 * screenDensity, textPaint);

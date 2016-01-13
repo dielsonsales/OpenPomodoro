@@ -13,12 +13,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.Calendar;
 
 import me.dielsonsales.app.openpomodoro.util.Duration;
-import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
 
 /**
  * The main activity containing the visual clock. This class is charged of
@@ -32,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean mIsBound;
 
     // UI Components -----------------------------------------------------------
-    private TextView mCountdownText;
+//    private TextView mCountdownText;
     ImageView mPlayButton;
     ImageView mSkipButton;
     ImageView mStopButton;
@@ -48,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         mClockFragment = (ClockFragment) getSupportFragmentManager().findFragmentById(R.id.clock_fragment);
 
         mIsBound = false;
-        mCountdownText = (TextView) findViewById(R.id.countdownText);
+//        mCountdownText = (TextView) findViewById(R.id.countdownText);
 
         // Play button
         mPlayButton = (ImageView) findViewById(R.id.play_button);
@@ -151,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetClock() {
         mClockFragment.setDuration(null);
-        mCountdownText.setText("00:00:00");
+//        mCountdownText.setText("00:00:00");
         mClockFragment.updateClock();
     }
 
@@ -179,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         endTime.setTimeInMillis(bundle.getLong("endTime"));
         Duration duration = new Duration(startTime, endTime);
 
-        mCountdownText.setText(FormattingUtils.getDisplayTime(countdown));
+//        mCountdownText.setText(FormattingUtils.getDisplayTime(countdown));
         if (mClockFragment.getDuration() == null) {
             mClockFragment.setDuration(duration);
         } else if (!mClockFragment.getDuration().equals(duration)) {

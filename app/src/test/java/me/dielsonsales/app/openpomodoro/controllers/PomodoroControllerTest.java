@@ -18,7 +18,9 @@ public class PomodoroControllerTest {
 
     @Before
     public void setUp() {
-        mPomodoroController = new PomodoroController(new MockSoundManager(RuntimeEnvironment.application));
+        mPomodoroController = new PomodoroController(
+                new MockSoundManager(RuntimeEnvironment.application),
+                new MockNotificationManager(RuntimeEnvironment.application));
     }
 
     /**
@@ -98,10 +100,22 @@ public class PomodoroControllerTest {
 
     // Private classes ---------------------------------------------------------
 
-    public class MockSoundManager extends PomodoroSoundManager {
-        public MockSoundManager(Context context) {
-            super(context);
+    public class MockNotificationManager extends PomodoroNotificationManager {
+        public MockNotificationManager(Context context) { super(context); }
+
+        @Override
+        public void showNotification(NotificationType notificationType) {
+            // do nothing
         }
+
+        @Override
+        public void hideNotification() {
+            // do nothing
+        }
+    }
+
+    public class MockSoundManager extends PomodoroSoundManager {
+        public MockSoundManager(Context context) { super(context); }
 
         @Override
         public void playTicTacSound() {

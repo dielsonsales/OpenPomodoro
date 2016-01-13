@@ -33,6 +33,7 @@
         tools:layout="@layout/fragment_clock"/>
 
     <me.dielsonsales.app.openpomodoro.views.TextCounter
+        android:id="@+id/countdownText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

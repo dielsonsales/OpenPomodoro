@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import java.util.Calendar;
 
 import me.dielsonsales.app.openpomodoro.util.Duration;
+import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
+import me.dielsonsales.app.openpomodoro.views.TextCounter;
 
 /**
  * The main activity containing the visual clock. This class is charged of
@@ -31,9 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
     // UI Components -----------------------------------------------------------
 //    private TextView mCountdownText;
-    ImageView mPlayButton;
-    ImageView mSkipButton;
-    ImageView mStopButton;
+    private TextCounter mCountdownText;
+    private ImageView mPlayButton;
+    private ImageView mSkipButton;
+    private ImageView mStopButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         mClockFragment = (ClockFragment) getSupportFragmentManager().findFragmentById(R.id.clock_fragment);
 
         mIsBound = false;
-//        mCountdownText = (TextView) findViewById(R.id.countdownText);
+        mCountdownText = (TextCounter) findViewById(R.id.countdownText);
 
         // Play button
         mPlayButton = (ImageView) findViewById(R.id.play_button);
@@ -149,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetClock() {
         mClockFragment.setDuration(null);
-//        mCountdownText.setText("00:00:00");
+        mCountdownText.setText("00:00:00");
         mClockFragment.updateClock();
     }
 
@@ -177,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         endTime.setTimeInMillis(bundle.getLong("endTime"));
         Duration duration = new Duration(startTime, endTime);
 
-//        mCountdownText.setText(FormattingUtils.getDisplayTime(countdown));
+        mCountdownText.setText(FormattingUtils.getDisplayTime(countdown));
         if (mClockFragment.getDuration() == null) {
             mClockFragment.setDuration(duration);
         } else if (!mClockFragment.getDuration().equals(duration)) {

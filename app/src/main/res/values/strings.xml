@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">OpenPomodoro</string>
+    <string name="app_name">Open Pomodoro</string>
     <string name="app_version">0.1.0</string>
 
     <!-- MainActivity -->
-    <string name="title_activity_main">OpenPomodoro</string>
+    <string name="title_activity_main">Open Pomodoro</string>
 
     <!-- SettingsActivity -->
     <string name="title_activity_settings">Settings</string>

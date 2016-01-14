@@ -14,4 +14,6 @@
     <color name="colorCopper">#D8A027</color>
     <color name="colorAquent">#448D7A</color>
     <color name="colorFabulan">#F3F4E4</color>
+
+    <color name="colorDarkGrey">#303030</color>
 </resources>

@@ -178,11 +178,10 @@ public class MainActivity extends AppCompatActivity {
         Calendar endTime = Calendar.getInstance();
         endTime.setTimeInMillis(bundle.getLong("endTime"));
         Duration duration = new Duration(startTime, endTime);
-
         mCountdownText.setText(FormattingUtils.getDisplayTime(countdown));
-        if (mClockFragment.getDuration() == null) {
-            mClockFragment.setDuration(duration);
-        } else if (!mClockFragment.getDuration().equals(duration)) {
+
+        // I'll only update the trail duration after starting or skipping a pomodoro
+        if (mClockFragment.getDuration() == null || !mClockFragment.getDuration().equals(duration)) {
             mClockFragment.setDuration(duration);
         }
         mClockFragment.updateClock();

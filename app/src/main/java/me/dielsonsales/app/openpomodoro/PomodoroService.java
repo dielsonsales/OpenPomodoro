@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
@@ -25,6 +26,7 @@ public class PomodoroService extends Service {
     private PomodoroSoundManager mSoundManager;
     private UpdateListener mUpdateListener;
     private int mStartId;
+    private PowerManager.WakeLock mWakeLock;
 
     // Getters & setters -------------------------------------------------------
 
@@ -88,6 +90,7 @@ public class PomodoroService extends Service {
     private void startPomodoro() throws Exception {
         updateControllerSettings();
         mPomodoroController.start();
+        acquireAwake();
     }
 
     public void skipPomodoro() { mPomodoroController.skip(true); }
@@ -98,6 +101,7 @@ public class PomodoroService extends Service {
      */
     public void stopPomodoro() {
         mPomodoroController.stop();
+        releaseAwake();
         stopSelf(mStartId);
     }
 
@@ -108,6 +112,20 @@ public class PomodoroService extends Service {
     public boolean isRunning() { return mPomodoroController.isRunning(); }
 
     // Private methods ---------------------------------------------------------
+
+    private void acquireAwake() {
+        if (mWakeLock == null) {
+            PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ServiceWakeLock");
+        }
+        mWakeLock.acquire();
+    }
+
+    private void releaseAwake() {
+        if (mWakeLock.isHeld()) {
+            mWakeLock.release();
+        }
+    }
 
     private void updateControllerSettings() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);

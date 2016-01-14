@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean mIsBound;
 
     // UI Components -----------------------------------------------------------
-//    private TextView mCountdownText;
     private TextCounter mCountdownText;
     private ImageView mPlayButton;
     private ImageView mSkipButton;

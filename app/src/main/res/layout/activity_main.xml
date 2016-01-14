@@ -39,14 +39,6 @@
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/buttons"/>
 
-    <!--<TextView-->
-        <!--android:id="@+id/countdownText"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textSize="40sp"-->
-        <!--android:text="00:00:00"-->
-        <!--android:layout_above="@+id/buttons"-->
-        <!--android:layout_centerHorizontal="true"/>-->
 
     <LinearLayout
         android:id="@id/buttons"

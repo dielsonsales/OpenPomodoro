@@ -196,6 +196,7 @@ public class PomodoroController {
             mSoundManager.playBell();
         } else if (mCounter == 0) {
             mSoundManager.playAlarm();
+            mSoundManager.vibrate();
             skip(false);
         }
     }

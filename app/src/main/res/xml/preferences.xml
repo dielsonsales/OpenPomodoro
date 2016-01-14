@@ -32,7 +32,7 @@
             android:defaultValue="true" />
         <CheckBoxPreference
             android:title="Vibrate"
-            android:key="pref_vibration_settings"
+            android:key="@string/pref_vibration_key"
             android:defaultValue="false" />
     </PreferenceCategory>
 

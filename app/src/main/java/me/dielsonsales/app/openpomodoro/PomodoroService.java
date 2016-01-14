@@ -139,8 +139,11 @@ public class PomodoroService extends Service {
         );
         mPomodoroController.setExtendedTime(FormattingUtils.timeToSeconds(extendedTimeString));
 
+        // Set sound and vibration
         boolean soundAllowed = preferences.getBoolean(getResources().getString(R.string.pref_play_sound_key), true);
         mSoundManager.setSoundAllowed(soundAllowed);
+        boolean vibrationAllowed = preferences.getBoolean(getResources().getString(R.string.pref_vibration_key), false);
+        mSoundManager.setVibrationAllowed(vibrationAllowed);
 
         boolean extendedAllowed = preferences.getBoolean(getResources().getString(R.string.pref_auto_skip_key), false);
         mPomodoroController.setExtendedAllowed(extendedAllowed);

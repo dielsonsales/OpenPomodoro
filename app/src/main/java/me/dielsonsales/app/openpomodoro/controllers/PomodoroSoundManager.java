@@ -2,6 +2,7 @@ package me.dielsonsales.app.openpomodoro.controllers;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.os.Vibrator;
 
 import me.dielsonsales.app.openpomodoro.R;
 
@@ -9,7 +10,9 @@ public class PomodoroSoundManager {
     private static final String TAG = "PomodoroSoundManager";
     private Context mContext;
     private boolean mSoundAllowed;
+    private boolean mVibrationAllowed;
     private MediaPlayer mPlayer;
+    private Vibrator mVibrator;
 
     // Constructors ------------------------------------------------------------
 
@@ -18,6 +21,8 @@ public class PomodoroSoundManager {
     public PomodoroSoundManager(Context context) {
         mContext = context;
         mSoundAllowed = true;
+        mVibrationAllowed = false;
+        mVibrator = (Vibrator) mContext.getSystemService(mContext.VIBRATOR_SERVICE);
     }
 
     // Getters & setters -------------------------------------------------------
@@ -26,11 +31,13 @@ public class PomodoroSoundManager {
         mSoundAllowed = soundAllowed;
     }
 
-    public boolean isSounsAllowed() {
-        return mSoundAllowed;
+    public void setVibrationAllowed(boolean vibrationAllowed) {
+        mVibrationAllowed = vibrationAllowed;
     }
 
-    // Public methods ----------------------------------------------------------
+    public boolean isSounsAllowed() { return mSoundAllowed; }
+
+    // Sound methods -----------------------------------------------------------
 
     public void playTicTacSound() {
         resetPlayer();
@@ -63,6 +70,14 @@ public class PomodoroSoundManager {
             }
             mPlayer.release();
             mPlayer = null;
+        }
+    }
+
+    // Vibration methods -------------------------------------------------------
+
+    public void vibrate() {
+        if (mVibrator.hasVibrator() && mVibrationAllowed) {
+            mVibrator.vibrate(1000);
         }
     }
 }

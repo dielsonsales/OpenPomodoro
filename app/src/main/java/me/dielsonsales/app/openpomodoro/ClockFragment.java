@@ -2,6 +2,7 @@ package me.dielsonsales.app.openpomodoro;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +40,24 @@ public class ClockFragment extends Fragment {
 
     // ClockFragment methods ---------------------------------------------------
 
+    /**
+     * Returns the current trail duration
+     */
     public Duration getDuration() { return mClockCanvas.getDuration(); }
 
+    /**
+     * The current pomodoro trail
+     */
     public void setDuration(Duration duration) { mClockCanvas.addDuration(duration); }
+
+
+    public void setIsRest(boolean isRest) {
+        if (isRest) {
+            ClockCanvas.POMODORO_COLOR = ContextCompat.getColor(getContext(), R.color.colorAquent);
+        } else {
+            ClockCanvas.POMODORO_COLOR = ContextCompat.getColor(getContext(), R.color.colorCopper);
+        }
+    }
 
     /**
      * Forces the clock to be drawn again.

@@ -182,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
         // I'll only update the trail duration after starting or skipping a pomodoro
         if (mClockFragment.getDuration() == null || !mClockFragment.getDuration().equals(duration)) {
+            mClockFragment.setIsRest(bundle.getBoolean("isRest", false));
             mClockFragment.setDuration(duration);
         }
         mClockFragment.updateClock();

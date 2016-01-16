@@ -191,6 +191,8 @@ public class PomodoroController {
         bundle.putLong("countdown", mCounter);
         bundle.putLong("startTime", mDuration.getStartTime().getTime().getTime());
         bundle.putLong("endTime", mDuration.getEndTime().getTime().getTime());
+        bundle.putBoolean("isRest", mCurrentIntervalType == IntervalType.REST ||
+                mCurrentIntervalType == IntervalType.LONG_REST);
         mListener.onTimeUpdated(bundle);
         if (mCounter == 60) {
             mSoundManager.playBell();

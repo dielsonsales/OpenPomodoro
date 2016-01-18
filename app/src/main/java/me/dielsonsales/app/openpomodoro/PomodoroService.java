@@ -9,6 +9,8 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 
+import javax.inject.Inject;
+
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroListener;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroNotificationManager;
@@ -23,10 +25,11 @@ public class PomodoroService extends Service {
     private static final String TAG = "PomodoroService";
     private final IBinder mBinder = new LocalBinder();
     private PomodoroController mPomodoroController;
-    private PomodoroSoundManager mSoundManager;
+    @Inject PomodoroSoundManager mSoundManager;
+    @Inject PomodoroNotificationManager mNotificationManager;
+    @Inject PowerManager.WakeLock mWakeLock;
     private UpdateListener mUpdateListener;
     private int mStartId;
-    private PowerManager.WakeLock mWakeLock;
 
     // Getters & setters -------------------------------------------------------
 
@@ -43,9 +46,9 @@ public class PomodoroService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mSoundManager = new PomodoroSoundManager(this);
-        mPomodoroController = new PomodoroController(mSoundManager,
-                new PomodoroNotificationManager(this), new PomodoroListener() {
+        ((PomodoroApp)getApplication()).getServiceComponent(this).inject(this);
+        mPomodoroController = new PomodoroController(mSoundManager, mNotificationManager);
+        mPomodoroController.setPomodoroListener(new PomodoroListener() {
             @Override
             public void onTimeUpdated(Bundle bundle) {
                 if (mUpdateListener != null) {
@@ -114,10 +117,10 @@ public class PomodoroService extends Service {
     // Private methods ---------------------------------------------------------
 
     private void acquireAwake() {
-        if (mWakeLock == null) {
-            PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
-            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ServiceWakeLock");
-        }
+//        if (mWakeLock == null) {
+//            PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+//            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ServiceWakeLock");
+//        }
         mWakeLock.acquire();
     }
 

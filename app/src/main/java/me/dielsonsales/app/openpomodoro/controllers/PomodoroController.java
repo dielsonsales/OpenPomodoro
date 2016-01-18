@@ -62,10 +62,6 @@ public class PomodoroController {
         mAllowExtended = true;
     }
 
-    public PomodoroController(PomodoroSoundManager soundManager, PomodoroNotificationManager notificationManager, PomodoroListener listener) {
-        this(soundManager, notificationManager);
-        setPomodoroListener(listener);
-    }
 
     // Getters & setters -------------------------------------------------------
 

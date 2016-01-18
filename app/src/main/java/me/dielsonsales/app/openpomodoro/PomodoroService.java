@@ -117,17 +117,11 @@ public class PomodoroService extends Service {
     // Private methods ---------------------------------------------------------
 
     private void acquireAwake() {
-//        if (mWakeLock == null) {
-//            PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
-//            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ServiceWakeLock");
-//        }
         mWakeLock.acquire();
     }
 
     private void releaseAwake() {
-        if (mWakeLock.isHeld()) {
-            mWakeLock.release();
-        }
+        mWakeLock.release();
     }
 
     private void updateControllerSettings() {

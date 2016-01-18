@@ -2,7 +2,7 @@
 
 OpenPomodoro aims to build the best open source pomodoro application for Android.
 
-![](http://i.imgur.com/UGw9mzP.gifv)
+![](http://i.imgur.com/UGw9mzP.gif)
 
 ## License
 

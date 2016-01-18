@@ -18,12 +18,10 @@ public class PomodoroApp extends Application {
     }
 
     public static ServiceComponent getServiceComponent(Service service) {
-        if (mServiceComponent == null) {
-            mServiceComponent = me.dielsonsales.app.openpomodoro.dagger2.DaggerServiceComponent.builder()
-                    .appModule(new AppModule(mApplication))
-                    .serviceModule(new ServiceModule(service))
-                    .build();
-        }
+        mServiceComponent = me.dielsonsales.app.openpomodoro.dagger2.DaggerServiceComponent.builder()
+                .appModule(new AppModule(mApplication))
+                .serviceModule(new ServiceModule(service))
+                .build();
         return mServiceComponent;
     }
 }

@@ -18,6 +18,7 @@ import me.dielsonsales.app.openpomodoro.R;
  * Created by dielson on 21/12/15.
  */
 public class PomodoroNotificationManager {
+    private static final String TAG = "NotificationManager";
     public enum NotificationType {
         WORK_NOTIFICATION,
         REST_NOTIFICATION
@@ -54,5 +55,7 @@ public class PomodoroNotificationManager {
         mService.startForeground(1, mNotification);
     }
 
-    public void hideNotification() { mService.stopForeground(true); }
+    public void hideNotification() {
+        mService.stopForeground(true);
+    }
 }

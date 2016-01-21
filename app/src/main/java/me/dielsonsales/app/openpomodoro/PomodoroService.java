@@ -81,10 +81,11 @@ public class PomodoroService extends Service {
         return mBinder;
     }
 
-//    @Override
-//    public boolean onUnbind(Intent intent) {
-//        return super.onUnbind(intent);
-//    }
+    @Override
+    public boolean onUnbind(Intent intent) {
+        setUpdateListener(null);
+        return super.onUnbind(intent);
+    }
 
     // Public methods ----------------------------------------------------------
 

@@ -1,5 +1,6 @@
 package me.dielsonsales.app.openpomodoro;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -52,10 +53,11 @@ public class ClockFragment extends Fragment {
 
 
     public void setIsRest(boolean isRest) {
+        Context context = getContext();
         if (isRest) {
-            ClockCanvas.POMODORO_COLOR = ContextCompat.getColor(getContext(), R.color.colorAquent);
+            ClockCanvas.POMODORO_COLOR = ContextCompat.getColor(context, R.color.colorAquent);
         } else {
-            ClockCanvas.POMODORO_COLOR = ContextCompat.getColor(getContext(), R.color.colorCopper);
+            ClockCanvas.POMODORO_COLOR = ContextCompat.getColor(context, R.color.colorCopper);
         }
     }
 

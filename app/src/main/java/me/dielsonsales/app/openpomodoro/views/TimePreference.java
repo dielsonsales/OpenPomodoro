@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.preferences;
+package me.dielsonsales.app.openpomodoro.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;

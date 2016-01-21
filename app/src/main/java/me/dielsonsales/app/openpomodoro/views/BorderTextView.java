@@ -13,14 +13,14 @@ import me.dielsonsales.app.openpomodoro.R;
 /**
  * Created by dielson on 13/01/16.
  */
-public class TextCounter extends View {
+public class BorderTextView extends View {
     private String mText;
     private Paint strokePaint;
     private Paint textPaint;
     private float mScreenDensity;
 
     // Constructor -------------------------------------------------------------
-    public TextCounter(Context context, AttributeSet attrs) {
+    public BorderTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mText = "00:00:00";
         mScreenDensity = getResources().getDisplayMetrics().density;

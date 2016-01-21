@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.controllers;
+package me.dielsonsales.app.openpomodoro.android;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -6,8 +6,7 @@ import android.os.Vibrator;
 
 import me.dielsonsales.app.openpomodoro.R;
 
-public class PomodoroSoundManager {
-    private static final String TAG = "PomodoroSoundManager";
+public class PomodoroSoundManager implements ISoundPlayer, IVibrator {
     private Context mContext;
     private boolean mSoundAllowed;
     private boolean mVibrationAllowed;
@@ -15,8 +14,6 @@ public class PomodoroSoundManager {
     private Vibrator mVibrator;
 
     // Constructors ------------------------------------------------------------
-
-    public PomodoroSoundManager() {}
 
     public PomodoroSoundManager(Context context) {
         mContext = context;
@@ -31,14 +28,11 @@ public class PomodoroSoundManager {
         mSoundAllowed = soundAllowed;
     }
 
-    public void setVibrationAllowed(boolean vibrationAllowed) {
-        mVibrationAllowed = vibrationAllowed;
-    }
+    public boolean isSoundAllowed() { return mSoundAllowed; }
 
-    public boolean isSounsAllowed() { return mSoundAllowed; }
+    // ISoundPlayer methods ----------------------------------------------------
 
-    // Sound methods -----------------------------------------------------------
-
+    @Override
     public void playTicTacSound() {
         resetPlayer();
         if (mSoundAllowed) {
@@ -47,6 +41,7 @@ public class PomodoroSoundManager {
         }
     }
 
+    @Override
     public void playAlarm() {
         resetPlayer();
         if (mSoundAllowed) {
@@ -55,6 +50,7 @@ public class PomodoroSoundManager {
         }
     }
 
+    @Override
     public void playBell() {
         resetPlayer();
         if (mSoundAllowed) {
@@ -63,7 +59,7 @@ public class PomodoroSoundManager {
         }
     }
 
-    public void resetPlayer() {
+    private void resetPlayer() {
         if (mPlayer != null) {
             if (mPlayer.isPlaying()) {
                 mPlayer.stop();
@@ -73,8 +69,19 @@ public class PomodoroSoundManager {
         }
     }
 
-    // Vibration methods -------------------------------------------------------
+    // IVibrator methods -------------------------------------------------------
 
+    @Override
+    public void setVibrationAllowed(boolean vibrationAllowed) {
+        mVibrationAllowed = vibrationAllowed;
+    }
+
+    @Override
+    public boolean isVibrationAllowed() {
+        return mVibrationAllowed;
+    }
+
+    @Override
     public void vibrate() {
         if (mVibrator.hasVibrator() && mVibrationAllowed) {
             mVibrator.vibrate(1000);

@@ -11,10 +11,10 @@ import android.preference.PreferenceManager;
 
 import javax.inject.Inject;
 
+import me.dielsonsales.app.openpomodoro.android.INotification;
+import me.dielsonsales.app.openpomodoro.android.PomodoroSoundManager;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroListener;
-import me.dielsonsales.app.openpomodoro.controllers.PomodoroNotificationManager;
-import me.dielsonsales.app.openpomodoro.controllers.PomodoroSoundManager;
 import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
 
 /**
@@ -26,7 +26,7 @@ public class PomodoroService extends Service {
     private final IBinder mBinder = new LocalBinder();
     private PomodoroController mPomodoroController;
     @Inject PomodoroSoundManager mSoundManager;
-    @Inject PomodoroNotificationManager mNotificationManager;
+    @Inject INotification mNotificationManager;
     @Inject PowerManager.WakeLock mWakeLock;
     private UpdateListener mUpdateListener;
     private int mStartId;

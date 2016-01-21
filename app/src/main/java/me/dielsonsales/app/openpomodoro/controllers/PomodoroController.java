@@ -3,13 +3,18 @@ package me.dielsonsales.app.openpomodoro.controllers;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import me.dielsonsales.app.openpomodoro.util.Duration;
+import me.dielsonsales.app.openpomodoro.android.INotification;
+import me.dielsonsales.app.openpomodoro.data.Duration;
+import me.dielsonsales.app.openpomodoro.android.PomodoroNotificationManager;
+import me.dielsonsales.app.openpomodoro.android.PomodoroSoundManager;
 
 /**
  * Controls the pomodoro clock
@@ -45,14 +50,16 @@ public class PomodoroController {
     private PomodoroListener mListener;
     private static ControllerHandler mHandler;
     private PomodoroSoundManager mSoundManager;
-    private PomodoroNotificationManager mNotificationManager;
+    private INotification mNotificationManager;
+
+    private static final SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("HH:mm:ss");
 
     // Constructors ------------------------------------------------------------
     /**
      * Creates a new PomodoroController instance.
      * @param soundManager a sound manager instance to play the sounds
      */
-    public PomodoroController(PomodoroSoundManager soundManager, PomodoroNotificationManager notificationManager) {
+    public PomodoroController(PomodoroSoundManager soundManager, INotification notificationManager) {
         mHandler = new ControllerHandler(this);
         mLongRestFrequency = DEFAULT_LONG_REST_FREQUENCY;
         mCurrentIntervalType = IntervalType.POMODORO;
@@ -186,7 +193,9 @@ public class PomodoroController {
         Bundle bundle = new Bundle();
         bundle.putLong("countdown", mCounter);
         bundle.putLong("startTime", mDuration.getStartTime().getTime().getTime());
+        Log.d(TAG, "startTime: " + mSimpleDateFormat.format(mDuration.getStartTime().getTime()));
         bundle.putLong("endTime", mDuration.getEndTime().getTime().getTime());
+        Log.d(TAG, "endTime: " + mSimpleDateFormat.format(mDuration.getEndTime().getTime()));
         bundle.putBoolean("isRest", mCurrentIntervalType == IntervalType.REST ||
                 mCurrentIntervalType == IntervalType.LONG_REST);
         mListener.onTimeUpdated(bundle);

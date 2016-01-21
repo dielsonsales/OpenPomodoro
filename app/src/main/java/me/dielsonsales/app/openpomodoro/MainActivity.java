@@ -15,10 +15,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import java.util.Calendar;
-
-import me.dielsonsales.app.openpomodoro.util.Duration;
+import me.dielsonsales.app.openpomodoro.data.Duration;
 import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
-import me.dielsonsales.app.openpomodoro.views.TextCounter;
+import me.dielsonsales.app.openpomodoro.views.BorderTextView;
 
 /**
  * The main activity containing the visual clock. This class is charged of
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean mIsBound;
 
     // UI Components -----------------------------------------------------------
-    private TextCounter mCountdownText;
+    private BorderTextView mCountdownText;
     private ImageView mPlayButton;
     private ImageView mSkipButton;
     private ImageView mStopButton;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         mClockFragment = (ClockFragment) getSupportFragmentManager().findFragmentById(R.id.clock_fragment);
 
         mIsBound = false;
-        mCountdownText = (TextCounter) findViewById(R.id.countdownText);
+        mCountdownText = (BorderTextView) findViewById(R.id.countdownText);
 
         // Play button
         mPlayButton = (ImageView) findViewById(R.id.play_button);

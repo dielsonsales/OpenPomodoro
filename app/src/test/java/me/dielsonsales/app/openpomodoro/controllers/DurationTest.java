@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.Calendar;
 
-import me.dielsonsales.app.openpomodoro.util.Duration;
+import me.dielsonsales.app.openpomodoro.data.Duration;
 
 import static junit.framework.Assert.assertEquals;
 

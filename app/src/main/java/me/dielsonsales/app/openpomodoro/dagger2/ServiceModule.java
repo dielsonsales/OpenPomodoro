@@ -8,8 +8,9 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import me.dielsonsales.app.openpomodoro.controllers.PomodoroNotificationManager;
-import me.dielsonsales.app.openpomodoro.controllers.PomodoroSoundManager;
+import me.dielsonsales.app.openpomodoro.android.INotification;
+import me.dielsonsales.app.openpomodoro.android.PomodoroNotificationManager;
+import me.dielsonsales.app.openpomodoro.android.PomodoroSoundManager;
 
 import static android.content.Context.POWER_SERVICE;
 import static android.os.PowerManager.PARTIAL_WAKE_LOCK;
@@ -35,7 +36,7 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    PomodoroNotificationManager providesNotificationManager(Service service) {
+    INotification providesNotificationManager(Service service) {
         return new PomodoroNotificationManager(service);
     }
 

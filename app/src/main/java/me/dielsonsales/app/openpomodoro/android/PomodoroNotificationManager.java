@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.controllers;
+package me.dielsonsales.app.openpomodoro.android;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -17,12 +17,9 @@ import me.dielsonsales.app.openpomodoro.R;
  * running in foreground, depending if the pomodoro is running or not.
  * Created by dielson on 21/12/15.
  */
-public class PomodoroNotificationManager {
+public class PomodoroNotificationManager implements INotification {
     private static final String TAG = "NotificationManager";
-    public enum NotificationType {
-        WORK_NOTIFICATION,
-        REST_NOTIFICATION
-    }
+
     NotificationManager mNotificationManager;
     Service mService;
 

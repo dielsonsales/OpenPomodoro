@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_clock"/>
 
-    <me.dielsonsales.app.openpomodoro.views.TextCounter
+    <me.dielsonsales.app.openpomodoro.views.BorderTextView
         android:id="@+id/countdownText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

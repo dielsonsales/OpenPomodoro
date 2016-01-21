@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import me.dielsonsales.app.openpomodoro.util.Duration;
+import me.dielsonsales.app.openpomodoro.data.Duration;
 import me.dielsonsales.app.openpomodoro.views.ClockCanvas;
 
 public class ClockFragment extends Fragment {

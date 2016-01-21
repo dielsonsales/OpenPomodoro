@@ -14,7 +14,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import me.dielsonsales.app.openpomodoro.R;
-import me.dielsonsales.app.openpomodoro.util.Duration;
+import me.dielsonsales.app.openpomodoro.data.Duration;
 
 /**
  * This class is supposed to draw a clock circle

@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.util;
+package me.dielsonsales.app.openpomodoro.data;
 
 import java.util.Calendar;
 

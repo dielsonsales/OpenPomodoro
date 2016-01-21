@@ -8,6 +8,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
+import me.dielsonsales.app.openpomodoro.android.PomodoroNotificationManager;
+import me.dielsonsales.app.openpomodoro.android.PomodoroSoundManager;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)

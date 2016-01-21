@@ -12,7 +12,8 @@ import android.preference.PreferenceManager;
 import javax.inject.Inject;
 
 import me.dielsonsales.app.openpomodoro.android.INotification;
-import me.dielsonsales.app.openpomodoro.android.PomodoroSoundManager;
+import me.dielsonsales.app.openpomodoro.android.ISoundPlayer;
+import me.dielsonsales.app.openpomodoro.android.IVibrator;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroListener;
 import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
@@ -25,8 +26,9 @@ public class PomodoroService extends Service {
     private static final String TAG = "PomodoroService";
     private final IBinder mBinder = new LocalBinder();
     private PomodoroController mPomodoroController;
-    @Inject PomodoroSoundManager mSoundManager;
-    @Inject INotification mNotificationManager;
+    @Inject ISoundPlayer mSoundPlayer;
+    @Inject IVibrator mVibrator;
+    @Inject INotification iNotification;
     @Inject PowerManager.WakeLock mWakeLock;
     private UpdateListener mUpdateListener;
     private int mStartId;
@@ -47,7 +49,7 @@ public class PomodoroService extends Service {
     public void onCreate() {
         super.onCreate();
         ((PomodoroApp)getApplication()).getServiceComponent(this).inject(this);
-        mPomodoroController = new PomodoroController(mSoundManager, mNotificationManager);
+        mPomodoroController = new PomodoroController(mSoundPlayer, mVibrator, iNotification);
         mPomodoroController.setPomodoroListener(new PomodoroListener() {
             @Override
             public void onTimeUpdated(Bundle bundle) {
@@ -156,9 +158,9 @@ public class PomodoroService extends Service {
 
         // Set sound and vibration
         boolean soundAllowed = preferences.getBoolean(getResources().getString(R.string.pref_play_sound_key), true);
-        mSoundManager.setSoundAllowed(soundAllowed);
+        mSoundPlayer.setSoundAllowed(soundAllowed);
         boolean vibrationAllowed = preferences.getBoolean(getResources().getString(R.string.pref_vibration_key), false);
-        mSoundManager.setVibrationAllowed(vibrationAllowed);
+        mVibrator.setVibrationAllowed(vibrationAllowed);
 
         boolean extendedAllowed = preferences.getBoolean(getResources().getString(R.string.pref_auto_skip_key), false);
         mPomodoroController.setExtendedAllowed(extendedAllowed);

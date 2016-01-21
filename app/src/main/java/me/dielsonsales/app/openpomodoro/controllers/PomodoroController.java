@@ -12,9 +12,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import me.dielsonsales.app.openpomodoro.android.INotification;
-import me.dielsonsales.app.openpomodoro.data.Duration;
+import me.dielsonsales.app.openpomodoro.android.ISoundPlayer;
+import me.dielsonsales.app.openpomodoro.android.IVibrator;
 import me.dielsonsales.app.openpomodoro.android.PomodoroNotificationManager;
-import me.dielsonsales.app.openpomodoro.android.PomodoroSoundManager;
+import me.dielsonsales.app.openpomodoro.data.Duration;
 
 /**
  * Controls the pomodoro clock
@@ -49,7 +50,8 @@ public class PomodoroController {
     private Duration mDuration;
     private PomodoroListener mListener;
     private static ControllerHandler mHandler;
-    private PomodoroSoundManager mSoundManager;
+    private ISoundPlayer mSoundPlayer;
+    private IVibrator mVibrator;
     private INotification mNotificationManager;
 
     private static final SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -59,12 +61,13 @@ public class PomodoroController {
      * Creates a new PomodoroController instance.
      * @param soundManager a sound manager instance to play the sounds
      */
-    public PomodoroController(PomodoroSoundManager soundManager, INotification notificationManager) {
+    public PomodoroController(ISoundPlayer soundManager, IVibrator vibrator, INotification notificationManager) {
         mHandler = new ControllerHandler(this);
         mLongRestFrequency = DEFAULT_LONG_REST_FREQUENCY;
         mCurrentIntervalType = IntervalType.POMODORO;
         mPomodoroCount = 0; // counts the pomodoros until the long rest
-        mSoundManager = soundManager;
+        mSoundPlayer = soundManager;
+        mVibrator = vibrator;
         mNotificationManager = notificationManager;
         mAllowExtended = true;
     }
@@ -131,7 +134,7 @@ public class PomodoroController {
         startPomodoroTask();
         mDuration = createNewDuration(getCurrentPomodoroTime());
         mPomodoroCount += 1;
-        mSoundManager.playTicTacSound();
+        mSoundPlayer.playTicTacSound();
         mNotificationManager.showNotification(PomodoroNotificationManager.NotificationType.WORK_NOTIFICATION);
     }
 
@@ -149,7 +152,7 @@ public class PomodoroController {
             mDuration = createNewDuration(mExtendedTime);
             mCounter = mExtendedTime;
         } else {
-            mSoundManager.playTicTacSound();
+            mSoundPlayer.playTicTacSound();
 
             if (mCurrentIntervalType == IntervalType.POMODORO) {
                 if (mPomodoroCount == mLongRestFrequency) {
@@ -200,10 +203,10 @@ public class PomodoroController {
                 mCurrentIntervalType == IntervalType.LONG_REST);
         mListener.onTimeUpdated(bundle);
         if (mCounter == 60) {
-            mSoundManager.playBell();
+            mSoundPlayer.playBell();
         } else if (mCounter == 0) {
-            mSoundManager.playAlarm();
-            mSoundManager.vibrate();
+            mSoundPlayer.playAlarm();
+            mVibrator.vibrate();
             skip(false);
         }
     }

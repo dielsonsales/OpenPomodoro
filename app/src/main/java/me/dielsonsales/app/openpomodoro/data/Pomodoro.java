@@ -12,7 +12,8 @@ public class Pomodoro {
     public enum PomodoroType {
         WORK,
         REST,
-        LONG_REST
+        LONG_REST,
+        NONE // when pomodoro is stopped
     }
     private Calendar mStarted;
     private PomodoroType mType;

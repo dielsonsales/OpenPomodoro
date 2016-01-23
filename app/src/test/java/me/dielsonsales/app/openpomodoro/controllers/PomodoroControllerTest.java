@@ -54,6 +54,7 @@ public class PomodoroControllerTest {
     public void testRunningUserSkipping() {
         setPomodoroValues();
         assertEquals(mPomodoroController.isRunning(), false);
+        assertEquals(mPomodoroController.getCurrentPomodoroType(), Pomodoro.PomodoroType.NONE);
         // start counting
         try {
             mPomodoroController.start();
@@ -90,6 +91,7 @@ public class PomodoroControllerTest {
         // stop everything
         mPomodoroController.stop();
         assertEquals(mPomodoroController.isRunning(), false);
+        assertEquals(mPomodoroController.getCurrentPomodoroType(), Pomodoro.PomodoroType.NONE);
     }
 
      private void setPomodoroValues() {

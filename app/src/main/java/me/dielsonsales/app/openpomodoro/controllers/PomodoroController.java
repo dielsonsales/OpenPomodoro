@@ -78,7 +78,12 @@ public class PomodoroController {
      */
     public int getPomodoroCount() { return mPomodoroCount; }
 
-    public Pomodoro.PomodoroType getCurrentPomodoroType() { return mCurrentPomodoro.getPomodoroType(); }
+    public Pomodoro.PomodoroType getCurrentPomodoroType() {
+        if (isRunning()) {
+            return mCurrentPomodoro.getPomodoroType();
+        }
+        return Pomodoro.PomodoroType.NONE;
+    }
 
     public boolean isRunning() { return mCurrentPomodoro != null; }
 

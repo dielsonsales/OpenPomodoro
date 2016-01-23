@@ -1,15 +1,14 @@
 package me.dielsonsales.app.openpomodoro.controllers;
 
-import android.content.Context;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
-import me.dielsonsales.app.openpomodoro.android.PomodoroNotificationManager;
-import me.dielsonsales.app.openpomodoro.android.PomodoroSoundManager;
+import me.dielsonsales.app.openpomodoro.android.INotification;
+import me.dielsonsales.app.openpomodoro.android.ISoundPlayer;
+import me.dielsonsales.app.openpomodoro.android.IVibrator;
+import me.dielsonsales.app.openpomodoro.data.Pomodoro;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,8 +21,9 @@ public class PomodoroControllerTest {
     @Before
     public void setUp() {
         mPomodoroController = new PomodoroController(
-                new MockSoundManager(RuntimeEnvironment.application),
-                new MockNotificationManager(RuntimeEnvironment.application));
+                new MockSoundManager(),
+                new MockVibrator(),
+                new MockNotificationManager());
     }
 
     /**
@@ -41,7 +41,7 @@ public class PomodoroControllerTest {
         mPomodoroController.setExtendedTime(EXTENDED_TIME);
         mPomodoroController.setLongRestTime(LONG_REST_TIME);
         // test the values
-        assertEquals(mPomodoroController.getPomodoroTime(), POMODORO_TIME);
+        assertEquals(mPomodoroController.getWorkTime(), POMODORO_TIME);
         assertEquals(mPomodoroController.getRestTime(), REST_TIME);
         assertEquals(mPomodoroController.getExtendedTime(), EXTENDED_TIME);
         assertEquals(mPomodoroController.getLongRestTime(), LONG_REST_TIME);
@@ -53,7 +53,6 @@ public class PomodoroControllerTest {
     @Test
     public void testRunningUserSkipping() {
         setPomodoroValues();
-        assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
         assertEquals(mPomodoroController.isRunning(), false);
         // start counting
         try {
@@ -62,13 +61,13 @@ public class PomodoroControllerTest {
             e.printStackTrace();
         }
 
-        assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
+        assertEquals(mPomodoroController.getCurrentPomodoroType(), Pomodoro.PomodoroType.WORK);
         assertEquals(mPomodoroController.isRunning(), true);
 
         // automatic skip, should keep the interval time the same
         for (int i = 0; i < 3; i++) {
             mPomodoroController.skip(false);
-            assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
+            assertEquals(mPomodoroController.getCurrentPomodoroType(), Pomodoro.PomodoroType.WORK);
         }
 
         // user skip
@@ -76,22 +75,21 @@ public class PomodoroControllerTest {
             assertEquals(mPomodoroController.getPomodoroCount(), i + 1);
             assertEquals(mPomodoroController.isRunning(), true);
             mPomodoroController.skip(true);
-            assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.REST);
+            assertEquals(mPomodoroController.getCurrentPomodoroType(), Pomodoro.PomodoroType.REST);
             mPomodoroController.skip(true);
-            assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
+            assertEquals(mPomodoroController.getCurrentPomodoroType(), Pomodoro.PomodoroType.WORK);
         }
         mPomodoroController.skip(true); // now it's the long rest
-        assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.LONG_REST);
+        assertEquals(mPomodoroController.getCurrentPomodoroType(), Pomodoro.PomodoroType.LONG_REST);
         assertEquals(mPomodoroController.getPomodoroCount(), 0);
 
         mPomodoroController.skip(true);
-        assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
+        assertEquals(mPomodoroController.getCurrentPomodoroType(), Pomodoro.PomodoroType.WORK);
         assertEquals(mPomodoroController.getPomodoroCount(), 1);
 
         // stop everything
         mPomodoroController.stop();
         assertEquals(mPomodoroController.isRunning(), false);
-        assertEquals(mPomodoroController.getCurrentIntervalType(), PomodoroController.IntervalType.POMODORO);
     }
 
      private void setPomodoroValues() {
@@ -103,25 +101,51 @@ public class PomodoroControllerTest {
 
     // Private classes ---------------------------------------------------------
 
-    public class MockNotificationManager extends PomodoroNotificationManager {
-        public MockNotificationManager(Context context) { super(context); }
-
+    private class MockNotificationManager implements INotification {
         @Override
         public void showNotification(NotificationType notificationType) {
             // do nothing
         }
-
         @Override
         public void hideNotification() {
             // do nothing
         }
     }
 
-    public class MockSoundManager extends PomodoroSoundManager {
-        public MockSoundManager(Context context) { super(context); }
-
+    private class MockSoundManager implements ISoundPlayer {
+        @Override
+        public void setSoundAllowed(boolean soundAllowed) {
+            // do nothing
+        }
+        @Override
+        public boolean isSoundAllowed() {
+            return false;
+        }
         @Override
         public void playTicTacSound() {
+            // do nothing
+        }
+        @Override
+        public void playAlarm() {
+            // do nothing
+        }
+        @Override
+        public void playBell() {
+            // do nothing
+        }
+    }
+
+    private class MockVibrator implements IVibrator {
+        @Override
+        public void setVibrationAllowed(boolean vibrationAllowed) {
+            // do nothing
+        }
+        @Override
+        public boolean isVibrationAllowed() {
+            return false;
+        }
+        @Override
+        public void vibrate() {
             // do nothing
         }
     }

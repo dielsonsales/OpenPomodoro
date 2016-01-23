@@ -16,6 +16,7 @@ import me.dielsonsales.app.openpomodoro.android.ISoundPlayer;
 import me.dielsonsales.app.openpomodoro.android.IVibrator;
 import me.dielsonsales.app.openpomodoro.android.PomodoroNotificationManager;
 import me.dielsonsales.app.openpomodoro.data.Duration;
+import me.dielsonsales.app.openpomodoro.data.Pomodoro;
 
 /**
  * Controls the pomodoro clock
@@ -23,30 +24,22 @@ import me.dielsonsales.app.openpomodoro.data.Duration;
  */
 public class PomodoroController {
     private static final String TAG = "PomodoroController";
-    // Enums -------------------------------------------------------------------
-    public enum IntervalType {
-        POMODORO,
-        REST,
-        LONG_REST
-    }
 
     // Static default values ---------------------------------------------------
     private static final int DEFAULT_LONG_REST_FREQUENCY = 4;
 
     // Configurable time values ------------------------------------------------
-    private int mPomodoroTime;
+    private int mWorkTime;
     private int mRestTime;
     private int mLongRestTime;
     private int mExtendedTime;
     private int mLongRestFrequency;
-    private int mPomodoroCount;
+    private int mPomodoroCount; // the number of pomodoros since the last long rest
 
     // Member variables --------------------------------------------------------
+    private Pomodoro mCurrentPomodoro;
     private boolean mAllowExtended;
     private Timer mTimer;
-    private boolean mIsRunning;
-    private long mCounter;
-    private IntervalType mCurrentIntervalType;
     private Duration mDuration;
     private PomodoroListener mListener;
     private static ControllerHandler mHandler;
@@ -59,14 +52,11 @@ public class PomodoroController {
     // Constructors ------------------------------------------------------------
     /**
      * Creates a new PomodoroController instance.
-     * @param soundManager a sound manager instance to play the sounds
      */
-    public PomodoroController(ISoundPlayer soundManager, IVibrator vibrator, INotification notificationManager) {
+    public PomodoroController(ISoundPlayer soundPlayer, IVibrator vibrator, INotification notificationManager) {
         mHandler = new ControllerHandler(this);
         mLongRestFrequency = DEFAULT_LONG_REST_FREQUENCY;
-        mCurrentIntervalType = IntervalType.POMODORO;
-        mPomodoroCount = 0; // counts the pomodoros until the long rest
-        mSoundPlayer = soundManager;
+        mSoundPlayer = soundPlayer;
         mVibrator = vibrator;
         mNotificationManager = notificationManager;
         mAllowExtended = true;
@@ -75,7 +65,7 @@ public class PomodoroController {
 
     // Getters & setters -------------------------------------------------------
 
-    public int getPomodoroTime() { return mPomodoroTime; }
+    public int getWorkTime() { return mWorkTime; }
 
     public int getRestTime() { return mRestTime; }
 
@@ -83,17 +73,20 @@ public class PomodoroController {
 
     public int getExtendedTime() { return mExtendedTime; }
 
+    /**
+     * Returns the number of pomodoros since the last long rest.
+     */
     public int getPomodoroCount() { return mPomodoroCount; }
 
-    public IntervalType getCurrentIntervalType() { return mCurrentIntervalType; }
+    public Pomodoro.PomodoroType getCurrentPomodoroType() { return mCurrentPomodoro.getPomodoroType(); }
 
-    public boolean isRunning() { return mIsRunning; }
+    public boolean isRunning() { return mCurrentPomodoro != null; }
 
     public boolean isExtendedAllowed() { return mAllowExtended; }
 
     public void setPomodoroTime(int pomodoroTime) {
         checkParameterTime(pomodoroTime);
-        mPomodoroTime = pomodoroTime;
+        mWorkTime = pomodoroTime;
     }
 
     public void setRestTime(int restTime) {
@@ -126,13 +119,12 @@ public class PomodoroController {
      * Starts the pomodoro.
      */
     public void start() throws Exception {
-        if (mPomodoroTime < 5 || mRestTime < 5 || mLongRestTime < 5 || mExtendedTime < 5) {
-            throw new Exception("Pomodoro values were not set");
+        if (mWorkTime < 5 || mRestTime < 5 || mLongRestTime < 5 || mExtendedTime < 5) {
+            throw new Exception("Pomodoro values are invalid");
         }
-        mCounter = mPomodoroTime;
-        mIsRunning = true;
-        startPomodoroTask();
+        mCurrentPomodoro = new Pomodoro(Pomodoro.PomodoroType.WORK, mWorkTime);
         mDuration = createNewDuration(getCurrentPomodoroTime());
+        startPomodoroTask();
         mPomodoroCount += 1;
         mSoundPlayer.playTicTacSound();
         mNotificationManager.showNotification(PomodoroNotificationManager.NotificationType.WORK_NOTIFICATION);
@@ -145,28 +137,26 @@ public class PomodoroController {
      * @param userInduced If the function was explicitly called by the user
      */
     public void skip(boolean userInduced) {
-        if (!mIsRunning) {
+        if (!isRunning()) {
             return;
+        }
+        if (userInduced) {
+            mSoundPlayer.playTicTacSound();
         }
         if (!userInduced && mAllowExtended) {
             mDuration = createNewDuration(mExtendedTime);
-            mCounter = mExtendedTime;
+            mCurrentPomodoro = new Pomodoro(Calendar.getInstance(), mCurrentPomodoro.getPomodoroType(), mExtendedTime);
         } else {
-            mSoundPlayer.playTicTacSound();
-
-            if (mCurrentIntervalType == IntervalType.POMODORO) {
+            if (mCurrentPomodoro.getPomodoroType() == Pomodoro.PomodoroType.WORK) {
                 if (mPomodoroCount == mLongRestFrequency) {
-                    mCurrentIntervalType = IntervalType.LONG_REST;
                     mPomodoroCount = 0;
-                    mCounter = mLongRestTime;
+                    mCurrentPomodoro = new Pomodoro(Pomodoro.PomodoroType.LONG_REST, mLongRestTime);
                 } else {
-                    mCurrentIntervalType = IntervalType.REST;
-                    mCounter = mRestTime;
+                    mCurrentPomodoro = new Pomodoro(Pomodoro.PomodoroType.REST, mRestTime);
                 }
                 mNotificationManager.showNotification(PomodoroNotificationManager.NotificationType.REST_NOTIFICATION);
             } else {
-                mCurrentIntervalType = IntervalType.POMODORO;
-                mCounter = mPomodoroTime;
+                mCurrentPomodoro = new Pomodoro(Pomodoro.PomodoroType.WORK, mWorkTime);
                 mPomodoroCount += 1;
                 mNotificationManager.showNotification(PomodoroNotificationManager.NotificationType.WORK_NOTIFICATION);
             }
@@ -178,33 +168,32 @@ public class PomodoroController {
      * Stops any activity and cancels all operations.
      */
     public void stop() {
-        if (mIsRunning) {
+        if (isRunning()) {
             mTimer.cancel();
             mTimer.purge();
         }
-        mCurrentIntervalType = IntervalType.POMODORO;
-        mPomodoroCount = 0; // restart the count
-        mIsRunning = false;
+        mCurrentPomodoro = null;
         mDuration = null; // not necessary anymore
+        mPomodoroCount = 0; // restart the count
         mNotificationManager.hideNotification();
     }
 
     public void handleMessage() {
-        if (mCounter > 0) {
-            mCounter = mCounter - 1;
+        if (mCurrentPomodoro.getRemainingTime() > 0) {
+            mCurrentPomodoro.decrement();
         }
         Bundle bundle = new Bundle();
-        bundle.putLong("countdown", mCounter);
+        bundle.putLong("countdown", mCurrentPomodoro.getRemainingTime());
         bundle.putLong("startTime", mDuration.getStartTime().getTime().getTime());
         Log.d(TAG, "startTime: " + mSimpleDateFormat.format(mDuration.getStartTime().getTime()));
         bundle.putLong("endTime", mDuration.getEndTime().getTime().getTime());
         Log.d(TAG, "endTime: " + mSimpleDateFormat.format(mDuration.getEndTime().getTime()));
-        bundle.putBoolean("isRest", mCurrentIntervalType == IntervalType.REST ||
-                mCurrentIntervalType == IntervalType.LONG_REST);
+        bundle.putBoolean("isRest", mCurrentPomodoro.getPomodoroType() == Pomodoro.PomodoroType.REST ||
+                mCurrentPomodoro.getPomodoroType() == Pomodoro.PomodoroType.LONG_REST);
         mListener.onTimeUpdated(bundle);
-        if (mCounter == 60) {
+        if (mCurrentPomodoro.getRemainingTime() == 60) {
             mSoundPlayer.playBell();
-        } else if (mCounter == 0) {
+        } else if (mCurrentPomodoro.getRemainingTime() == 0) {
             mSoundPlayer.playAlarm();
             mVibrator.vibrate();
             skip(false);
@@ -220,11 +209,11 @@ public class PomodoroController {
     }
 
     private int getCurrentPomodoroTime() {
-        if (mCurrentIntervalType == IntervalType.POMODORO) {
-            return mPomodoroTime;
-        } else if (mCurrentIntervalType == IntervalType.REST ) {
+        if (mCurrentPomodoro.getPomodoroType() == Pomodoro.PomodoroType.WORK) {
+            return mWorkTime;
+        } else if (mCurrentPomodoro.getPomodoroType() == Pomodoro.PomodoroType.REST) {
             return mRestTime;
-        } else if (mCurrentIntervalType == IntervalType.LONG_REST) {
+        } else if (mCurrentPomodoro.getPomodoroType() == Pomodoro.PomodoroType.LONG_REST) {
             return mLongRestTime;
         } else {
             return mExtendedTime;

@@ -8,15 +8,20 @@ import android.util.Log;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
+import me.dielsonsales.app.openpomodoro.domain.Duration;
+import me.dielsonsales.app.openpomodoro.domain.Pomodoro;
 import me.dielsonsales.app.openpomodoro.framework.INotification;
 import me.dielsonsales.app.openpomodoro.framework.ISoundPlayer;
 import me.dielsonsales.app.openpomodoro.framework.IVibrator;
 import me.dielsonsales.app.openpomodoro.framework.PomodoroNotificationManager;
-import me.dielsonsales.app.openpomodoro.domain.Duration;
-import me.dielsonsales.app.openpomodoro.domain.Pomodoro;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Controls the pomodoro clock
@@ -39,13 +44,14 @@ public class PomodoroController {
     // Member variables --------------------------------------------------------
     private Pomodoro mCurrentPomodoro;
     private boolean mAllowExtended;
-    private Timer mTimer;
     private Duration mDuration;
     private PomodoroListener mListener;
     private static ControllerHandler mHandler;
     private ISoundPlayer mSoundPlayer;
     private IVibrator mVibrator;
     private INotification mNotificationManager;
+
+    private Subscription mTimerSubscription;
 
     private static final SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("HH:mm:ss");
 
@@ -129,10 +135,30 @@ public class PomodoroController {
         }
         mCurrentPomodoro = new Pomodoro(Pomodoro.PomodoroType.WORK, mWorkTime);
         mDuration = createNewDuration(getCurrentPomodoroTime());
-        startPomodoroTask();
         mPomodoroCount += 1;
         mSoundPlayer.playTicTacSound();
         mNotificationManager.showNotification(PomodoroNotificationManager.NotificationType.WORK_NOTIFICATION);
+
+        mTimerSubscription = startPomodoroTask()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Long>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(Long tick) {
+                handleMessage();
+            }
+        });
+    }
+
+    public Observable<Long> startPomodoroTask() {
+        return Observable.interval(1, TimeUnit.SECONDS, Schedulers.newThread());
     }
 
     /**
@@ -174,8 +200,7 @@ public class PomodoroController {
      */
     public void stop() {
         if (isRunning()) {
-            mTimer.cancel();
-            mTimer.purge();
+            mTimerSubscription.unsubscribe();
         }
         mCurrentPomodoro = null;
         mDuration = null; // not necessary anymore
@@ -206,12 +231,6 @@ public class PomodoroController {
     }
 
     // Private methods ---------------------------------------------------------
-
-    private void startPomodoroTask() {
-        mTimer = new Timer();
-        PomodoroTask pomodoroTask = new PomodoroTask();
-        mTimer.schedule(pomodoroTask, 0, 1000);
-    }
 
     private int getCurrentPomodoroTime() {
         if (mCurrentPomodoro.getPomodoroType() == Pomodoro.PomodoroType.WORK) {

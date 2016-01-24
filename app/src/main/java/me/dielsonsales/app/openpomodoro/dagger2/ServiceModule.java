@@ -2,23 +2,22 @@ package me.dielsonsales.app.openpomodoro.dagger2;
 
 import android.app.Application;
 import android.app.Service;
-import android.os.PowerManager;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
+import me.dielsonsales.app.openpomodoro.data.IPreferences;
+import me.dielsonsales.app.openpomodoro.data.PomodoroPreferences;
 import me.dielsonsales.app.openpomodoro.framework.INotification;
 import me.dielsonsales.app.openpomodoro.framework.ISoundPlayer;
 import me.dielsonsales.app.openpomodoro.framework.IVibrator;
+import me.dielsonsales.app.openpomodoro.framework.IWakeLock;
 import me.dielsonsales.app.openpomodoro.framework.PomodoroNotificationManager;
 import me.dielsonsales.app.openpomodoro.framework.PomodoroSoundManager;
 import me.dielsonsales.app.openpomodoro.framework.PomodoroVibrator;
-import me.dielsonsales.app.openpomodoro.data.IPreferences;
-import me.dielsonsales.app.openpomodoro.data.PomodoroPreferences;
-
-import static android.content.Context.POWER_SERVICE;
-import static android.os.PowerManager.PARTIAL_WAKE_LOCK;
+import me.dielsonsales.app.openpomodoro.framework.PomodoroWakeLock;
 
 @Module
 public class ServiceModule {
@@ -57,8 +56,13 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    PowerManager.WakeLock providesWakeLock(Application application) {
-        return ((PowerManager) application.getSystemService(POWER_SERVICE))
-                .newWakeLock(PARTIAL_WAKE_LOCK, "ServiceWakeLock");
+    IWakeLock providesWakeLock(Application application) {
+        return new PomodoroWakeLock(application);
+    }
+
+    @Provides
+    @Singleton
+    PomodoroController providesPomodoroController(ISoundPlayer soundPlayer, IVibrator vibrator, INotification notification) {
+        return new PomodoroController(soundPlayer, vibrator, notification);
     }
 }

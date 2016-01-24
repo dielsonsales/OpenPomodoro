@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import java.util.Calendar;
+
 import me.dielsonsales.app.openpomodoro.domain.Duration;
 import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
 import me.dielsonsales.app.openpomodoro.views.BorderTextView;
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         if (!mService.isRunning()) {
             Intent intent = new Intent(this, PomodoroService.class);
             startService(intent);
+            mService.stopPomodoro();
             enableRunningButtons();
         }
     }

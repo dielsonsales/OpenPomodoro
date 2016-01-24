@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.util.Calendar;
 
+import me.dielsonsales.app.openpomodoro.domain.Pomodoro;
+
 import static org.junit.Assert.assertEquals;
 
 /**

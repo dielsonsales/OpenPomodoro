@@ -2,12 +2,10 @@ package me.dielsonsales.app.openpomodoro;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.preference.PreferenceManager;
 
 import javax.inject.Inject;
 
@@ -16,6 +14,7 @@ import me.dielsonsales.app.openpomodoro.android.ISoundPlayer;
 import me.dielsonsales.app.openpomodoro.android.IVibrator;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroListener;
+import me.dielsonsales.app.openpomodoro.data.IPreferences;
 import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
 
 /**
@@ -29,6 +28,7 @@ public class PomodoroService extends Service {
     @Inject ISoundPlayer mSoundPlayer;
     @Inject IVibrator mVibrator;
     @Inject INotification iNotification;
+    @Inject IPreferences mPreferences;
     @Inject PowerManager.WakeLock mWakeLock;
     private UpdateListener mUpdateListener;
     private int mStartId;
@@ -127,44 +127,28 @@ public class PomodoroService extends Service {
         mWakeLock.release();
     }
 
+    @Inject
     private void updateControllerSettings() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        mPreferences.retrievePreferences();
         // Set pomodoro time
-        String pomodoroTimeString = preferences.getString(
-                getResources().getString(R.string.pref_pomodoro_time_key),
-                getResources().getString(R.string.pomodoro_time_default));
+        String pomodoroTimeString = mPreferences.getPomodoroTime();
         mPomodoroController.setPomodoroTime(FormattingUtils.timeToSeconds(pomodoroTimeString));
 
         // Set rest time
-        String restTimeString = preferences.getString(
-                getResources().getString(R.string.pref_rest_time_key),
-                getResources().getString(R.string.rest_time_default)
-        );
+        String restTimeString = mPreferences.getRestTime();
         mPomodoroController.setRestTime(FormattingUtils.timeToSeconds(restTimeString));
 
         // Set long rest time
-        String longRestTimeString = preferences.getString(
-                getResources().getString(R.string.pref_long_rest_time_key),
-                getResources().getString(R.string.long_rest_time_default)
-        );
+        String longRestTimeString = mPreferences.getLongRestTime();
         mPomodoroController.setLongRestTime(FormattingUtils.timeToSeconds(longRestTimeString));
 
         // Set extended time
-        String extendedTimeString = preferences.getString(
-                getResources().getString(R.string.pref_extended_time_key),
-                getResources().getString(R.string.extended_time_default)
-        );
+        String extendedTimeString = mPreferences.getExtendedTime();
         mPomodoroController.setExtendedTime(FormattingUtils.timeToSeconds(extendedTimeString));
 
-        // Set sound and vibration
-        boolean soundAllowed = preferences.getBoolean(getResources().getString(R.string.pref_play_sound_key), true);
-        mSoundPlayer.setSoundAllowed(soundAllowed);
-        boolean vibrationAllowed = preferences.getBoolean(getResources().getString(R.string.pref_vibration_key), false);
-        mVibrator.setVibrationAllowed(vibrationAllowed);
-
-        boolean extendedAllowed = preferences.getBoolean(getResources().getString(R.string.pref_auto_skip_key), false);
-        mPomodoroController.setExtendedAllowed(extendedAllowed);
+        mSoundPlayer.setSoundAllowed(mPreferences.getSoundAllowed());
+        mVibrator.setVibrationAllowed(mPreferences.getVibrationAllowed());
+        mPomodoroController.setExtendedAllowed(mPreferences.getExtendedAllowed());
     }
 
     // Local binder ------------------------------------------------------------

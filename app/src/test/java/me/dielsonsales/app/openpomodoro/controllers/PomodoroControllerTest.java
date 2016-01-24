@@ -8,7 +8,7 @@ import org.robolectric.RobolectricTestRunner;
 import me.dielsonsales.app.openpomodoro.android.INotification;
 import me.dielsonsales.app.openpomodoro.android.ISoundPlayer;
 import me.dielsonsales.app.openpomodoro.android.IVibrator;
-import me.dielsonsales.app.openpomodoro.data.Pomodoro;
+import me.dielsonsales.app.openpomodoro.domain.Pomodoro;
 
 import static org.junit.Assert.assertEquals;
 

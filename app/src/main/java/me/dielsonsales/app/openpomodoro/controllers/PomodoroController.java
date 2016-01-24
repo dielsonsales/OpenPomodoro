@@ -15,8 +15,8 @@ import me.dielsonsales.app.openpomodoro.android.INotification;
 import me.dielsonsales.app.openpomodoro.android.ISoundPlayer;
 import me.dielsonsales.app.openpomodoro.android.IVibrator;
 import me.dielsonsales.app.openpomodoro.android.PomodoroNotificationManager;
-import me.dielsonsales.app.openpomodoro.data.Duration;
-import me.dielsonsales.app.openpomodoro.data.Pomodoro;
+import me.dielsonsales.app.openpomodoro.domain.Duration;
+import me.dielsonsales.app.openpomodoro.domain.Pomodoro;
 
 /**
  * Controls the pomodoro clock

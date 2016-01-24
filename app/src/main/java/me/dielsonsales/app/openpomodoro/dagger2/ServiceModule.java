@@ -14,6 +14,8 @@ import me.dielsonsales.app.openpomodoro.android.IVibrator;
 import me.dielsonsales.app.openpomodoro.android.PomodoroNotificationManager;
 import me.dielsonsales.app.openpomodoro.android.PomodoroSoundManager;
 import me.dielsonsales.app.openpomodoro.android.PomodoroVibrator;
+import me.dielsonsales.app.openpomodoro.data.IPreferences;
+import me.dielsonsales.app.openpomodoro.data.PomodoroPreferences;
 
 import static android.content.Context.POWER_SERVICE;
 import static android.os.PowerManager.PARTIAL_WAKE_LOCK;
@@ -46,6 +48,11 @@ public class ServiceModule {
     @Singleton
     INotification providesINotification(Service service) {
         return new PomodoroNotificationManager(service);
+    }
+
+    @Provides
+    IPreferences providesPreferences(Application application) {
+        return new PomodoroPreferences(application);
     }
 
     @Provides

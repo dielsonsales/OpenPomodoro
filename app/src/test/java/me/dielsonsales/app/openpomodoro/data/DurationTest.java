@@ -1,10 +1,10 @@
-package me.dielsonsales.app.openpomodoro.controllers;
+package me.dielsonsales.app.openpomodoro.data;
 
 import org.junit.Test;
 
 import java.util.Calendar;
 
-import me.dielsonsales.app.openpomodoro.data.Duration;
+import me.dielsonsales.app.openpomodoro.domain.Duration;
 
 import static junit.framework.Assert.assertEquals;
 

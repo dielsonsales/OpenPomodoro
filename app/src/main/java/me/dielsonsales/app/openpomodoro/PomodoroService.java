@@ -127,7 +127,6 @@ public class PomodoroService extends Service {
         mWakeLock.release();
     }
 
-    @Inject
     private void updateControllerSettings() {
         mPreferences.retrievePreferences();
         // Set pomodoro time

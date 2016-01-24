@@ -24,50 +24,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/buttons"/>
+        android:layout_above="@+id/buttons_fragment"/>
 
-
-    <LinearLayout
-        android:id="@id/buttons"
+    <fragment
+        android:id="@id/buttons_fragment"
+        class="me.dielsonsales.app.openpomodoro.ButtonsFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true">
-        <ImageView
-            android:id="@+id/skip_button"
-            android:visibility="gone"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:src="@drawable/button_skip"
-            android:clickable="true"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"/>
-        <ImageView
-            android:id="@+id/play_button"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:src="@drawable/button_play"
-            android:clickable="true"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"/>
-
-        <ImageView
-            android:id="@+id/stop_button"
-            android:visibility="gone"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:src="@drawable/button_stop"
-            android:clickable="true"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"/>
-    </LinearLayout>
+        android:layout_alignParentBottom="true"/>
 
     <android.support.design.widget.AppBarLayout
         android:layout_alignParentTop="true"

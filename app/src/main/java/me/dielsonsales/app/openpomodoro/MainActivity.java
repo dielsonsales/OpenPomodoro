@@ -6,17 +6,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 
 import java.util.Calendar;
 
 import me.dielsonsales.app.openpomodoro.domain.Duration;
+import me.dielsonsales.app.openpomodoro.presentation.BaseActivity;
 import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
 import me.dielsonsales.app.openpomodoro.views.BorderTextView;
 
@@ -24,64 +21,30 @@ import me.dielsonsales.app.openpomodoro.views.BorderTextView;
  * The main activity containing the visual clock. This class is charged of
  * displaying and updating the view according to the data in the Service.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity implements ButtonsFragment.FragmentInteractionListener {
 
     private static final String TAG = "MainActivity";
-    private ClockFragment mClockFragment;
     private PomodoroService mService;
     private boolean mIsBound;
 
+    // Fragments ---------------------------------------------------------------
+    private ClockFragment mClockFragment;
+    private ButtonsFragment mButtonsFragment;
+
     // UI Components -----------------------------------------------------------
     private BorderTextView mCountdownText;
-    private ImageView mPlayButton;
-    private ImageView mSkipButton;
-    private ImageView mStopButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getResources().getString(R.string.title_activity_main));
-        setSupportActionBar(toolbar);
+        setToolbar(R.id.toolbar, R.string.title_activity_main);
 
         mClockFragment = (ClockFragment) getSupportFragmentManager().findFragmentById(R.id.clock_fragment);
+        mCountdownText = (BorderTextView) findViewById(R.id.countdownText);
+        mButtonsFragment = (ButtonsFragment) getSupportFragmentManager().findFragmentById(R.id.buttons_fragment);
 
         mIsBound = false;
-        mCountdownText = (BorderTextView) findViewById(R.id.countdownText);
-
-        // Play button
-        mPlayButton = (ImageView) findViewById(R.id.play_button);
-        mPlayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mIsBound) {
-                    startPomodoro();
-                }
-            }
-        });
-
-        // Skip button
-        mSkipButton = (ImageView) findViewById(R.id.skip_button);
-        mSkipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mIsBound) {
-                    skipPomodoro();
-                }
-            }
-        });
-
-        // Stop button
-        mStopButton = (ImageView) findViewById(R.id.stop_button);
-        mStopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mIsBound) {
-                    stopPomodoro();
-                }
-            }
-        });
     }
 
     /**
@@ -132,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, PomodoroService.class);
             startService(intent);
             mService.stopPomodoro();
-            enableRunningButtons();
+            mButtonsFragment.enableRunningButtons();
         }
     }
 
@@ -146,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         if (mService.isRunning()) {
             mService.stopPomodoro();
             resetClock();
-            disableRunningButtons();
+            mButtonsFragment.disableRunningButtons();
         }
     }
 
@@ -156,16 +119,27 @@ public class MainActivity extends AppCompatActivity {
         mClockFragment.updateClock();
     }
 
-    private void enableRunningButtons() {
-        mPlayButton.setVisibility(View.GONE);
-        mSkipButton.setVisibility(View.VISIBLE);
-        mStopButton.setVisibility(View.VISIBLE);
+    // FragmentInteractionListener methods -------------------------------------
+
+    @Override
+    public void onPlayButtonClicked() {
+        if (mIsBound) {
+            startPomodoro();
+        }
     }
 
-    private void disableRunningButtons() {
-        mPlayButton.setVisibility(View.VISIBLE);
-        mSkipButton.setVisibility(View.GONE);
-        mStopButton.setVisibility(View.GONE);
+    @Override
+    public void onSkipButtonClicked() {
+        if (mIsBound) {
+            skipPomodoro();
+        }
+    }
+
+    @Override
+    public void onStopButtonClicked() {
+        if (mIsBound) {
+            stopPomodoro();
+        }
     }
 
     /**
@@ -207,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             if (mService.isRunning()) {
-                enableRunningButtons();
+                mButtonsFragment.enableRunningButtons();
             }
         }
 

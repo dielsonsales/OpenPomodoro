@@ -16,23 +16,16 @@ public class ClockFragment extends Fragment {
     private static final String TAG = "ClockFragment";
     private ClockCanvas mClockCanvas;
 
-    public ClockFragment() {
-        // Required empty public constructor
-    }
-
-    // Fragment methods --------------------------------------------------------
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_clock, container, false);
+        View view = inflater.inflate(R.layout.fragment_clock, container, false);
+        mClockCanvas = (ClockCanvas) view.findViewById(R.id.clockCanvas);
+        return  view;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mClockCanvas = (ClockCanvas) getView().findViewById(R.id.clockCanvas);
-    }
-
+    /**
+     * Every time the clock is back to the foreground, it is redrawn.
+     */
     @Override
     public void onResume() {
         super.onResume();

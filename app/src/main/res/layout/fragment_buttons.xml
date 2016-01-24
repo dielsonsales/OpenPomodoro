@@ -1,0 +1,47 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             tools:context="me.dielsonsales.app.openpomodoro.ButtonsFragment">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/skip_button"
+            android:visibility="gone"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@drawable/button_skip"
+            android:clickable="true"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"/>
+        <ImageView
+            android:id="@+id/play_button"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@drawable/button_play"
+            android:clickable="true"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"/>
+
+        <ImageView
+            android:id="@+id/stop_button"
+            android:visibility="gone"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@drawable/button_stop"
+            android:clickable="true"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"/>
+    </LinearLayout>
+
+</FrameLayout>

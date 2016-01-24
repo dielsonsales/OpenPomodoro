@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.android;
+package me.dielsonsales.app.openpomodoro.framework;
 
 import android.app.Notification;
 import android.app.NotificationManager;

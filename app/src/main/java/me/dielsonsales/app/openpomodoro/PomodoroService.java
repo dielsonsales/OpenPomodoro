@@ -9,9 +9,9 @@ import android.os.PowerManager;
 
 import javax.inject.Inject;
 
-import me.dielsonsales.app.openpomodoro.android.INotification;
-import me.dielsonsales.app.openpomodoro.android.ISoundPlayer;
-import me.dielsonsales.app.openpomodoro.android.IVibrator;
+import me.dielsonsales.app.openpomodoro.framework.INotification;
+import me.dielsonsales.app.openpomodoro.framework.ISoundPlayer;
+import me.dielsonsales.app.openpomodoro.framework.IVibrator;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
 import me.dielsonsales.app.openpomodoro.controllers.PomodoroListener;
 import me.dielsonsales.app.openpomodoro.data.IPreferences;

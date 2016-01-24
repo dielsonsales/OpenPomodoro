@@ -8,12 +8,12 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import me.dielsonsales.app.openpomodoro.android.INotification;
-import me.dielsonsales.app.openpomodoro.android.ISoundPlayer;
-import me.dielsonsales.app.openpomodoro.android.IVibrator;
-import me.dielsonsales.app.openpomodoro.android.PomodoroNotificationManager;
-import me.dielsonsales.app.openpomodoro.android.PomodoroSoundManager;
-import me.dielsonsales.app.openpomodoro.android.PomodoroVibrator;
+import me.dielsonsales.app.openpomodoro.framework.INotification;
+import me.dielsonsales.app.openpomodoro.framework.ISoundPlayer;
+import me.dielsonsales.app.openpomodoro.framework.IVibrator;
+import me.dielsonsales.app.openpomodoro.framework.PomodoroNotificationManager;
+import me.dielsonsales.app.openpomodoro.framework.PomodoroSoundManager;
+import me.dielsonsales.app.openpomodoro.framework.PomodoroVibrator;
 import me.dielsonsales.app.openpomodoro.data.IPreferences;
 import me.dielsonsales.app.openpomodoro.data.PomodoroPreferences;
 

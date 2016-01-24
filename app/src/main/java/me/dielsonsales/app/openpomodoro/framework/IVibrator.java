@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.android;
+package me.dielsonsales.app.openpomodoro.framework;
 
 public interface IVibrator {
     void setVibrationAllowed(boolean vibrationAllowed);

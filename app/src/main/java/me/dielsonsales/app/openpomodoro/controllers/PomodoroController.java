@@ -11,10 +11,10 @@ import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import me.dielsonsales.app.openpomodoro.android.INotification;
-import me.dielsonsales.app.openpomodoro.android.ISoundPlayer;
-import me.dielsonsales.app.openpomodoro.android.IVibrator;
-import me.dielsonsales.app.openpomodoro.android.PomodoroNotificationManager;
+import me.dielsonsales.app.openpomodoro.framework.INotification;
+import me.dielsonsales.app.openpomodoro.framework.ISoundPlayer;
+import me.dielsonsales.app.openpomodoro.framework.IVibrator;
+import me.dielsonsales.app.openpomodoro.framework.PomodoroNotificationManager;
 import me.dielsonsales.app.openpomodoro.domain.Duration;
 import me.dielsonsales.app.openpomodoro.domain.Pomodoro;
 

@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.android;
+package me.dielsonsales.app.openpomodoro.framework;
 
 import android.content.Context;
 import android.os.Vibrator;

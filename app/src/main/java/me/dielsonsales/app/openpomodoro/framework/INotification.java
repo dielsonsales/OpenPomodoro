@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.android;
+package me.dielsonsales.app.openpomodoro.framework;
 
 /**
  * Created by dielson on 21/01/16.

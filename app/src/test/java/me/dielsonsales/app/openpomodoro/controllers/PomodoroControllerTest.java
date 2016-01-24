@@ -5,9 +5,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import me.dielsonsales.app.openpomodoro.android.INotification;
-import me.dielsonsales.app.openpomodoro.android.ISoundPlayer;
-import me.dielsonsales.app.openpomodoro.android.IVibrator;
+import me.dielsonsales.app.openpomodoro.framework.INotification;
+import me.dielsonsales.app.openpomodoro.framework.ISoundPlayer;
+import me.dielsonsales.app.openpomodoro.framework.IVibrator;
 import me.dielsonsales.app.openpomodoro.domain.Pomodoro;
 
 import static org.junit.Assert.assertEquals;

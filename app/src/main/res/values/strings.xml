@@ -4,6 +4,7 @@
 
     <!-- MainActivity -->
     <string name="title_activity_main">Open Pomodoro</string>
+    <string name="menu_item_settings">Settings</string>
 
     <!-- SettingsActivity -->
     <string name="title_activity_settings">Settings</string>

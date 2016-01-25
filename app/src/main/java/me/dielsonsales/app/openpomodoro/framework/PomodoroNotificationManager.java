@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
-import me.dielsonsales.app.openpomodoro.MainActivity;
+import me.dielsonsales.app.openpomodoro.presentation.MainActivity;
 import me.dielsonsales.app.openpomodoro.R;
 
 /**

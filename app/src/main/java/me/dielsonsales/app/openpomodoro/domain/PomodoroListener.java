@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.controllers;
+package me.dielsonsales.app.openpomodoro.domain;
 
 import android.os.Bundle;
 

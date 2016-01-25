@@ -6,9 +6,8 @@ import android.util.Log;
 import javax.inject.Inject;
 
 import me.dielsonsales.app.openpomodoro.PomodoroApp;
-import me.dielsonsales.app.openpomodoro.PomodoroService;
-import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
-import me.dielsonsales.app.openpomodoro.controllers.PomodoroListener;
+import me.dielsonsales.app.openpomodoro.domain.PomodoroController;
+import me.dielsonsales.app.openpomodoro.domain.PomodoroListener;
 import me.dielsonsales.app.openpomodoro.data.IPreferences;
 import me.dielsonsales.app.openpomodoro.framework.INotification;
 import me.dielsonsales.app.openpomodoro.framework.ISoundPlayer;

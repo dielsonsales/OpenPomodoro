@@ -1,8 +1,8 @@
-package me.dielsonsales.app.openpomodoro;
+package me.dielsonsales.app.openpomodoro.presentation;
 
 import android.os.Bundle;
 
-import me.dielsonsales.app.openpomodoro.presentation.BaseActivity;
+import me.dielsonsales.app.openpomodoro.R;
 
 public class AboutActivity extends BaseActivity {
 

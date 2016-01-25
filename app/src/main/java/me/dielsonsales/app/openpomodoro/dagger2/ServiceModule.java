@@ -7,7 +7,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import me.dielsonsales.app.openpomodoro.controllers.PomodoroController;
+import me.dielsonsales.app.openpomodoro.domain.PomodoroController;
 import me.dielsonsales.app.openpomodoro.data.IPreferences;
 import me.dielsonsales.app.openpomodoro.data.PomodoroPreferences;
 import me.dielsonsales.app.openpomodoro.framework.INotification;

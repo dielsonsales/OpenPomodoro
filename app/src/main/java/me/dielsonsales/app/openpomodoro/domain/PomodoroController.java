@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.controllers;
+package me.dielsonsales.app.openpomodoro.domain;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,8 +11,6 @@ import java.util.Calendar;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import me.dielsonsales.app.openpomodoro.domain.Duration;
-import me.dielsonsales.app.openpomodoro.domain.Pomodoro;
 import me.dielsonsales.app.openpomodoro.framework.INotification;
 import me.dielsonsales.app.openpomodoro.framework.ISoundPlayer;
 import me.dielsonsales.app.openpomodoro.framework.IVibrator;

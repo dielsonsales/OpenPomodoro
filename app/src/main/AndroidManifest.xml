@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.MainActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -23,25 +23,25 @@
         </activity>
 
         <service
-            android:name=".PomodoroService"
+            android:name=".presentation.PomodoroService"
             android:enabled="true"
             android:exported="true"/>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name=".presentation.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".presentation.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".presentation.MainActivity"/>
         </activity>
         <activity
-            android:name=".AboutActivity"
+            android:name=".presentation.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".SettingsActivity">
+            android:parentActivityName=".presentation.SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SettingsActivity"/>
+                android:value=".presentation.SettingsActivity"/>
         </activity>
     </application>
 

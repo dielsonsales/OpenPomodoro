@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro;
+package me.dielsonsales.app.openpomodoro.presentation;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,8 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import me.dielsonsales.app.openpomodoro.R;
 import me.dielsonsales.app.openpomodoro.domain.Duration;
-import me.dielsonsales.app.openpomodoro.views.ClockCanvas;
+import me.dielsonsales.app.openpomodoro.presentation.views.ClockCanvas;
 
 public class ClockFragment extends Fragment {
 

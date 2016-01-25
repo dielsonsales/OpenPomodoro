@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="me.dielsonsales.app.openpomodoro.AboutActivity">
+    tools:context=".presentation.AboutActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="me.dielsonsales.app.openpomodoro.AboutActivityFragment"
+        android:name="me.dielsonsales.app.openpomodoro.presentation.AboutActivityFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_about"/>

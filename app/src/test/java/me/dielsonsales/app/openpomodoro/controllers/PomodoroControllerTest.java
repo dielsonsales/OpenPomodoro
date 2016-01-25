@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import me.dielsonsales.app.openpomodoro.domain.PomodoroController;
 import me.dielsonsales.app.openpomodoro.framework.INotification;
 import me.dielsonsales.app.openpomodoro.framework.ISoundPlayer;
 import me.dielsonsales.app.openpomodoro.framework.IVibrator;

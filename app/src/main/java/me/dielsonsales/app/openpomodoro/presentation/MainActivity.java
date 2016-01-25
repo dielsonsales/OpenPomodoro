@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro;
+package me.dielsonsales.app.openpomodoro.presentation;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,13 +9,11 @@ import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
 import java.util.Calendar;
-
+import me.dielsonsales.app.openpomodoro.R;
 import me.dielsonsales.app.openpomodoro.domain.Duration;
-import me.dielsonsales.app.openpomodoro.presentation.BaseActivity;
 import me.dielsonsales.app.openpomodoro.util.FormattingUtils;
-import me.dielsonsales.app.openpomodoro.views.BorderTextView;
+import me.dielsonsales.app.openpomodoro.presentation.views.BorderTextView;
 
 /**
  * The main activity containing the visual clock. This class is charged of

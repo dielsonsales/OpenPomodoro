@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.views;
+package me.dielsonsales.app.openpomodoro.presentation.views;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.action.ViewActions;
@@ -8,7 +8,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import org.junit.Before;
 import org.junit.Test;
 
-import me.dielsonsales.app.openpomodoro.MainActivity;
+import me.dielsonsales.app.openpomodoro.presentation.MainActivity;
 import me.dielsonsales.app.openpomodoro.R;
 
 import static android.support.test.espresso.Espresso.onView;

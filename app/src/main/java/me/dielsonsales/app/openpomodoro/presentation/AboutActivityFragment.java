@@ -1,10 +1,12 @@
-package me.dielsonsales.app.openpomodoro;
+package me.dielsonsales.app.openpomodoro.presentation;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import me.dielsonsales.app.openpomodoro.R;
 
 /**
  * A placeholder fragment containing a simple view.

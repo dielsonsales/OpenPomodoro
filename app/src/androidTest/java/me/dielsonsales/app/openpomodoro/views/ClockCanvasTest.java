@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro.views;
+package me.dielsonsales.app.openpomodoro.presentation.views;
 
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 import java.util.Calendar;
 
-import me.dielsonsales.app.openpomodoro.MainActivity;
+import me.dielsonsales.app.openpomodoro.presentation.MainActivity;
 
 public class ClockCanvasTest extends ActivityInstrumentationTestCase2<MainActivity> {
 

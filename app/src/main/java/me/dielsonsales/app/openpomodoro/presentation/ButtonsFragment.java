@@ -1,4 +1,4 @@
-package me.dielsonsales.app.openpomodoro;
+package me.dielsonsales.app.openpomodoro.presentation;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import me.dielsonsales.app.openpomodoro.R;
 
 /**
  * Represents the buttons in the MainActivity.

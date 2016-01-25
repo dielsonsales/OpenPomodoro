@@ -2,19 +2,19 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="Time preferences">
-        <me.dielsonsales.app.openpomodoro.views.TimePreference
+        <me.dielsonsales.app.openpomodoro.presentation.views.TimePreference
             android:title="Pomodoro time"
             android:key="@string/pref_pomodoro_time_key"
             android:defaultValue="@string/pomodoro_time_default"/>
-        <me.dielsonsales.app.openpomodoro.views.TimePreference
+        <me.dielsonsales.app.openpomodoro.presentation.views.TimePreference
             android:title="Rest time"
             android:key="@string/pref_rest_time_key"
             android:defaultValue="@string/rest_time_default"/>
-        <me.dielsonsales.app.openpomodoro.views.TimePreference
+        <me.dielsonsales.app.openpomodoro.presentation.views.TimePreference
             android:title="Long rest time"
             android:key="@string/pref_long_rest_time_key"
             android:defaultValue="@string/long_rest_time_default"/>
-        <me.dielsonsales.app.openpomodoro.views.TimePreference
+        <me.dielsonsales.app.openpomodoro.presentation.views.TimePreference
             android:title="Extended time"
             android:key="@string/pref_extended_time_key"
             android:defaultValue="@string/extended_time_default"/>

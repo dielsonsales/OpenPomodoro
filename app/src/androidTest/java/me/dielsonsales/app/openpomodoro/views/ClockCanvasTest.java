@@ -23,7 +23,7 @@ public class ClockCanvasTest extends ActivityInstrumentationTestCase2<MainActivi
         super.setUp();
         setActivityInitialTouchMode(true);
         mActivity = getActivity();
-        mClockCanvas = (ClockCanvas) mActivity.findViewById(me.dielsonsales.app.openpomodoro.R.id.clockCanvas);
+        mClockCanvas = (ClockCanvas) mActivity.findViewById(me.dielsonsales.app.openpomodoro.R.id.clock_canvas);
         testPreconditions();
     }
 

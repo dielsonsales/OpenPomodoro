@@ -5,7 +5,7 @@
              tools:context="me.dielsonsales.app.openpomodoro.ClockFragment">
 
     <me.dielsonsales.app.openpomodoro.views.ClockCanvas
-        android:id="@+id/clockCanvas"
+        android:id="@+id/clock_canvas"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

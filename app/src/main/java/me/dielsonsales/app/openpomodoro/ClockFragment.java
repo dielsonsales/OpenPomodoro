@@ -19,7 +19,7 @@ public class ClockFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_clock, container, false);
-        mClockCanvas = (ClockCanvas) view.findViewById(R.id.clockCanvas);
+        mClockCanvas = (ClockCanvas) view.findViewById(R.id.clock_canvas);
         return  view;
     }
 

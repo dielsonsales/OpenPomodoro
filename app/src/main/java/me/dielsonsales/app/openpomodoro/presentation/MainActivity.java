@@ -80,6 +80,9 @@ public class MainActivity extends BaseActivity implements ButtonsFragment.Fragme
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 break;
+            case R.id.action_help:
+                Intent helpIntent = new Intent(this, HelpActivity.class);
+                startActivity(helpIntent);
             default:
                 break;
         }

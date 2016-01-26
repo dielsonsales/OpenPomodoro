@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:openpomodoro="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_help"
+        android:title="@string/menu_item_help"
+        openpomodoro:showAsAction="always"
+        android:icon="@drawable/ic_help_white_24dp"/>
+    <item
         android:id="@+id/action_settings"
         android:title="@string/menu_item_settings"
         openpomodoro:showAsAction="always"

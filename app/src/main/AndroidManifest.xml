@@ -46,7 +46,11 @@
         <activity
             android:name=".presentation.HelpActivity"
             android:label="@string/title_activity_help"
+            android:parentActivityName=".presentation.MainActivity"
             android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.MainActivity"/>
         </activity>
     </application>
 
